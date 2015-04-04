@@ -75,3 +75,11 @@ input[type="submit"] {
 	width: auto !important;
 	padding: 30px;
 }
+
+@media screen and (max-width: 600px){
+	#main article.article {
+		width: 7em;
+		height: 7em;
+		line-height: 7em;
+	}
+}

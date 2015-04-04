@@ -66,11 +66,16 @@ postBuyCashR bId = do
       ((res, _), _) <- runFormPost buyForm
       case res of
         FormSuccess quant -> do
+          master <- getYesod
           price <- return $ quant * (beveragePrice bev + 50)
           runDB $ update bId [BeverageAmount -=. quant]
           updateCashier price "Barzahlung"
           checkAlert bId
-          setMessage $ Content $ Text $ "Viel Vergnügen. Bitte Zahle " `T.append` (T.pack $ show ((fromIntegral price) / 100)) `T.append` " in die Kasse ein"
+          setMessage $ Content $ Text $ "Viel Vergnügen. Bitte Zahle "
+            `T.append` (T.pack $ show ((fromIntegral price) / 100))
+            `T.append` " "
+            `T.append` (appCurrency $ appSettings master)
+            `T.append` " in die Kasse ein"
           redirect $ HomeR
         _ -> do
           setMessage "Etwas ist schief gelaufen"

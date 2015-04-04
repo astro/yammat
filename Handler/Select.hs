@@ -18,9 +18,6 @@ getSelectR uId = do
       setMessage "Benutzer unbekannt"
       redirect $ HomeR
 
-postSelectR :: UserId -> Handler Html
-postSelectR = error "Not yet implemented: postSelectR"
-
 getSelectCashR :: Handler Html
 getSelectCashR = do
   beverages <- runDB $ selectList [BeverageAmount >=. 0] [Desc BeverageIdent]

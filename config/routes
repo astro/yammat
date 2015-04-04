@@ -6,7 +6,7 @@
 / 				HomeR 			GET POST
 /reactivate			ReactivateR		GET
 /user/#UserId/reactivate	UserReactivateR		GET
-/user/#UserId		 	SelectR			GET POST
+/user/#UserId		 	SelectR			GET
 !/user/cash			SelectCashR		GET
 /user/#UserId/recharge		RechargeR		GET POST
 /newuser			NewUserR		GET POST

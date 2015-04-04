@@ -8,18 +8,18 @@ $if not $ L.null entries
       <tr>
         <th>Zeit
         <th>Beschreibung
-        <th>Betrag
+        <th>Betrag in #{appCurrency $ appSettings master}
     $forall (Entity eId entry) <- entries
       <tr>
         <td>#{formatTime defaultTimeLocale "%A %F %H:%M" $ transactionTime entry}
         <td>#{transactionDescription entry}
-        <td>#{show ((fromIntegral (transactionAmount entry)) / 100)}
+        <td>#{show ((fromIntegral (transactionAmount entry)) / 100)} #{appCurrency $ appSettings master}
     <tfoot>
       <tr>
         <td colspan="2">Gesamtbetrag:
-        <td>#{show ((fromIntegral total) / 100)}
+        <td>#{show ((fromIntegral total) / 100)} #{appCurrency $ appSettings master}
   <p>
-    Kassenbestand: #{show ((fromIntegral cashBalance) / 100)}
+    Kassenbestand: #{show ((fromIntegral cashBalance) / 100)} #{appCurrency $ appSettings master}
 
   <p>
     <a href=@{PayoutR}>

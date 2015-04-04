@@ -6,6 +6,7 @@ import Handler.Common
 
 getJournalR :: Handler Html
 getJournalR = do
+  master <- getYesod
   entries <- runDB $ selectList [] [Asc TransactionId]
   total <- return $ L.sum $ I.map (transactionAmount . entityVal) entries
   cashBalance <- getCashierBalance

@@ -65,6 +65,11 @@ h1 {
 	text-align: center;
 }
 
+input[type="submit"] {
+	width: auto;
+	height: 5em;
+}
+
 .container {
 	width: auto !important;
 	padding: 30px;

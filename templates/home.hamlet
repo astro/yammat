@@ -18,4 +18,4 @@ $forall (Entity uId user) <- users
 
 <article .article>
   <a href=@{ReactivateR}>
-    <p>Alten Nutzer reaktivieren bla laber foo bar baz
+    <p>Alten Nutzer reaktivieren

@@ -10,6 +10,7 @@ getBuyR uId bId = do
   mTup <- checkData uId bId
   case mTup of
     Just (user, bev) -> do
+      master <- getYesod
       (buyWidget, enctype) <- generateFormPost buyForm
       defaultLayout $ do
         $(widgetFile "buy")
@@ -49,6 +50,7 @@ getBuyCashR bId = do
   mBev <- runDB $ get bId
   case mBev of
     Just bev -> do
+      master <- getYesod
       (buyCashWidget, enctype) <- generateFormPost buyForm
       defaultLayout $ do
         $(widgetFile "buyCash")

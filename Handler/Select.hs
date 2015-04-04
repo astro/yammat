@@ -10,6 +10,7 @@ getSelectR uId = do
   mUser <- runDB $ get uId
   case mUser of
     Just user -> do
+      master <- getYesod
       beverages <- runDB $ selectList [BeverageAmount >=. 0] [Desc BeverageIdent]
       defaultLayout $ do
         $(widgetFile "select")

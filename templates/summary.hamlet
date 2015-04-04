@@ -9,14 +9,14 @@ $if not $ L.null bevs
         <th>Name
         <th>aktuelle Anzahl
         <th>Meldebestand
-        <th>Preis
+        <th>Preis in #{appCurrency $ appSettings master}
         <th>
     $forall (Entity bId bev) <- bevs
       <tr>
         <td>#{beverageIdent bev}
         <td>#{beverageAmount bev}
         <td>#{beverageAlertAmount bev}
-        <td>#{show ((fromIntegral (beveragePrice bev)) / 100)}
+        <td>#{show ((fromIntegral (beveragePrice bev)) / 100)} #{appCurrency $ appSettings master}
         <td><a href=@{ModifyR bId}>bearbeiten
 $else
   <p>keine Getränke vorhanden

@@ -54,6 +54,7 @@ data AppSettings = AppSettings
     -- ^ Google Analytics code
     , appEmail 	                :: Text
     -- ^ notification address
+    , appCurrency               :: Text
     }
 
 instance FromJSON AppSettings where
@@ -80,6 +81,7 @@ instance FromJSON AppSettings where
         -- appCopyright              <- o .: "copyright"
         appAnalytics              <- o .:? "analytics"
         appEmail                  <- o .: "email"
+        appCurrency               <- o .: "currency"
 
         return AppSettings {..}
 

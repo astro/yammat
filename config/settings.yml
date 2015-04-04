@@ -27,3 +27,4 @@ database:
 
 #analytics: UA-YOURCODE
 email: "nek0@momen"
+currency: "€"

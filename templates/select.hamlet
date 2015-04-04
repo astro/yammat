@@ -3,7 +3,7 @@ $doctype 5
 <div .header>
   <ul>
     <li>
-      aktuelles Guthaben: #{show ((fromIntegral (userBalance user)) / 100)}
+      aktuelles Guthaben: #{show ((fromIntegral (userBalance user)) / 100)} #{appCurrency $ appSettings master}
     <li>
       <a href=@{RechargeR uId}>
         Guthaben aufladen

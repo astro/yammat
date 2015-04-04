@@ -3,7 +3,7 @@ $doctype 5
 <h3>Kauf von #{beverageIdent bev}
 
 <p>
-  Preis pro Einheit: #{show ((fromIntegral (beveragePrice bev)) / 100)}
+  Preis pro Einheit: #{show ((fromIntegral (beveragePrice bev)) / 100)} #{appCurrency $ appSettings master}
 
 <form method=post enctype=#{enctype}>
   ^{buyWidget}

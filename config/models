@@ -1,0 +1,23 @@
+User
+    ident Text
+    balance Int
+    timestamp Int
+    UniqueUser ident
+    deriving Typeable Show
+Beverage
+    ident Text
+    price Int
+    amount Int
+    alertAmount Int
+    UniqueBeverage ident
+    deriving Typeable Show
+Transaction
+    description Text
+    amount Int
+    time UTCTime
+    deriving Typeable Show
+Cashier
+    balance Int
+    deriving Typeable Show
+
+ -- By default this file is used in Model.hs (which is imported by Foundation.hs)

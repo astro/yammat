@@ -1,0 +1,12 @@
+$doctype 5
+
+<h3>
+  Guthaben aufladen
+
+<p>
+  aktuelles Guthaben: #{show ((fromIntegral $ userBalance user) / 100)}
+
+<form method=post enctype=#{enctype}>
+  ^{rechargeWidget}
+  <div>
+    <input type=submit value="Aufladen">

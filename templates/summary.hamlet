@@ -1,0 +1,22 @@
+$doctype 5
+
+<h3>Übersicht
+
+$if not $ L.null bevs
+  <table>
+    <thead>
+      <tr>
+        <th>Name
+        <th>aktuelle Anzahl
+        <th>Meldebestand
+        <th>Preis
+        <th>
+    $forall (Entity bId bev) <- bevs
+      <tr>
+        <td>#{beverageIdent bev}
+        <td>#{beverageAmount bev}
+        <td>#{beverageAlertAmount bev}
+        <td>#{show ((fromIntegral (beveragePrice bev)) / 100)}
+        <td><a href=@{ModifyR bId}>bearbeiten
+$else
+  <p>keine Getränke vorhanden

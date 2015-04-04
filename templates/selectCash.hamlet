@@ -1,0 +1,9 @@
+$doctype 5
+
+<h3>Wähle deinen Artikel
+
+$forall (Entity bId bev) <- beverages
+  <article .article>
+    <a href=@{BuyCashR bId}>
+      <p>
+        #{beverageIdent bev}

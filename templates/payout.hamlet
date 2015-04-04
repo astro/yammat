@@ -1,0 +1,10 @@
+$doctype 5
+
+<h3>Auszahlung aus der Kasse
+
+<p>Bitte gewünschten Betrag angeben
+
+<form method=post enctype='{enctype}>
+  ^{payoutWidget}
+  <div>
+    <input type=submit value="Auszahlen">

@@ -1,0 +1,11 @@
+$doctype 5
+
+<h3>Artikel bearbeiten
+
+<form method=post enctype=#{enctype}>
+  ^{modifyWidget}
+  <div>
+    <input type=submit value="Absenden">
+
+<p>
+  <a href=@{DeleteBeverageR bId}>Artikel löschen

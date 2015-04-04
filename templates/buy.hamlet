@@ -1,0 +1,11 @@
+$doctype 5
+
+<h3>Kauf von #{beverageIdent bev}
+
+<p>
+  Preis pro Einheit: #{show ((fromIntegral (beveragePrice bev)) / 100)}
+
+<form method=post enctype=#{enctype}>
+  ^{buyWidget}
+  <div>
+    <input type=submit value="Kaufen">

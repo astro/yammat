@@ -1,0 +1,8 @@
+$doctype 5
+
+<h3>Neuer Benutzer
+
+<form method=post enctype=#{enctype}>
+  ^{newUserWidget}
+  <div>
+    <input type=submit value="Absenden">

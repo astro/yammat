@@ -1,0 +1,15 @@
+$doctype 5
+
+<h3>
+  Bestände wieder auffüllen
+
+$forall (Entity bId bev) <- beverages
+  <article .article>
+    <a href=@{UpstockR bId}>
+      <p>
+        #{beverageIdent bev}
+
+<article .article>
+  <a href=@{NewArticleR}>
+    <p>
+      neuen Artikel hinzufügen

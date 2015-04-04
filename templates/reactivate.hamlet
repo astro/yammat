@@ -1,0 +1,8 @@
+$doctype 5
+
+<h3>Nutzer reaktivieren
+
+$forall (Entity uId user) <- users
+  <article .article>
+    <a href=@{UserReactivateR uId}>
+      <p>#{userIdent user}

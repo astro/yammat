@@ -1,0 +1,28 @@
+$doctype 5
+
+<h3>Journal
+
+$if not $ L.null entries
+  <table>
+    <thead>
+      <tr>
+        <th>Zeit
+        <th>Beschreibung
+        <th>Betrag
+    $forall (Entity eId entry) <- entries
+      <tr>
+        <td>#{formatTime defaultTimeLocale "%A %F %H:%M" $ transactionTime entry}
+        <td>#{transactionDescription entry}
+        <td>#{show ((fromIntegral (transactionAmount entry)) / 100)}
+    <tfoot>
+      <tr>
+        <td colspan="2">Gesamtbetrag:
+        <td>#{show ((fromIntegral total) / 100)}
+  <p>
+    Kassenbestand: #{show ((fromIntegral cashBalance) / 100)}
+
+  <p>
+    <a href=@{PayoutR}>
+      Aus der kasse auszahlen
+$else
+  <p>Noch keine Bewegungen zu verzeichnen

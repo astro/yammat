@@ -1,0 +1,22 @@
+/static StaticR Static appStatic
+
+/favicon.ico FaviconR GET
+/robots.txt RobotsR GET
+
+/ 				HomeR 			GET POST
+/reactivate			ReactivateR		GET
+/user/#UserId/reactivate	UserReactivateR		GET
+/user/#UserId		 	SelectR			GET POST
+!/user/cash			SelectCashR		GET
+/user/#UserId/recharge		RechargeR		GET POST
+/newuser			NewUserR		GET POST
+/restock	 		RestockR		GET
+/upstock/#BeverageId		UpstockR		GET POST
+/newarticle			NewArticleR		GET POST
+/user/#UserId/buy/#BeverageId 	BuyR			GET POST
+!/user/cash/buy/#BeverageId	BuyCashR		GET POST
+/journal 			JournalR		GET
+/payout				PayoutR			GET POST
+/summary			SummaryR		GET
+/modify/#BeverageId		ModifyR			GET POST
+/delete/#BeverageId		DeleteBeverageR		GET

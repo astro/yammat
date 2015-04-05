@@ -60,7 +60,7 @@ postNewArticleR = do
   case result of
     FormSuccess bev -> do
       runDB $ insert_ bev
-      setMessage "Neues Getränk hinzugefügt"
+      setMessage "Neuer Artikel hinzugefügt"
       redirect $ HomeR
     _ -> do
       setMessage "Fehler beim Hinzufügen"

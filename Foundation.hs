@@ -8,6 +8,9 @@ import Yesod.Auth.BrowserId (authBrowserId)
 import Yesod.Default.Util   (addStaticContentExternal)
 import Yesod.Core.Types     (Logger)
 import Settings.StaticFiles
+--snip
+import qualified Data.Text as T
+import Network.Wai as Wai
 
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -36,12 +39,24 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 -- | A convenient synonym for creating forms.
 type Form x = Html -> MForm (HandlerT App IO) (FormResult x, Widget)
 
+approotRequest :: App -> Wai.Request -> T.Text
+approotRequest master req =
+    case requestHeaderHost req of
+        Just a  -> prefix `T.append` decodeUtf8 a
+        Nothing -> appRoot $ appSettings master
+    where
+        prefix =
+            case isSecure req of
+                True  -> "https://"
+                False -> "http://"
+
 -- Please see the documentation for the Yesod typeclass. There are a number
 -- of settings which can be configured by overriding methods here.
 instance Yesod App where
     -- Controls the base of generated URLs. For more information on modifying,
     -- see: https://github.com/yesodweb/yesod/wiki/Overriding-approot
-    approot = ApprootMaster $ appRoot . appSettings
+    --approot = ApprootMaster $ appRoot . appSettings
+    approot = ApprootRequest approotRequest
 
     -- Store session data on the client in encrypted cookies,
     -- default session idle timeout is 120 minutes

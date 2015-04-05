@@ -91,6 +91,7 @@ library
                  -- snip
                  , mime-mail
                  , blaze-markup
+                 , wai
 
 executable         yammat
     if flag(library-only)

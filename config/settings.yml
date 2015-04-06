@@ -18,12 +18,12 @@ ip-from-header: "_env:IP_FROM_HEADER:false"
 # skip-combining: false
 
 database:
-  user:     "_env:MYSQL_USER:yammat"
-  password: "_env:MYSQL_PASSWORD:yammat"
-  host:     "_env:MYSQL_HOST:localhost"
-  port:     "_env:MYSQL_PORT:5432"
-  database: "_env:MYSQL_DATABASE:yammat"
-  poolsize: "_env:MYSQL_POOLSIZE:10"
+  user:     "_env:PGUSER:yammat"
+  password: "_env:PGPASS:yammat"
+  host:     "_env:PGHOST:localhost"
+  port:     "_env:PGPORT:5432"
+  database: "_env:PGDATABASE:yammat"
+  poolsize: "_env:PGPOOLSIZE:10"
 
 #analytics: UA-YOURCODE
 email: "nek0@momen"

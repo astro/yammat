@@ -10,6 +10,10 @@ $doctype 5
 
 <h3>Wähle deinen Artikel, #{userIdent user}
 
+$if null beverages
+  <h1>
+    !!!MATEKALYPSE!!!
+
 $forall (Entity bId bev) <- beverages
   <article .article>
     <a href=@{BuyR uId bId}>

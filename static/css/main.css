@@ -145,7 +145,7 @@ input[type="submit"] {
 	padding: 30px;
 }
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 690px){
 	#main article.article {
 		width: 7em;
 		height: 7em;

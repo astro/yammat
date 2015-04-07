@@ -79,7 +79,7 @@ postBuyCashR bId = do
               updateCashier price "Barzahlung"
               checkAlert bId
               setMessage $ Content $ Text $ "Viel Vergnügen. Bitte Zahle "
-                `T.append` (T.pack $ show ((fromIntegral price) / 100))
+                `T.append` (formatIntCurrency price)
                 `T.append` " "
                 `T.append` (appCurrency $ appSettings master)
                 `T.append` " in die Kasse ein"

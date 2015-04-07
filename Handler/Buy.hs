@@ -4,6 +4,7 @@ import Import
 import Handler.Common
 import qualified Data.Text as T
 import Text.Blaze.Internal
+import Text.Shakespeare.Text
 
 getBuyR :: UserId -> BeverageId -> Handler Html
 getBuyR uId bId = do
@@ -33,6 +34,8 @@ postBuyR uId bId = do
               runDB $ update uId [UserBalance -=. price]
               runDB $ update bId [BeverageAmount -=. quant]
               checkAlert bId
+              master <- getYesod
+              liftIO $ notifyUser user bev price master
               case sw of
                 False -> do
                   setMessage "Viel Vergnügen"
@@ -49,6 +52,27 @@ postBuyR uId bId = do
     Nothing -> do
       setMessage "Benutzer oder Artikel unbekannt"
       redirect $ HomeR
+
+notifyUser :: User -> Beverage -> Int -> App -> IO ()
+notifyUser user bev price master = do
+  case userNotify user of
+    True ->
+      case userEmail user of
+        Just email ->
+          sendMail email "Einkauf beim Matematen"
+            [stext|
+Hallo #{userIdent user},
+
+Du hast gerade beim Matematen für #{formatIntCurrency price}#{appCurrency $ appSettings master} #{beverageIdent bev} eingekauft.
+
+Viele Grüsse,
+
+Der Matemat
+            |]
+        Nothing ->
+          return ()
+    False ->
+      return ()
 
 getBuyCashR :: BeverageId -> Handler Html
 getBuyCashR bId = do

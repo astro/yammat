@@ -9,6 +9,7 @@
 /user/#UserId		 	SelectR			GET
 !/user/cash			SelectCashR		GET
 /user/#UserId/recharge		RechargeR		GET POST
+/user/#UserId/modify		ModifyUserR		GET POST
 /newuser			NewUserR		GET POST
 /restock	 		RestockR		GET
 /upstock/#BeverageId		UpstockR		GET POST

@@ -2,6 +2,8 @@ User
     ident Text
     balance Int
     timestamp Int
+    email Text Maybe
+    notify Bool default=False
     UniqueUser ident
     deriving Typeable Show
 Beverage

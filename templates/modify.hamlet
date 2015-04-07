@@ -7,5 +7,5 @@ $doctype 5
   <div>
     <input type=submit value="Absenden">
 
-<p>
-  <a href=@{DeleteBeverageR bId}>Artikel löschen
+<a href=@{ModifyR bId}>
+  Artikel löschen

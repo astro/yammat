@@ -82,14 +82,14 @@ checkAlert bId = do
       to <- return $ appEmail $ appSettings master 
       sendMail to "Niedriger Bestand"
         [stext|
-          Hallo,
+Hallo,
 
-          Der Bestand an #{beverageIdent bev} ist unterhalb der Warnschwelle von #{beverageAlertAmount bev}.
-          Der momentane Bestand ist bei #{beverageAmount bev} Artikeln.
+Der Bestand an #{beverageIdent bev} ist unterhalb der Warnschwelle von #{beverageAlertAmount bev}.
+Der momentane Bestand ist bei #{beverageAmount bev} Artikeln.
 
-          Viele Grüße,
+Viele Grüße,
 
-          der Matemat
+der Matemat
         |]
     False -> return () -- do nothing
 

@@ -7,6 +7,9 @@ $doctype 5
     <li>
       <a href=@{RechargeR uId}>
         Guthaben aufladen
+    <li>
+      <a href=@{ModifyUserR uId}>
+        Nutzerdaten akutalisieren
 
 <h3>Wähle deinen Artikel, #{userIdent user}
 

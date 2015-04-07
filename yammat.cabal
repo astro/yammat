@@ -92,6 +92,7 @@ library
                  , mime-mail
                  , blaze-markup
                  , wai
+                 , blaze-builder                 < 0.4.0.0
 
 executable         yammat
     if flag(library-only)

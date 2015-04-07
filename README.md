@@ -32,7 +32,7 @@ Check the configuration File `config/settings.yml`. Create Postgresql Databases 
 
 ##Lift-Off
 
-Run `./yammat config/settings.yml` in your desired run location.
+Run `./yammat config/settings.yml` in your desired run location. Finally point a reverse-proxy (something like nginx) at `http://localhost:3000` or any other port you configured in `donfig/settings.yml`.
 
 For better control You can wrap an init script around this. How to do this is described [in my blog][blog].
 

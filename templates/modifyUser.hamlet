@@ -1,0 +1,8 @@
+$doctype 5
+
+<h3>Benutzer bearbeiten
+
+<form method=post enctype=#{enctype}>
+  ^{modifyUserWidget}
+  <div>
+    <input type=submit value="Absenden">

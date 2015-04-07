@@ -14,6 +14,8 @@ In order to build yammat you need the packages `cabal-install`, `ghc` and `postg
 
 ###Internal dependencies
 
+Before installing the internal dependencies it is best practice to put the project into a sandbox with `cabal sandbox init`.
+
 All internal dependencies are in the file `yammat.cabal` and will be installed automagically with the command `cabal install --only-dependencies`.
 
 ##Building

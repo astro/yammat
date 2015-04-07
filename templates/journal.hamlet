@@ -13,13 +13,13 @@ $if not $ L.null entries
       <tr>
         <td>#{formatTime defaultTimeLocale "%A %F %H:%M" $ transactionTime entry}
         <td>#{transactionDescription entry}
-        <td>#{show ((fromIntegral (transactionAmount entry)) / 100)} #{appCurrency $ appSettings master}
+        <td>#{formatIntCurrency (transactionAmount entry)} #{appCurrency $ appSettings master}
     <tfoot>
       <tr>
         <td colspan="2">Gesamtbetrag:
-        <td>#{show ((fromIntegral total) / 100)} #{appCurrency $ appSettings master}
+        <td>#{formatIntCurrency (fromIntegral total)} #{appCurrency $ appSettings master}
   <p>
-    Kassenbestand: #{show ((fromIntegral cashBalance) / 100)} #{appCurrency $ appSettings master}
+    Kassenbestand: #{formatIntCurrency (fromIntegral cashBalance)} #{appCurrency $ appSettings master}
 
   <p>
     <a href=@{PayoutR}>

@@ -8,6 +8,7 @@ import qualified Data.Text.Read as R
 import Yesod.Form.Functions
 import Text.Shakespeare.Text
 import Network.Mail.Mime
+import Text.Printf
 import Import
 
 -- These handlers embed files in the executable at compile time to avoid a
@@ -120,3 +121,9 @@ prependZero t0 = if T.null t1
                            else t1
 
   where t1 = T.dropWhile ((==) ' ') t0
+
+formatFloat :: Double -> Text
+formatFloat = T.pack . (printf "%.2f")
+
+formatIntCurrency :: Int -> Text
+formatIntCurrency x = formatFloat $ ((fromIntegral x) / 100)

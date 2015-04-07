@@ -2,6 +2,7 @@ module Handler.Summary where
 
 import Import
 import Data.List as L
+import Handler.Common
 
 getSummaryR :: Handler Html
 getSummaryR = do

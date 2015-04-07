@@ -4,7 +4,7 @@ $doctype 5
   Guthaben aufladen
 
 <p>
-  aktuelles Guthaben: #{show ((fromIntegral $ userBalance user) / 100)}
+  aktuelles Guthaben: #{formatIntCurrency (userBalance user)}
 
 <form method=post enctype=#{enctype}>
   ^{rechargeWidget}

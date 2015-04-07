@@ -16,7 +16,7 @@ $if not $ L.null bevs
         <td>#{beverageIdent bev}
         <td>#{beverageAmount bev}
         <td>#{beverageAlertAmount bev}
-        <td>#{show ((fromIntegral (beveragePrice bev)) / 100)} #{appCurrency $ appSettings master}
+        <td>#{formatIntCurrency (beveragePrice bev)} #{appCurrency $ appSettings master}
         <td><a href=@{ModifyR bId}>bearbeiten
 $else
   <p>keine Getränke vorhanden

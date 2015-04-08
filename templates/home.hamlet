@@ -3,11 +3,11 @@ $doctype 5
 $if null beverages
   <h1>!!!MATEKALYPSE!!!
 
-<article .article>
+<article .article #func>
   <a href=@{SelectCashR}>
     <p>Bar bezahlen
 
-<article .article>
+<article .article #func>
   <a href=@{NewUserR}>
     <p>Neuen Nutzer anlegen
 
@@ -16,6 +16,6 @@ $forall (Entity uId user) <- users
     <a href=@{SelectR uId}>
       <p>#{userIdent user}
 
-<article .article>
+<article .article #func>
   <a href=@{ReactivateR}>
     <p>Alten Nutzer reaktivieren

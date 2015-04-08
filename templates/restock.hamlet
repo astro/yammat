@@ -9,7 +9,7 @@ $forall (Entity bId bev) <- beverages
       <p>
         #{beverageIdent bev}
 
-<article .article>
+<article .article #func>
   <a href=@{NewArticleR}>
     <p>
       neuen Artikel hinzufügen

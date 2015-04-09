@@ -1,0 +1,11 @@
+$doctype 5
+
+<h3>Kassensturz
+
+<p>
+  Bitte Kasse zählen und gezählten Betrag in unten stehendes Feld eintragen.
+
+<form method=post enctype=#{enctype}>
+  ^{cashCheckWidget}
+  <div>
+    <input type=submit value="Absenden">

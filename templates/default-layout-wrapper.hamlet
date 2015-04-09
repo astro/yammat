@@ -37,7 +37,7 @@ $newline never
               <span>
                 <a href=@{JournalR}>Journal
               <span>
-                <a href=@{SummaryR}>Übersicht
+                <a href=@{SummaryR}>Inventar
 
         $maybe analytics <- appAnalytics $ appSettings master
             <script>

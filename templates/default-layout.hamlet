@@ -1,3 +1,19 @@
-$maybe msg <- mmsg
-    <div #message>#{msg}
-^{widget}
+<div class="container">
+  <header>
+    <nav>
+      <ul>
+        <li>
+          <a href=@{HomeR}>_{MsgHome}
+
+  <div id="main" role="main">
+    $maybe msg <- mmsg
+      <div #message>#{msg}
+    ^{widget}
+
+  <footer>
+    <span>
+      <a href=@{RestockR}>_{MsgRestock}
+    <span>
+      <a href=@{JournalR}>_{MsgJournal}
+    <span>
+      <a href=@{SummaryR}>_{MsgSummary}

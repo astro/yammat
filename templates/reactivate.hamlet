@@ -1,6 +1,6 @@
 $doctype 5
 
-<h3>Nutzer reaktivieren
+<h3>_{MsgReactivateUser}
 
 $forall (Entity uId user) <- users
   <article .article>

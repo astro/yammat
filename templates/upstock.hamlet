@@ -1,11 +1,11 @@
 $doctype 5
 
-<h3>Bestand von #{beverageIdent bev} auffüllen
+<h3>_{MsgStockUp $ beverageIdent bev}
 
 <p>
-  Aktueller Bestand: #{beverageAmount bev}
+  _{MsgCurrentStock}: #{beverageAmount bev}
 
 <form method=post enctype=#{enctype}>
   ^{upstockWidget}
   <div>
-    <input type=submit value="Auffüllen">
+    <input type=submit value="_{MsgFillup}">

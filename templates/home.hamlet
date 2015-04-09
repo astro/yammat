@@ -5,11 +5,11 @@ $if null beverages
 
 <article .article #func>
   <a href=@{SelectCashR}>
-    <p>Bar bezahlen
+    <p>_{MsgPayCash}
 
 <article .article #func>
   <a href=@{NewUserR}>
-    <p>Neuen Nutzer anlegen
+    <p>_{MsgCreateUser}
 
 $forall (Entity uId user) <- users
   <article .article>
@@ -18,4 +18,4 @@ $forall (Entity uId user) <- users
 
 <article .article #func>
   <a href=@{ReactivateR}>
-    <p>Alten Nutzer reaktivieren
+    <p>_{MsgReactivateOldUser}

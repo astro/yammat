@@ -11,6 +11,32 @@ import Settings.StaticFiles
 --snip
 import qualified Data.Text as T
 import Network.Wai as Wai
+import Data.List (tail)
+import Data.List.Split
+import Text.Printf
+
+
+prependZero :: Text -> Text
+prependZero t0 = if T.null t1
+                 then t1
+                 else if T.head t1 == '.'
+                      then '0' `T.cons` t1
+                      else if "-." `T.isPrefixOf` t1
+                           then "-0." `T.append` (T.drop 2 t1)
+                           else t1
+
+  where t1 = T.dropWhile ((==) ' ') t0
+
+formatFloat :: Double -> Text
+formatFloat d = T.pack (t ++ c)
+  where
+    t = reverse (intercalate "." $ chunksOf 3 $ reverse $ fst sp)
+    c = "," ++ tail (snd sp)
+    sp = (break (== '.') (printf "%.2f" d))
+    -- T.pack . (splitEvery 3) . (printf "%,2f")
+
+formatIntCurrency :: Int -> Text
+formatIntCurrency x = formatFloat $ ((fromIntegral x) / 100)
 
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -26,6 +52,13 @@ data App = App
 
 instance HasHttpManager App where
     getHttpManager = appHttpManager
+
+mkMessage "App" "messages" "de"
+
+renderMessage' e = do
+  m <- getYesod
+  l <- languages
+  return $ renderMessage m l e
 
 -- This is where we define all of the routes in our application. For a full
 -- explanation of the syntax, please see:
@@ -168,3 +201,4 @@ instance RenderMessage App FormMessage where
 -- https://github.com/yesodweb/yesod/wiki/Sending-email
 -- https://github.com/yesodweb/yesod/wiki/Serve-static-files-from-a-separate-domain
 -- https://github.com/yesodweb/yesod/wiki/i18n-messages-in-the-scaffolding
+

@@ -39,8 +39,8 @@ getUserReactivateR uId = do
       time <- liftIO getCurrentTime
       secs <- return $ R.read $ formatTime defaultTimeLocale "%s" time
       runDB $ update uId [UserTimestamp =. secs]
-      setMessage "Nutzer reaktiviert"
+      setMessageI MsgUserReactivated
       redirect $ HomeR
     Nothing -> do
-      setMessage "Nutzer unbekannt"
+      setMessageI MsgUserUnknown
       redirect $ HomeR

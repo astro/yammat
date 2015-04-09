@@ -1,10 +1,10 @@
 $doctype 5
 
-<h3>Auszahlung aus der Kasse
+<h3>_{MsgPayoutFromCash}
 
 <p>Bitte gewünschten Betrag angeben
 
-<form method=post enctype='{enctype}>
+<form method=post enctype=#{enctype}>
   ^{payoutWidget}
   <div>
-    <input type=submit value="Auszahlen">
+    <input type=submit value="_{MsgDoPayout}">

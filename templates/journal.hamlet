@@ -6,9 +6,9 @@ $if not $ L.null entries
   <table>
     <thead>
       <tr>
-        <th>Zeit
-        <th>Beschreibung
-        <th>Betrag in #{appCurrency $ appSettings master}
+        <th>_{MsgTime}
+        <th>_{MsgDescription}
+        <th>_{MsgValueIn $ appCurrency $ appSettings master}
     $forall (eTransCash) <- list
       $case eTransCash
         $of Left trans
@@ -19,21 +19,22 @@ $if not $ L.null entries
         $of Right cash
           <tr #check>
             <td colspan="2">
-              Kassensturz vom #{formatTime defaultTimeLocale "%A %F %H:%M" $ cashierCreated cash}:
+              _{MsgCashCheckOf $ formatTime defaultTimeLocale "%A %F %H:%M" $ cashierCreated cash}:
             <td>#{formatIntCurrency (cashierBalance cash)} #{appCurrency $ appSettings master}
+
     <tfoot>
       <tr>
-        <td colspan="2">Gesamtbetrag:
-        <td>#{formatIntCurrency total} #{appCurrency $ appSettings master}
+        <td colspan="2">_{MsgTotalValue}:
+        <td>#{formatIntCurrency (fromIntegral total)} #{appCurrency $ appSettings master}
   <p>
-    Kassenbestand: #{formatIntCurrency (fromIntegral cashBalance)} #{appCurrency $ appSettings master}
+    _{MsgCashStock}: #{formatIntCurrency (fromIntegral cashBalance)} #{appCurrency $ appSettings master}
 
   <ul>
     <li>
       <a href=@{PayoutR}>
-        Aus der Kasse auszahlen
+        _{MsgPayoutFromCash}
     <li>
       <a href=@{CashCheckR}>
-        Kassensturz
+        _{MsgCashCheck}
 $else
-  <p>Noch keine Bewegungen zu verzeichnen
+  <p>_{MsgNothingToShow}

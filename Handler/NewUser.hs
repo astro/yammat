@@ -21,19 +21,19 @@ postNewUserR = do
   case res of
     FormSuccess user -> do
       _ <- runDB $ insert user
-      setMessage "Benutzer angelegt"
+      setMessageI MsgUserCreated
       redirect $ HomeR
     _ -> do
-      setMessage "Benutzer konnte nicht angelegt werden"
+      setMessageI MsgUserNotCreated
       redirect $ NewUserR
 
 newUserForm :: Int -> Form User
 newUserForm secs = renderDivs $ User
-  <$> areq textField "Nickname" Nothing
+  <$> areq textField (fieldSettingsLabel MsgName) Nothing
   <*> pure 0
   <*> pure secs
-  <*> aopt emailField "E-mail" Nothing
-  <*> areq boolField "Benachrichtigung bei Kauf" (Just False)
+  <*> aopt emailField (fieldSettingsLabel MsgEmail) Nothing
+  <*> areq boolField (fieldSettingsLabel MsgBuyNotification) (Just False)
 
 data UserConf = UserConf
   { userConfEmail :: Maybe Text
@@ -49,7 +49,7 @@ getModifyUserR uId = do
       defaultLayout $ do
       $(widgetFile "modifyUser")
     Nothing -> do
-      setMessage "Benutzer unbekannt"
+      setMessageI MsgUserUnknown
       redirect $ HomeR
 
 postModifyUserR :: UserId -> Handler Html
@@ -65,19 +65,19 @@ postModifyUserR uId = do
             , UserNotify =. userConfNotify conf
             ]
           liftIO $ notify user conf
-          setMessage "Nutzerdaten aktualisiert"
+          setMessageI MsgUserEdited
           redirect $ SelectR uId
         _ -> do
-          setMessage "Nutzerdatenaktualisierung nicht erfolgreich"
+          setMessageI MsgUserNotEdited
           redirect $ SelectR uId
     Nothing -> do
-      setMessage "Nutzer unbekannt"
+      setMessageI MsgUserUnknown
       redirect $ HomeR
 
 modifyUserForm :: User -> Form UserConf
 modifyUserForm user = renderDivs $ UserConf
-  <$> aopt emailField "E-Mail" (Just $ userEmail user)
-  <*> areq boolField "Benachrichtigung bei Kauf" (Just $ userNotify user)
+  <$> aopt emailField (fieldSettingsLabel MsgEmail) (Just $ userEmail user)
+  <*> areq boolField (fieldSettingsLabel MsgBuyNotification) (Just $ userNotify user)
 
 notify :: User -> UserConf -> IO ()
 notify user conf

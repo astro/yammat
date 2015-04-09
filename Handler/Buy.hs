@@ -16,7 +16,7 @@ getBuyR uId bId = do
       defaultLayout $ do
         $(widgetFile "buy")
     Nothing -> do
-      setMessage "Benutzer oder Artikel unbekannt"
+      setMessageI MsgUserOrArticleUnknown
       redirect $ HomeR
 
 postBuyR :: UserId -> BeverageId -> Handler Html
@@ -38,19 +38,19 @@ postBuyR uId bId = do
               liftIO $ notifyUser user bev price master
               case sw of
                 False -> do
-                  setMessage "Viel Vergnügen"
+                  setMessageI MsgPurchaseSuccess
                   redirect $ HomeR
                 True -> do
-                  setMessage "Achtung: Guthaben im negativen Bereich"
+                  setMessageI MsgPurchaseDebtful
                   redirect $ HomeR
             True -> do
-              setMessage "So viele Artikel sind nicht vorhanden"
+              setMessageI MsgNotEnoughItems
               redirect $ BuyR uId bId
         _ -> do
-          setMessage "Etwas ist schief gelaufen"
+          setMessageI MsgErrorOccured
           redirect $ HomeR
     Nothing -> do
-      setMessage "Benutzer oder Artikel unbekannt"
+      setMessageI MsgUserUnknown
       redirect $ HomeR
 
 notifyUser :: User -> Beverage -> Int -> App -> IO ()
@@ -84,7 +84,7 @@ getBuyCashR bId = do
       defaultLayout $ do
         $(widgetFile "buyCash")
     Nothing -> do
-      setMessage "Getrank unbekannt"
+      setMessageI MsgItemUnknown
       redirect $ HomeR
 
 postBuyCashR :: BeverageId -> Handler Html
@@ -102,20 +102,17 @@ postBuyCashR bId = do
               runDB $ update bId [BeverageAmount -=. quant]
               updateCashier price "Barzahlung"
               checkAlert bId
-              setMessage $ Content $ Text $ "Viel Vergnügen. Bitte Zahle "
-                `T.append` (formatIntCurrency price)
-                `T.append` " "
-                `T.append` (appCurrency $ appSettings master)
-                `T.append` " in die Kasse ein"
-              redirect $ HomeR
+              let currency = appCurrency $ appSettings master
+              setMessageI $ MsgPurchaseSuccessCash price currency
+              redirect HomeR
             True -> do
-              setMessage "So viele Artikel sind nicht vorhanden"
+              setMessageI MsgNotEnoughItems
               redirect $ BuyCashR bId
         _ -> do
-          setMessage "Etwas ist schief gelaufen"
+          setMessageI MsgItemDisappeared
           redirect $ HomeR
     Nothing -> do
-      setMessage "Artikel unbekannt"
+      setMessageI MsgItemUnknown
       redirect $ HomeR
 
 checkData :: UserId -> BeverageId -> Handler (Maybe (User, Beverage))
@@ -131,4 +128,4 @@ checkData uId bId = do
 
 buyForm :: Form Int
 buyForm = renderDivs
-  $ areq amountField "Anzahl" (Just 1)
+  $ areq amountField (fieldSettingsLabel MsgAmount) (Just 1)

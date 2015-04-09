@@ -29,6 +29,7 @@ library
                      Handler.Payout
                      Handler.Summary
                      Handler.Modify
+                     Handler.CashCheck
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT

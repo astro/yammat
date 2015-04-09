@@ -26,24 +26,25 @@ getRobotsR = return $ TypedContent typePlain
 
 updateCashier :: Int -> Text -> Handler ()
 updateCashier amount desc = do
-  mCashier <- runDB $ selectFirst [] [Asc CashierId]
+  mCashier <- runDB $ selectFirst [] [Desc CashierCreated]
   trans <- liftIO $ (\time -> return $ Transaction desc amount time) =<< getCurrentTime
   case mCashier of
     Just entCash -> do
       runDB $ update (entityKey entCash) [CashierBalance +=. amount]
       runDB $ insert_ trans
     Nothing -> do
-      runDB $ insert_ $ Cashier amount
+      currentTime <- liftIO getCurrentTime
+      runDB $ insert_ $ Cashier amount currentTime
       runDB $ insert_ trans
 
 getCashierBalance :: Handler Int
 getCashierBalance = do
-  mCashier <- runDB $ selectFirst [] [Asc CashierId]
+  mCashier <- runDB $ selectFirst [] [Desc CashierCreated]
   case mCashier of
     Just cashier -> do
       return $ cashierBalance $ entityVal cashier
     Nothing -> do
-      return 0 
+      return 0
 
 currencyField :: (RenderMessage (HandlerSite m) FormMessage, Show a, Monad m, Integral a) => Field m a
 currencyField = Field

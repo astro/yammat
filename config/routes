@@ -21,3 +21,4 @@
 /summary			SummaryR		GET
 /modify/#BeverageId		ModifyR			GET POST
 /delete/#BeverageId		DeleteBeverageR		GET
+/cashcheck			CashCheckR		GET POST

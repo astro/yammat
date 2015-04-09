@@ -21,8 +21,12 @@ $if not $ L.null entries
   <p>
     Kassenbestand: #{formatIntCurrency (fromIntegral cashBalance)} #{appCurrency $ appSettings master}
 
-  <p>
-    <a href=@{PayoutR}>
-      Aus der Kasse auszahlen
+  <ul>
+    <li>
+      <a href=@{PayoutR}>
+        Aus der Kasse auszahlen
+    <li>
+      <a href=@{CashCheckR}>
+        Kassensturz
 $else
   <p>Noch keine Bewegungen zu verzeichnen

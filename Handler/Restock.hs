@@ -5,7 +5,7 @@ import Handler.Common
 
 getRestockR :: Handler Html
 getRestockR = do
-  beverages <- runDB $ selectList [] [Desc BeverageIdent]
+  beverages <- runDB $ selectList [] [Asc BeverageIdent]
   defaultLayout $ do
     $(widgetFile "restock")
 

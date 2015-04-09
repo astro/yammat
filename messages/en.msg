@@ -73,3 +73,4 @@ CurrentAmount: Current amount
 NoItems: No items
 StockUp name@Text: Stock up #{name}
 Fillup: Fill up
+CashCheckOf date@String: Cash check of #{date}

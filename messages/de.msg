@@ -73,3 +73,4 @@ CurrentAmount: Aktuelle Anzahl
 NoItems: keine Getränke vorhanden
 StockUp name@Text: Bestand von #{name} auffüllen
 Fillup: Auffüllen
+CashCheckOf date@String: Kassensturz vom #{date}

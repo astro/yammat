@@ -23,6 +23,6 @@ $if not $ L.null entries
 
   <p>
     <a href=@{PayoutR}>
-      Aus der kasse auszahlen
+      Aus der Kasse auszahlen
 $else
   <p>Noch keine Bewegungen zu verzeichnen

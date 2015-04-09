@@ -11,7 +11,7 @@ getSelectR uId = do
   case mUser of
     Just user -> do
       master <- getYesod
-      beverages <- runDB $ selectList [BeverageAmount >=. 0] [Desc BeverageIdent]
+      beverages <- runDB $ selectList [BeverageAmount >. 0] [Asc BeverageIdent]
       defaultLayout $ do
         $(widgetFile "select")
     Nothing -> do
@@ -20,7 +20,7 @@ getSelectR uId = do
 
 getSelectCashR :: Handler Html
 getSelectCashR = do
-  beverages <- runDB $ selectList [BeverageAmount >=. 0] [Desc BeverageIdent]
+  beverages <- runDB $ selectList [BeverageAmount >. 0] [Asc BeverageIdent]
   defaultLayout $ do
     $(widgetFile "selectCash")
 

@@ -1,13 +1,13 @@
 #main article.article {
 	display: inline-block;
 	position: relative;
-	width: 14.5em;
-	height: 14.5em;
+	width: 10em;
+	height: 10em;
 	margin: 0.3em 0.15em 0px;
 	overflow-y: hidden;
 	box-shadow: 0px 0px 3px #c4c4c4;
 	background-color: #f5f5f5;
-	line-height: 14.5em;
+	line-height: 10em;
 	text-align: center;
 	border-radius: 6px;
 }

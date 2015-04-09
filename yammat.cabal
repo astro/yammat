@@ -93,6 +93,7 @@ library
                  , blaze-markup
                  , wai
                  , blaze-builder                 < 0.4.0.0
+                 , split
 
 executable         yammat
     if flag(library-only)

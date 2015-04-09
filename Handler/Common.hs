@@ -5,6 +5,8 @@ import Data.FileEmbed (embedFile)
 import qualified Data.Text as T
 import qualified Data.Text.Lazy.Encoding as E
 import qualified Data.Text.Read as R
+import Data.List (tail)
+import Data.List.Split
 import Yesod.Form.Functions
 import Text.Shakespeare.Text
 import Network.Mail.Mime
@@ -123,7 +125,12 @@ prependZero t0 = if T.null t1
   where t1 = T.dropWhile ((==) ' ') t0
 
 formatFloat :: Double -> Text
-formatFloat = T.pack . (printf "%.2f")
+formatFloat d = T.pack (t ++ c)
+  where
+    t = reverse (intercalate "." $ chunksOf 3 $ reverse $ fst sp)
+    c = "," ++ tail (snd sp)
+    sp = (break (== '.') (printf "%.2f" d))
+    -- T.pack . (splitEvery 3) . (printf "%,2f")
 
 formatIntCurrency :: Int -> Text
 formatIntCurrency x = formatFloat $ ((fromIntegral x) / 100)

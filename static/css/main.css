@@ -36,6 +36,10 @@ article#func.article {
 	border-radius: 6px;
 }
 
+tr#check {
+	background-color: lightgrey;
+}
+
 header {
 	border-bottom: 1px solid black;
 	margin-bottom: 1em;

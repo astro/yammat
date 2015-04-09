@@ -83,7 +83,7 @@ checkAlert bId = do
     True -> do
       master <- getYesod
       to <- return $ appEmail $ appSettings master 
-      sendMail to "Niedriger Bestand"
+      liftIO $ sendMail to "Niedriger Bestand"
         [stext|
 Hallo,
 
@@ -98,7 +98,7 @@ der Matemat
 
 --sendMail :: MonadIO m => Text -> Text -> Text -> m ()
 sendMail to subject body =
-  liftIO $ renderSendMail
+  renderSendMail
     Mail
       { mailFrom = Address Nothing "noreply"
       , mailTo = [Address Nothing to]

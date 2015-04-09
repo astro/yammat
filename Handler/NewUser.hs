@@ -1,7 +1,10 @@
 module Handler.NewUser where
 
 import Import as I
+import Handler.Common
 import Text.Read
+import Text.Shakespeare.Text
+import Data.Maybe
 
 getNewUserR :: Handler Html
 getNewUserR = do
@@ -62,6 +65,7 @@ postModifyUserR uId = do
             [ UserEmail =. userConfEmail conf
             , UserNotify =. userConfNotify conf
             ]
+          liftIO $ notify user conf
           setMessage "Nutzerdaten aktualisiert"
           redirect $ SelectR uId
         _ -> do
@@ -75,3 +79,18 @@ modifyUserForm :: User -> Form UserConf
 modifyUserForm user = renderDivs $ UserConf
   <$> aopt emailField "E-Mail" (Just $ userEmail user)
   <*> areq boolField "Benachrichtigung bei Kauf" (Just $ userNotify user)
+
+notify :: User -> UserConf -> IO ()
+notify user conf
+  | (userEmail user) == (userConfEmail conf) && (userNotify user) == (userConfNotify conf) = return ()
+  | otherwise = sendMail (fromJust $ userEmail user) "Profiländerung"
+                  [stext|
+Hallo #{userIdent user},
+
+deine Profileinstellungen wurden geändert.
+Nur damit du Bescheid weißt.
+
+Grüße,
+
+der Matemat
+                  |]

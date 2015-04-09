@@ -59,7 +59,7 @@ notifyUser user bev price master = do
     True ->
       case userEmail user of
         Just email ->
-          sendMail email "Einkauf beim Matematen"
+          liftIO $ sendMail email "Einkauf beim Matematen"
             [stext|
 Hallo #{userIdent user},
 

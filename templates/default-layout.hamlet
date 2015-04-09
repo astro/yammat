@@ -4,6 +4,9 @@
       <ul>
         <li>
           <a href=@{HomeR}>_{MsgHome}
+        <li .lang>
+          <a onclick="document.cookie = '_LANG=en'; location.reload()">EN
+          <a onclick="document.cookie = '_LANG=de'; location.reload()">DE
 
   <div id="main" role="main">
     $maybe msg <- mmsg

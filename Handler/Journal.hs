@@ -7,10 +7,12 @@ import Handler.Common
 getJournalR :: Handler Html
 getJournalR = do
   master <- getYesod
-  rawEntries <- runDB $ selectList [] [Desc TransactionId, LimitTo 30]
-  entries <- return $ L.reverse rawEntries
-  total <- return $ L.sum $ I.map (transactionAmount . entityVal) entries
-  timeLimit <- return $ transactionTime $ entityVal $ L.head $ entries
+  rawEntries <- runDB $ selectList [] [Desc TransactionId]
+  entries <- return $ L.reverse $ L.take 30 rawEntries
+  total <- return $ L.sum $ I.map (transactionAmount . entityVal) rawEntries
+  timeLimit <- case L.null entries of
+    False -> return $ transactionTime $ entityVal $ L.head $ entries
+    True -> liftIO getCurrentTime
   cashChecks <- runDB $ selectList [CashCheckTime >=. timeLimit] [Asc CashCheckId]
   list <- return $ merge entries cashChecks
   cashBalance <- getCashierBalance

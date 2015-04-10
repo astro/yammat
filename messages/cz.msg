@@ -14,7 +14,7 @@ EditFail: Změna se nezdařila
 Name: Jméno
 Price: Cena
 CurrentStock: Aktuální stav
-AnnouncedStock: oznámený stav
+AnnouncedStock: Oznamovací počet
 DeleteItem: Smazat zboží
 ItemDeleted: zboží smazáno
 UserCreated: Uživatel vytvořen

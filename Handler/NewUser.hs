@@ -32,8 +32,7 @@ newUserForm secs = renderDivs $ User
   <$> areq textField "Nickname" Nothing
   <*> pure 0
   <*> pure secs
-  <*> aopt emailField "E-mail" Nothing
-  <*> areq boolField "Benachrichtigung bei Kauf" (Just False)
+  <*> aopt emailField "E-mail eintragen, falls Benachrichtigungen erwünscht" Nothing
 
 data UserConf = UserConf
   { userConfEmail :: Maybe Text
@@ -59,12 +58,11 @@ postModifyUserR uId = do
     Just user -> do
       ((res, _), _) <- runFormPost $ modifyUserForm user
       case res of
-        FormSuccess conf -> do
+        FormSuccess email -> do
           runDB $ update uId
-            [ UserEmail =. userConfEmail conf
-            , UserNotify =. userConfNotify conf
+            [ UserEmail =. email
             ]
-          liftIO $ notify user conf
+          liftIO $ notify user email
           setMessage "Nutzerdaten aktualisiert"
           redirect $ SelectR uId
         _ -> do
@@ -74,16 +72,15 @@ postModifyUserR uId = do
       setMessage "Nutzer unbekannt"
       redirect $ HomeR
 
-modifyUserForm :: User -> Form UserConf
-modifyUserForm user = renderDivs $ UserConf
-  <$> aopt emailField "E-Mail" (Just $ userEmail user)
-  <*> areq boolField "Benachrichtigung bei Kauf" (Just $ userNotify user)
+modifyUserForm :: User -> Form (Maybe Text)
+modifyUserForm user = renderDivs $
+  aopt emailField "E-Mail eintragen, falls Benchrichtigungen erwünscht" (Just $ userEmail user)
 
-notify :: User -> UserConf -> IO ()
-notify user conf
-  | (userEmail user) == (userConfEmail conf) && (userNotify user) == (userConfNotify conf) = return ()
+notify :: User -> Maybe Text -> IO ()
+notify user email
+  | (userEmail user) == email = return ()
   | otherwise = case userEmail user of
-    Just email -> sendMail email "Profiländerung"
+    Just address -> sendMail address "Profiländerung"
       [stext|
 Hallo #{userIdent user},
 

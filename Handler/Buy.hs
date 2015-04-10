@@ -55,12 +55,10 @@ postBuyR uId bId = do
 
 notifyUser :: User -> Beverage -> Int -> App -> IO ()
 notifyUser user bev price master = do
-  case userNotify user of
-    True ->
-      case userEmail user of
-        Just email ->
-          liftIO $ sendMail email "Einkauf beim Matematen"
-            [stext|
+  case userEmail user of
+    Just email ->
+      liftIO $ sendMail email "Einkauf beim Matematen"
+        [stext|
 Hallo #{userIdent user},
 
 Du hast gerade beim Matematen für #{formatIntCurrency price}#{appCurrency $ appSettings master} #{beverageIdent bev} eingekauft.
@@ -68,10 +66,8 @@ Du hast gerade beim Matematen für #{formatIntCurrency price}#{appCurrency $ app
 Viele Grüsse,
 
 Der Matemat
-            |]
-        Nothing ->
-          return ()
-    False ->
+        |]
+    Nothing ->
       return ()
 
 getBuyCashR :: BeverageId -> Handler Html

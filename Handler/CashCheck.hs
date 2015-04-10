@@ -17,13 +17,13 @@ postCashCheckR = do
       currentTime <- liftIO getCurrentTime
       runDB $ insert_ c
       runDB $ insert_ $ Cashier (cashCheckBalance c) currentTime
-      setMessage "Kassensturz durchgeführt. Kasse aktualisiert"
+      setMessageI MsgCashChecked
       redirect $ HomeR
     _ -> do
-      setMessage "Fehler im Kassensturz"
+      setMessageI MsgCashCheckError
       redirect $ CashCheckR
 
 createCashCheckForm :: Form CashCheck
 createCashCheckForm = renderDivs $ CashCheck
-  <$> areq currencyField "Gezählter Betrag" Nothing
+  <$> areq currencyField (fieldSettingsLabel MsgCountedValue) Nothing
   <*> lift (liftIO getCurrentTime)

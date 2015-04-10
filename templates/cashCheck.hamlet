@@ -1,11 +1,12 @@
 $doctype 5
 
-<h3>Kassensturz
+<h3>_{MsgCashCheck}
 
 <p>
-  Bitte Kasse zählen und gezählten Betrag in unten stehendes Feld eintragen.
+  _{MsgPleaseCountAndCheck}
+  
 
 <form method=post enctype=#{enctype}>
   ^{cashCheckWidget}
   <div>
-    <input type=submit value="Absenden">
+    <input type=submit value="_{MsgSubmit}">

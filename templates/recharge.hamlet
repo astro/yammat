@@ -1,12 +1,12 @@
 $doctype 5
 
 <h3>
-  Guthaben aufladen
+  _{MsgRecharge}
 
 <p>
-  aktuelles Guthaben: #{formatIntCurrency (userBalance user)}
+  _{MsgCurrentCharge (userBalance user) currency}
 
 <form method=post enctype=#{enctype}>
   ^{rechargeWidget}
   <div>
-    <input type=submit value="Aufladen">
+    <input type=submit value="_{MsgRecharge}">

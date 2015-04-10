@@ -12,7 +12,7 @@ getModifyR bId = do
       defaultLayout $ do
         $(widgetFile "modify")
     Nothing -> do
-      setMessage "Artikel unbekannt"
+      setMessageI MsgItemUnknown
       redirect $ SummaryR
 
 postModifyR :: BeverageId -> Handler Html
@@ -29,21 +29,21 @@ postModifyR bId = do
             , BeverageAmount =. beverageAmount nBev
             , BeverageAlertAmount =. beverageAlertAmount nBev
             ]
-          setMessage "Bearbeitung erfolgreich"
+          setMessageI MsgEditSuccess
           redirect $ SummaryR
         _ -> do
-          setMessage "Bearbeitung nicht möglich"
+          setMessageI MsgEditFail
           redirect $ SummaryR
     Nothing -> do
-      setMessage "Artikel unbekannt"
+      setMessageI MsgItemUnknown
       redirect $ SummaryR
 
 modifyForm :: Beverage -> Form Beverage
 modifyForm bev = renderDivs $ Beverage
-  <$> areq textField "Name" (Just $ beverageIdent bev)
-  <*> areq currencyField "Preis" (Just $ beveragePrice bev)
-  <*> areq amountField "aktueller Bestand" (Just $ beverageAmount bev)
-  <*> areq amountField "Meldebestand" (Just $ beverageAlertAmount bev)
+  <$> areq textField (fieldSettingsLabel MsgName) (Just $ beverageIdent bev)
+  <*> areq currencyField (fieldSettingsLabel MsgPrice) (Just $ beveragePrice bev)
+  <*> areq amountField (fieldSettingsLabel MsgCurrentStock) (Just $ beverageAmount bev)
+  <*> areq amountField (fieldSettingsLabel MsgAnnouncedStock) (Just $ beverageAlertAmount bev)
 
 getDeleteBeverageR :: BeverageId -> Handler Html
 getDeleteBeverageR bId = do
@@ -51,8 +51,8 @@ getDeleteBeverageR bId = do
   case mBev of
     Just bev -> do
       runDB $ delete bId
-      setMessage "Artikel gelöscht"
+      setMessageI MsgItemDeleted
       redirect $ HomeR
     Nothing -> do
-      setMessage "Artikel unbekannt"
+      setMessageI MsgItemUnknown
       redirect $ HomeR

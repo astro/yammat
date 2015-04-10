@@ -1,7 +1,7 @@
 $doctype 5
 
 <h3>
-  Bestände wieder auffüllen
+  _{MsgRestock}
 
 $forall (Entity bId bev) <- beverages
   <article .article>
@@ -12,4 +12,4 @@ $forall (Entity bId bev) <- beverages
 <article .article #func>
   <a href=@{NewArticleR}>
     <p>
-      neuen Artikel hinzufügen
+      _{MsgAddItem}

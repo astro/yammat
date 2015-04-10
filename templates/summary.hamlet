@@ -1,15 +1,15 @@
 $doctype 5
 
-<h3>Übersicht
+<h3>_{MsgSummary}
 
 $if not $ L.null bevs
   <table>
     <thead>
       <tr>
-        <th>Name
-        <th>aktuelle Anzahl
-        <th>Meldebestand
-        <th>Preis in #{appCurrency $ appSettings master}
+        <th>_{MsgName}
+        <th>_{MsgCurrentAmount}
+        <th>_{MsgAnnouncedStock}
+        <th>_{MsgValueIn $ appCurrency $ appSettings master}
         <th>
     $forall (Entity bId bev) <- bevs
       <tr>
@@ -19,4 +19,4 @@ $if not $ L.null bevs
         <td>#{formatIntCurrency (beveragePrice bev)} #{appCurrency $ appSettings master}
         <td><a href=@{ModifyR bId}>bearbeiten
 $else
-  <p>keine Getränke vorhanden
+  <p>_{MsgNoItems}

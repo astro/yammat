@@ -3,15 +3,15 @@ $doctype 5
 <div .header>
   <ul>
     <li>
-      aktuelles Guthaben: #{formatIntCurrency (userBalance user)} #{appCurrency $ appSettings master}
+      _{MsgCurrentCharge (userBalance user) (appCurrency $ appSettings master)}
     <li>
       <a href=@{RechargeR uId}>
-        Guthaben aufladen
+        _{MsgRecharge}
     <li>
       <a href=@{ModifyUserR uId}>
-        Nutzerdaten akutalisieren
+        _{MsgEditUser}
 
-<h3>Wähle deinen Artikel, #{userIdent user}
+<h3>_{MsgChoosePrompt $ userIdent user}
 
 $if null beverages
   <h1>

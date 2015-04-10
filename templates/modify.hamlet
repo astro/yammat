@@ -8,4 +8,4 @@ $doctype 5
     <input type=submit value="Absenden">
 
 <a href=@{DeleteBeverageR bId}>
-  Artikel löschen
+  _{MsgDeleteItem}

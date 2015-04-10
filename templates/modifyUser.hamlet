@@ -1,8 +1,8 @@
 $doctype 5
 
-<h3>Benutzer bearbeiten
+<h3>_{MsgEditUser}
 
 <form method=post enctype=#{enctype}>
   ^{modifyUserWidget}
   <div>
-    <input type=submit value="Absenden">
+    <input type=submit value="_{MsgSubmit}">

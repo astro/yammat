@@ -1,8 +1,8 @@
 $doctype 5
 
-<h3>Neuer Artikel
+<h3>_{MsgNewItem}
 
 <form method=post enctype=#{enctype}>
   ^{newArticleWidget}
   <div>
-    <input type=submit value="Absenden">
+    <input type=submit value="_{MsgSubmit}">

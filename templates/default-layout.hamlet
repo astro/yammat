@@ -5,9 +5,12 @@
         <li>
           <a href=@{HomeR}>_{MsgHome}
         <li .lang>
-          <a onclick="document.cookie = '_LANG=en'; location.reload()">EN
-          <a onclick="document.cookie = '_LANG=de'; location.reload()">DE
-          <a onclick="document.cookie = '_LANG=cz'; location.reload()">CZ
+          <a onclick="document.cookie = '_LANG=en'; location.reload()">
+            <img .flag src=@{StaticR images_en_svg}>
+          <a onclick="document.cookie = '_LANG=de'; location.reload()">
+            <img .flag src=@{StaticR images_de_svg}>
+          <a onclick="document.cookie = '_LANG=cz'; location.reload()">
+            <img .flag src=@{StaticR images_cz_svg}>
 
   <div id="main" role="main">
     $maybe msg <- mmsg

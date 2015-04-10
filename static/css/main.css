@@ -29,6 +29,11 @@ article#func.article {
 	line-height: normal;
 }
 
+img.flag {
+	width: 3.2em;
+	height: 2em;
+}
+
 #message {
 	padding: 10px;
 	box-shadow: 0px 0px 3px #c4c4c4;

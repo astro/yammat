@@ -47,7 +47,7 @@ Purchase: Koupit
 PleaseCountAndCheck: Spočítej Hotovost a zadej ji v poli dole
 Submit: Odeslat
 Home: Domů
-Restock: Nabrat zásoby
+Restock: Přidat zásoby
 Journal: Žurnál
 Summary: Inventář
 PayCash: Platit v hotovosti

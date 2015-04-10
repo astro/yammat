@@ -20,7 +20,10 @@ Transaction
     deriving Typeable Show
 Cashier
     balance Int
-    created UTCTime default=now()
+    deriving Typeable Show
+CashCheck
+    balance Int
+    time UTCTime
     deriving Typeable Show
 
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)

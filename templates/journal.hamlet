@@ -19,8 +19,8 @@ $if not $ L.null entries
         $of Right cash
           <tr #check>
             <td colspan="2">
-              Kassensturz vom #{formatTime defaultTimeLocale "%A %F %H:%M" $ cashierCreated cash}:
-            <td>#{formatIntCurrency (cashierBalance cash)} #{appCurrency $ appSettings master}
+              Kassensturz vom #{formatTime defaultTimeLocale "%A %F %H:%M" $ cashCheckTime cash}:
+            <td>#{formatIntCurrency (cashCheckBalance cash)} #{appCurrency $ appSettings master}
     <tfoot>
       <tr>
         <td colspan="2">Gesamtbetrag:

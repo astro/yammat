@@ -21,18 +21,18 @@ postNewUserR = do
   case res of
     FormSuccess user -> do
       _ <- runDB $ insert user
-      setMessage "Benutzer angelegt"
+      setMessageI MsgUserCreated
       redirect $ HomeR
     _ -> do
-      setMessage "Benutzer konnte nicht angelegt werden"
+      setMessageI MsgUserNotCreated
       redirect $ NewUserR
 
 newUserForm :: Int -> Form User
 newUserForm secs = renderDivs $ User
-  <$> areq textField "Nickname" Nothing
+  <$> areq textField (fieldSettingsLabel MsgName) Nothing
   <*> pure 0
   <*> pure secs
-  <*> aopt emailField "E-mail eintragen, falls Benachrichtigungen erwünscht" Nothing
+  <*> aopt emailField (fieldSettingsLabel MsgEmailNotify) Nothing
 
 data UserConf = UserConf
   { userConfEmail :: Maybe Text
@@ -48,7 +48,7 @@ getModifyUserR uId = do
       defaultLayout $ do
       $(widgetFile "modifyUser")
     Nothing -> do
-      setMessage "Benutzer unbekannt"
+      setMessageI MsgUserUnknown
       redirect $ HomeR
 
 postModifyUserR :: UserId -> Handler Html
@@ -63,18 +63,18 @@ postModifyUserR uId = do
             [ UserEmail =. email
             ]
           liftIO $ notify user email
-          setMessage "Nutzerdaten aktualisiert"
+          setMessageI MsgUserEdited
           redirect $ SelectR uId
         _ -> do
-          setMessage "Nutzerdatenaktualisierung nicht erfolgreich"
+          setMessageI MsgUserNotEdited
           redirect $ SelectR uId
     Nothing -> do
-      setMessage "Nutzer unbekannt"
+      setMessageI MsgUserUnknown
       redirect $ HomeR
 
 modifyUserForm :: User -> Form (Maybe Text)
 modifyUserForm user = renderDivs $
-  aopt emailField "E-Mail eintragen, falls Benchrichtigungen erwünscht" (Just $ userEmail user)
+  aopt emailField (fieldSettingsLabel MsgEmailNotify) (Just $ userEmail user)
 
 notify :: User -> Maybe Text -> IO ()
 notify user email

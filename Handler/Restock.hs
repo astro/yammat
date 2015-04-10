@@ -18,7 +18,7 @@ getUpstockR bId = do
       defaultLayout $ do
         $(widgetFile "upstock")
     Nothing -> do
-      setMessage "Artikel unbekannt"
+      setMessageI MsgItemUnknown
       redirect $ HomeR
 
 postUpstockR :: BeverageId -> Handler Html
@@ -32,21 +32,21 @@ postUpstockR bId = do
           case c > 0 of
             True -> do
               runDB $ update bId [BeverageAmount +=. c]
-              setMessage "Bestand aufgefüllt"
+              setMessageI MsgStockedUp
               redirect $ HomeR
             False -> do
-              setMessage "Bestand kann nicht negativ aufgefüllt werden"
+              setMessageI MsgNotStockedUp
               redirect $ UpstockR bId
         _ -> do
-          setMessage "Fehler beim Auffüllen"
+          setMessageI MsgStockupError
           redirect $ UpstockR bId
     Nothing -> do
-      setMessage "Artikel unbekannt"
+      setMessageI MsgItemUnknown
       redirect $ HomeR
 
 upstockForm :: Form Int
 upstockForm = renderDivs
-  $ areq amountField "Anzahl hinzugefügt" (Just 0)
+  $ areq amountField (fieldSettingsLabel MsgAmountAdded) (Just 0)
 
 getNewArticleR :: Handler Html
 getNewArticleR = do
@@ -60,15 +60,15 @@ postNewArticleR = do
   case result of
     FormSuccess bev -> do
       runDB $ insert_ bev
-      setMessage "Neuer Artikel hinzugefügt"
+      setMessageI MsgItemAdded
       redirect $ HomeR
     _ -> do
-      setMessage "Fehler beim Hinzufügen"
+      setMessageI MsgItemNotAdded
       redirect $ HomeR
 
 newArticleForm :: Form Beverage
 newArticleForm = renderDivs $ Beverage
-  <$> areq textField "Name" Nothing
-  <*> areq currencyField "Preis" (Just 100)
-  <*> areq amountField "Anzahl Elemente" (Just 0)
-  <*> areq amountField "Warnung bei Anzahl" (Just 0)
+  <$> areq textField (fieldSettingsLabel MsgName) Nothing
+  <*> areq currencyField (fieldSettingsLabel MsgPrice) (Just 100)
+  <*> areq amountField (fieldSettingsLabel MsgAmount) (Just 0)
+  <*> areq amountField (fieldSettingsLabel MsgAmountWarning) (Just 0)

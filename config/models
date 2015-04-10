@@ -19,7 +19,7 @@ Transaction
     deriving Typeable Show
 Cashier
     balance Int
-    created UTCTime
+    created UTCTime default=now()
     deriving Typeable Show
 CashCheck
     balance Int

@@ -56,6 +56,11 @@ header a {
 	box-shadow: 0px 0px 3px #c4c4c4;
 }
 
+header .lang a {
+	background-color: olive;
+	color: yellow;
+}
+
 header ul {
 	list-style: none outside none;
 }

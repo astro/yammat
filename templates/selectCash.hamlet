@@ -1,6 +1,6 @@
 $doctype 5
 
-<h3>Wähle deinen Artikel
+<h3>_{MsgSelectItem}
 
 $forall (Entity bId bev) <- beverages
   <article .article>

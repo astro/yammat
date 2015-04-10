@@ -1,11 +1,11 @@
 $doctype 5
 
-<h3>Kauf von #{beverageIdent bev}
+<h3>_{MsgPurchaseOf $ beverageIdent bev}
 
 <p>
-  Preis pro Einheit: #{formatIntCurrency (beveragePrice bev + 50)} #{appCurrency $ appSettings master}
+  _{MsgPricePerUnit (beveragePrice bev + 50) (appCurrency $ appSettings master)}
 
 <form method=post enctype=#{enctype}>
   ^{buyCashWidget}
   <div>
-    <input type=submit value="Kaufen">
+    <input type=submit value="_{MsgPurchase}">

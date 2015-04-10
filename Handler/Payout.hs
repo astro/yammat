@@ -20,14 +20,15 @@ postPayoutR = do
   ((res, _), _) <- runFormPost payoutForm
   case res of
     FormSuccess payment -> do
-      updateCashier (- (paymentAmount payment)) ("Auszahlung: " `T.append` paymentDesc payment)
-      setMessage "Betrag ausgezahlt"
+      msg <- renderMessage' $ MsgPayout $ paymentDesc payment
+      updateCashier (- (paymentAmount payment)) msg
+      setMessageI MsgPaidOut
       redirect $ HomeR
     _ -> do
-      setMessage "Auszahlung nicht möglich"
+      setMessageI MsgNotPaidOut
       redirect $ JournalR
 
 payoutForm :: Form Payment
 payoutForm = renderDivs $ Payment
-  <$> areq currencyField "Betrag" Nothing
-  <*> areq textField "Beschreibung" Nothing
+  <$> areq currencyField (fieldSettingsLabel MsgValue) Nothing
+  <*> areq textField (fieldSettingsLabel MsgDescription) Nothing

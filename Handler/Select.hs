@@ -15,7 +15,7 @@ getSelectR uId = do
       defaultLayout $ do
         $(widgetFile "select")
     Nothing -> do
-      setMessage "Benutzer unbekannt"
+      setMessageI MsgUserUnknown
       redirect $ HomeR
 
 getSelectCashR :: Handler Html
@@ -30,10 +30,11 @@ getRechargeR uId = do
   case mUser of
     Just user -> do
       (rechargeWidget, enctype) <- generateFormPost rechargeForm
+      currency <- appCurrency <$> appSettings <$> getYesod
       defaultLayout $ do
         $(widgetFile "recharge")
     Nothing -> do
-      setMessage "Benutzer unbekannt"
+      setMessageI MsgUserUnknown
       redirect $ HomeR
 
 postRechargeR :: UserId -> Handler Html
@@ -48,15 +49,15 @@ postRechargeR uId = do
           time <- liftIO getCurrentTime
           secs <- return $ R.read $ formatTime defaultTimeLocale "%s" time
           runDB $ update uId [UserBalance +=. amount, UserTimestamp =. secs]
-          setMessage "Guthaben erfolgreich aufgeladen"
+          setMessageI MsgRecharged
           redirect $ HomeR
         _ -> do
-          setMessage "Fehler beim Aufladen"
+          setMessageI MsgRechargeError
           redirect $ HomeR
     Nothing -> do
-      setMessage "Benutzer unbekannt"
+      setMessageI MsgUserUnknown
       redirect $ HomeR
 
 rechargeForm :: Form Int
 rechargeForm = renderDivs
-  $ areq currencyField "Betrag" (Just 0)
+  $ areq currencyField (fieldSettingsLabel MsgValue) (Just 0)

@@ -19,6 +19,7 @@
 /journal 			JournalR		GET
 /payout				PayoutR			GET POST
 /summary			SummaryR		GET
+/summary.json			SummaryJsonR		GET
 /modify/#BeverageId		ModifyR			GET POST
 /delete/#BeverageId		DeleteBeverageR		GET
 /cashcheck			CashCheckR		GET POST

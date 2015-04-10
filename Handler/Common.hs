@@ -33,7 +33,8 @@ updateCashier amount desc = do
       runDB $ update (entityKey entCash) [CashierBalance +=. amount]
       runDB $ insert_ trans
     Nothing -> do
-      runDB $ insert_ $ Cashier amount
+      currentTime <- liftIO getCurrentTime
+      runDB $ insert_ $ Cashier amount currentTime
       runDB $ insert_ trans
 
 getCashierBalance :: Handler Int

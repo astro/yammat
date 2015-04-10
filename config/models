@@ -19,6 +19,7 @@ Transaction
     deriving Typeable Show
 Cashier
     balance Int
+    created UTCTime
     deriving Typeable Show
 CashCheck
     balance Int

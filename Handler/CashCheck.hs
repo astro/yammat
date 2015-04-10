@@ -14,8 +14,9 @@ postCashCheckR = do
   ((res, _), _) <- runFormPost createCashCheckForm
   case res of
     FormSuccess c -> do
+      currentTime <- liftIO getCurrentTime
       runDB $ insert_ c
-      runDB $ insert_ $ Cashier (cashCheckBalance c)
+      runDB $ insert_ $ Cashier (cashCheckBalance c) currentTime
       setMessage "Kassensturz durchgeführt. Kasse aktualisiert"
       redirect $ HomeR
     _ -> do

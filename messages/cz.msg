@@ -16,10 +16,10 @@ Price: Cena
 CurrentStock: Aktuální stav
 AnnouncedStock: Oznamovací počet
 DeleteItem: Smazat zboží
-ItemDeleted: zboží smazáno
+ItemDeleted: Zboží smazáno
 UserCreated: Uživatel vytvořen
 UserNotCreated: Nemohl jsem vytvořit uživatele
-EmailNotify: vlož Email zda si přeješ správy
+EmailNotify: Vlož Email zda si přeješ správy
 BuyNotification: Notify on purchase
 UserEdited: Uživatel změněn
 UserNotEdited: Nemohl jsem změnit uživatele
@@ -54,7 +54,7 @@ PayCash: Platit v hotovosti
 CreateUser: Vytvořit uživatele
 ReactivateOldUser: Reaktivovat starého uživatele
 Time: Čas
-ValueIn currency@Text: Obnos v #{currency}
+ValueIn currency@Text: Cena v #{currency}
 TotalValue: Celkový obnos
 CashStock: Hotovost
 PayoutFromCash: Vyplatit

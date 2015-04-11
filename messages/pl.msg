@@ -74,3 +74,9 @@ NoItems: Napoje dostępne żadne
 StockUp name@Text: składało się z #{name} wypełnić
 Fillup: wypełnić
 CashCheckOf date@String: Fundusze spaść z #{date}
+NotJson: These are not JSON data
+Upload: Upload backup
+SelectFile: Select file
+RestoreSuccess: Database restored successfully!
+InventoryBackup: Backup inventory
+RestoreFromBackup: Restore from backup

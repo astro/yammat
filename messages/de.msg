@@ -74,3 +74,9 @@ NoItems: keine Getränke vorhanden
 StockUp name@Text: Bestand von #{name} auffüllen
 Fillup: Auffüllen
 CashCheckOf date@String: Kassensturz vom #{date}
+NotJson: Dies sind keine JSON daten
+Upload: Sicherung hochladen
+SelectFile: Datei auswählen
+RestoreSuccess: Datenbankwiederherstellung erfolgreich!
+InventoryBackup: Inventarsicherung herunterladen
+RestoreFromBackup: Inventar wiederherstellen

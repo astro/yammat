@@ -23,3 +23,5 @@
 /modify/#BeverageId		ModifyR			GET POST
 /delete/#BeverageId		DeleteBeverageR		GET
 /cashcheck			CashCheckR		GET POST
+/backup				UploadInventoryJsonR	GET POST
+/backup/inventory.json		InventoryJsonR		GET

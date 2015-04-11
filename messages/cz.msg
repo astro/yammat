@@ -74,3 +74,9 @@ NoItems: Žadné zboží
 StockUp name@Text: Přidat #{name}
 Fillup: Naplnit
 CashCheckOf date@String: Kontrola kasy od #{date}
+NotJson: Toto nejsou JSON data
+Upload: Nahrát zálohu
+SelectFile: Vyber soubor
+RestoreSuccess: Databáze znovu nahrána!
+InventoryBackup: Stahnout zálohu
+RestoreFromBackup: Nahrát záĺohu

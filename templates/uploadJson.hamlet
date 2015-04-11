@@ -1,0 +1,9 @@
+$doctype 5
+
+<h3>
+  _{MsgUpload}
+
+<form method=post enctype=#{enctype}>
+  ^{uploadJsonWidget}
+  <div>
+    <input type=submit value="_{MsgSubmit}">

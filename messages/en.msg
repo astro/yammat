@@ -74,3 +74,9 @@ NoItems: No items
 StockUp name@Text: Stock up #{name}
 Fillup: Fill up
 CashCheckOf date@String: Cash check of #{date}
+NotJson: These are not JSON data
+Upload: Upload backup
+SelectFile: Select file
+RestoreSuccess: Database restored successfully!
+InventoryBackup: Backup inventory
+RestoreFromBackup: Restore from backup

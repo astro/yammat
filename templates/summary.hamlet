@@ -20,3 +20,11 @@ $if not $ L.null bevs
         <td><a href=@{ModifyR bId}>bearbeiten
 $else
   <p>_{MsgNoItems}
+
+<ul>
+  <li>
+    <a href=@{InventoryJsonR}>
+      _{MsgInventoryBackup}
+  <li>
+    <a href=@{UploadInventoryJsonR}>
+      _{MsgRestoreFromBackup}

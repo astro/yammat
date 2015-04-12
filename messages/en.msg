@@ -80,3 +80,5 @@ SelectFile: Select file
 RestoreSuccess: Database restored successfully!
 InventoryBackup: Backup inventory
 RestoreFromBackup: Restore from backup
+Increment: ++
+Decrement: --

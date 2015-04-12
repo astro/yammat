@@ -9,3 +9,6 @@ $doctype 5
   ^{upstockWidget}
   <div>
     <input type=submit value="_{MsgFillup}">
+    <input onclick="e=document.getElementById('hident2');e.value=parseInt(e.value)+1;" value="_{MsgIncrement}" type="button">
+    <input onclick="e=document.getElementById('hident2');e.value=(parseInt(e.value)>=1)?parseInt(e.value)-1:0;" value="_{MsgDecrement}" type="button">
+

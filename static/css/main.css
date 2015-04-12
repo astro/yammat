@@ -118,7 +118,7 @@ footer a {
 
 table, td, th {
 	border: 1px solid black;
-        border-spacing: 0.5rem;
+	border-spacing: 0.5rem;
 	border-collapse: collapse;
 }
 
@@ -155,9 +155,10 @@ h1 {
 }
 
 input[type] {
+	font-size: 24.5px;
 	width: auto;
-	min-width: 5em;
-	height: 5em;
+	min-width: 5rem;
+	height: 5rem;
 }
 
 .container {

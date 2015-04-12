@@ -1,82 +1,82 @@
-UserReactivated: wyłączony użytkownika
-UserUnknown: nieznany użytkownik
-UserOrArticleUnknown: Użytkownik lub artykuły nieznane
-PurchaseSuccess: świetna zabawa
-PurchaseDebtful: uważaj kredyty ostrożność w minusie
-NotEnoughItems: tak wiele rzeczy nie są dostępne
+UserReactivated: użytkownik włączony
+UserUnknown: użytkownik nieznany
+UserOrArticleUnknown: użytkownik lub artykuł nieznany
+PurchaseSuccess: na zdrowie!
+PurchaseDebtful: uwaga: masz minus
+NotEnoughItems: za mało sztuk
 ErrorOccured: coś poszło nie tak
-ItemUnknown: Artykuły nieznane
-PurchaseSuccessCash price@Int currency@Text: świetna zabawa. prosimy o dokonanie wpłaty #{formatIntCurrency price} #{currency} na fundusz
+ItemUnknown: artykuł nieznany
+PurchaseSuccessCash price@Int currency@Text: na zdrowie! prosimy o dokonanie wpłaty #{formatIntCurrency price} #{currency} gotówką
 ItemDisappeared: artykuł zniknął o_0
 Amount: liczba
-EditSuccess: przetwarzanie powodzeniem
+EditSuccess: przetwarzanie powiodło się
 EditFail: przetwarzanie nie jest możliwe
 Name: nazwa
 Price: cena
-CurrentStock: obecny był
-AnnouncedStock: Zmień kolejność
-DeleteItem: usunięcie artykułu
-ItemDeleted: usunięte elementy
-UserCreated: utworzyć użytkownika
-UserNotCreated: Użytkownik nie może być utworzony
-EmailNotify: Podaj e-mail powiadomienia w razie potrzeby
-BuyNotification: powiadomienie na zakup
-UserEdited: aktualizacja danych użytkownika
-UserNotEdited: Aktualizacja danych użytkownika nie powiodło się
-Payout desc@Text: wypłaty: #{desc}
+CurrentStock: aktualny wybór
+AnnouncedStock: wybór ogłoszony
+DeleteItem: usuń artykuł
+ItemDeleted: artykuł usunięty
+UserCreated: użytkownik utworzony
+UserNotCreated: użytkownik nie może być utworzony
+EmailNotify: podaj e-mail jeśli chcesz otrzymywać powiadomienia
+BuyNotification: powiadomienie przy zakupie
+UserEdited: zaktualizowano dane użytkownika
+UserNotEdited: aktualizacja danych użytkownika nie powiodła się
+Payout desc@Text: wypłata: #{desc}
 PaidOut: kwota wypłacona
-NotPaidOut: Wypłata nie jest możliwe
+NotPaidOut: wypłata nie jest możliwa
 Value: należność
 Description: opis
-StockedUp: Uzupełniania zapasów
-NotStockedUp: Zdjęcie nie może być ujemna wypełnione
-StockupError: błąd podczas napełniania
-AmountAdded: dodany numer
-ItemAdded: Dodano nowy artykuł
-ItemNotAdded: Błąd podczas dodawania
-AmountWarning: ostrzeżenie w liczbie
-Recharged: kredyty powodzeniem pobierana
-RechargeError: Podczas ładowania błędów
-CashCheck: fundusze spaść
-CashChecked: Kassensturz wykonania. Zaktualizowany Zamówienie
-CashCheckError: błąd
-CountedValue: kwota wypłacona
+StockedUp: zapas uzupełniony
+NotStockedUp: zapas nieuzupełniony
+StockupError: błąd uzupełniania zapasu
+AmountAdded: dodana ilość
+ItemAdded: artykuł dodany
+ItemNotAdded: błąd dodawania
+AmountWarning: ostrzeżenie: ilość
+Recharged: doładowano
+RechargeError: błąd w doładowaniu
+CashCheck: podlicz kasę
+CashChecked: kasa podliczona i zaktualizowana
+CashCheckError: błąd podliczania
+CountedValue: kwota naliczona
 PurchaseOf name@Text: zakup #{name}
-PricePerUnit price@Int currency@Text: Cena za sztukęt: #{formatIntCurrency price} #{currency}
-Purchase: kupić
-PleaseCountAndCheck: Proszę to kasy i wpisać kwotę zapłaconą w polu poniżej.
-Submit: wysłać
+PricePerUnit price@Int currency@Text: cena za sztukę: #{formatIntCurrency price} #{currency}
+Purchase: zakup
+PleaseCountAndCheck: podlicz należność i wynik wpisz w polu poniżej
+Submit: wyślij
 Home: strona główna
-Restock: uzupełnić
+Restock: uzupełnij inwentarz
 Journal: czasopismo
 Summary: inwentarz
-PayCash: płacić gotówką
-CreateUser: Tworzenie nowego użytkownika
-ReactivateOldUser: Wyłącz stary użytkownika
+PayCash: płatność gotówką
+CreateUser: utworz użytkownika
+ReactivateOldUser: włącz istniejącego użytkownika
 Time: czas
-ValueIn currency@Text: wynieść się #{currency}
-TotalValue: Całkowita ilość
-CashStock: gotówka
-PayoutFromCash: Zapłać z funduszu
-NothingToShow: Nie zarejestrowane ruchy
-NewItem: Nowy artykuł
-NewUser: Nowy użytkownik
-DoPayout: Wypłata
-ReactivateUser: Wyłącz użytkownika
-Recharge: Naładuj kredytowej
+ValueIn currency@Text: należność w #{currency}
+TotalValue: całkowita należność
+CashStock: dostępna gotówka
+PayoutFromCash: zapłać z kasy
+NothingToShow: brak ruchu
+NewItem: nowy artykuł
+NewUser: nowy użytkownik
+DoPayout: wypłać
+ReactivateUser: włącz użytkownika
+Recharge: uzupełnij kredyt
 CurrentCharge charge@Int currency@Text: saldo bieżące: #{formatIntCurrency charge} #{currency}
-AddItem: Dodaj nową pozycję
-EditUser: Aktualizacja danych użytkownika
-ChoosePrompt text@Text: Wybierz swój artykuł, #{text}
-SelectItem: Wybierz swój artykuł
-CurrentAmount: Aktualny numer
-NoItems: Napoje dostępne żadne
-StockUp name@Text: składało się z #{name} wypełnić
-Fillup: wypełnić
-CashCheckOf date@String: Fundusze spaść z #{date}
-NotJson: These are not JSON data
-Upload: Upload backup
-SelectFile: Select file
-RestoreSuccess: Database restored successfully!
-InventoryBackup: Backup inventory
-RestoreFromBackup: Restore from backup
+AddItem: dodaj nowy artykuł
+EditUser: aktualizacja danych użytkownika
+ChoosePrompt text@Text: wybierz artykuł, #{text}
+SelectItem: wybierz artykuł
+CurrentAmount: aktualna ilość
+NoItems: brak towaru
+StockUp name@Text: w tym: #{name} wpisz nazwę
+Fillup: wypełnij
+CashCheckOf date@String: podliczenie kasy z dn. #{date}
+NotJson: to nie JSON data
+Upload: wyślij kopię zapasową
+SelectFile: wybierz plik
+RestoreSuccess: baza danych pomyślnie przywrócona!
+InventoryBackup: kopia zapasowa inwentarza
+RestoreFromBackup: przywróć z kopii zapasowej

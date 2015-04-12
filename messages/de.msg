@@ -80,3 +80,5 @@ SelectFile: Datei auswählen
 RestoreSuccess: Datenbankwiederherstellung erfolgreich!
 InventoryBackup: Inventarsicherung herunterladen
 RestoreFromBackup: Inventar wiederherstellen
+Increment: ++
+Decrement: --

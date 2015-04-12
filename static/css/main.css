@@ -154,8 +154,9 @@ h1 {
 	-moz-animation-timing-function: linear;
 }
 
-input[type="submit"] {
+input[type] {
 	width: auto;
+	min-width: 5em;
 	height: 5em;
 }
 

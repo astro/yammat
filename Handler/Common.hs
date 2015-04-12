@@ -50,7 +50,7 @@ currencyField = Field
         Right (a, "") -> Right $ floor $ 100 * a
         _             -> Left $ MsgInvalidNumber rawVals
   , fieldView = \theId name attr val req -> toWidget [hamlet|$newline never
-      <input id='{theId} name=#{name} *{attr} type="number" step=0.01 min=0 :req:required="" value=#{showVal val}>
+      <input id=#{theId} name=#{name} *{attr} type="number" step=0.01 min=0 :req:required="" value=#{showVal val}>
       |]
   , fieldEnctype = UrlEncoded
   }
@@ -65,7 +65,7 @@ amountField = Field
       Right (a, "") -> Right a
       _ -> Left $ MsgInvalidInteger s
   , fieldView = \theId name attr val req -> toWidget [hamlet|$newline never
-    <input id=#{theId} name="#{name}" *{attr} type="number" step=1 min=0 :req:required="" value="#{showVal val}">
+    <input id=#{theId} name=#{name} *{attr} type="number" step=1 min=0 :req:required="" value="#{showVal val}">
     |]
   , fieldEnctype = UrlEncoded
   }

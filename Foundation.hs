@@ -28,11 +28,14 @@ prependZero t0 = if T.null t1
   where t1 = T.dropWhile ((==) ' ') t0
 
 formatFloat :: Double -> Text
-formatFloat d = T.pack (t ++ c)
+formatFloat d = T.pack (pre ++ t ++ c)
   where
     t = reverse (intercalate "." $ chunksOf 3 $ reverse $ fst sp)
     c = "," ++ tail (snd sp)
-    sp = (break (== '.') (printf "%.2f" d))
+    sp = (break (== '.') (printf "%.2f" (abs d)))
+    pre = case d < 0 of
+      True -> "-"
+      False -> ""
     -- T.pack . (splitEvery 3) . (printf "%,2f")
 
 formatIntCurrency :: Int -> Text

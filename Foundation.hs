@@ -115,6 +115,9 @@ instance Yesod App where
                 [ css_bootstrap_css
                 , css_main_css
                 ])
+            $(combineScripts 'StaticR
+                [ js_crementing_js
+                ])
             $(widgetFile "default-layout")
         withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 

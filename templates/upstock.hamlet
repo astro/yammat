@@ -9,5 +9,5 @@ $doctype 5
   ^{upstockWidget}
   <div>
     <input type=submit value="_{MsgFillup}">
-    <input onclick="crmnt( document.getElementById('hident2'), 1 )" value="_{MsgIncrement}" type="button">
-    <input onclick="crmnt( document.getElementById('hident2'), -1 )" value="_{MsgDecrement}" type="button">
+    <input onclick="crmnt( document.getElementById('crement'), 1 )" value="_{MsgIncrement}" type="button">
+    <input onclick="crmnt( document.getElementById('crement'), -1 )" value="_{MsgDecrement}" type="button">

@@ -46,7 +46,7 @@ postUpstockR bId = do
 
 upstockForm :: Form Int
 upstockForm = renderDivs
-  $ areq amountField (fieldSettingsLabel MsgAmountAdded) (Just 0)
+  $ areq amountField (fieldSettingsLabel MsgAmountAdded) (Just 1)
 
 getNewArticleR :: Handler Html
 getNewArticleR = do

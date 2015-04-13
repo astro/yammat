@@ -9,3 +9,5 @@ $doctype 5
   ^{buyCashWidget}
   <div>
     <input type=submit value="_{MsgPurchase}">
+    <input onclick="crmnt( document.getElementById('crement'), 1 )" value="_{MsgIncrement}" type="button">
+    <input onclick="crmnt( document.getElementById('crement'), -1 )" value="_{MsgDecrement}" type="button">

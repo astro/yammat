@@ -12,6 +12,13 @@
 	border-radius: 6px;
 }
 
+.text {
+	text-align: left;
+}
+.numeric {
+	text-align: right;	
+}
+
 article#func.article {
 	background-color: #fff7bd;
 }

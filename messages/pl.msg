@@ -80,5 +80,6 @@ SelectFile: wybierz plik
 RestoreSuccess: baza danych pomyślnie przywrócona!
 InventoryBackup: kopia zapasowa inwentarza
 RestoreFromBackup: przywróć z kopii zapasowej
+NegativeRecharge: You can not recharge negative amounts
 Increment: ++
 Decrement: --

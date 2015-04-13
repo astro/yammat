@@ -45,12 +45,17 @@ postRechargeR uId = do
       ((res, _), _) <- runFormPost rechargeForm
       case res of
         FormSuccess amount -> do
-          updateCashier amount ("Guthaben: " `T.append` (userIdent user))
-          time <- liftIO getCurrentTime
-          secs <- return $ R.read $ formatTime defaultTimeLocale "%s" time
-          runDB $ update uId [UserBalance +=. amount, UserTimestamp =. secs]
-          setMessageI MsgRecharged
-          redirect $ HomeR
+          case amount < 0 of
+            False -> do
+              updateCashier amount ("Guthaben: " `T.append` (userIdent user))
+              time <- liftIO getCurrentTime
+              secs <- return $ R.read $ formatTime defaultTimeLocale "%s" time
+              runDB $ update uId [UserBalance +=. amount, UserTimestamp =. secs]
+              setMessageI MsgRecharged
+              redirect $ HomeR
+            True -> do
+              setMessageI MsgNegativeRecharge
+              redirect $ RechargeR uId
         _ -> do
           setMessageI MsgRechargeError
           redirect $ HomeR

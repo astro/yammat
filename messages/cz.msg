@@ -80,5 +80,6 @@ SelectFile: Vyber soubor
 RestoreSuccess: Databáze znovu nahrána!
 InventoryBackup: Stahnout zálohu
 RestoreFromBackup: Nahrát záĺohu
+NegativeRecharge: Nelze nabít negativní obnos
 Increment: ++
 Decrement: --

@@ -6,7 +6,7 @@ PurchaseDebtful: Pozor: Jsi v dluhu!
 NotEnoughItems: Není dost zboží dostupné
 ErrorOccured: Něco se pokazilo
 ItemUnknown: Zboží neznámé
-PurchaseSuccessCash: price@Int currency@Text: Dobrou chuť. prosím zaplať #{currency} #{formatIntCurrency price} #{currency} v hotovosti.
+PurchaseSuccessCash price@Int currency@Text: Dobrou chuť. prosím zaplať #{currency} #{formatIntCurrency price} #{currency} v hotovosti.
 ItemDisappeared: Zboží zmizelo o_0
 Amount: Počet
 EditSuccess: Změna úspěšná

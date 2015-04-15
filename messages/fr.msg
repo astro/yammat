@@ -19,7 +19,6 @@ DeleteItem: Annuler chose
 ItemDeleted: Chose annulée
 UserCreated: Compte édifié
 UserNotCreated: Impossible de édifier un compte
-Email: eMail
 BuyNotification: Notification de achat
 UserEdited: Compte martelé
 UserNotEdited: Impossible de modifier compte

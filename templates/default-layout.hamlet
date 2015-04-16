@@ -9,6 +9,8 @@
             <img .flag src=@{StaticR images_cz_svg}>
           <a onclick="document.cookie = '_LANG=de'; location.reload()">
             <img .flag src=@{StaticR images_de_svg}>
+          <a onclick="document.cookie = '_LANG=fr'; location.reload()">
+            <img .flag src=@{StaticR images_fr_svg}>
           <a onclick="document.cookie = '_LANG=en'; location.reload()">
             <img .flag src=@{StaticR images_en_svg}>
           <a onclick="document.cookie = '_LANG=pl'; location.reload()">

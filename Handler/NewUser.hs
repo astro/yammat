@@ -41,7 +41,7 @@ newUserForm secs = renderDivs $ User
 
 data UserConf = UserConf
   { userConfEmail :: Maybe Text
-  , userConfNotify :: Bool
+  , userConfAvatar :: Maybe AvatarId
   }
 
 getModifyUserR :: UserId -> Handler Html
@@ -63,11 +63,12 @@ postModifyUserR uId = do
     Just user -> do
       ((res, _), _) <- runFormPost $ modifyUserForm user
       case res of
-        FormSuccess email -> do
+        FormSuccess uc -> do
           runDB $ update uId
-            [ UserEmail =. email
+            [ UserEmail =. userConfEmail uc
+            , UserAvatar =. userConfAvatar uc
             ]
-          liftIO $ notify user email
+          liftIO $ notify user (userConfEmail uc)
           setMessageI MsgUserEdited
           redirect $ SelectR uId
         _ -> do
@@ -77,9 +78,14 @@ postModifyUserR uId = do
       setMessageI MsgUserUnknown
       redirect $ HomeR
 
-modifyUserForm :: User -> Form (Maybe Text)
-modifyUserForm user = renderDivs $
-  aopt emailField (fieldSettingsLabel MsgEmailNotify) (Just $ userEmail user)
+modifyUserForm :: User -> Form UserConf
+modifyUserForm user = renderDivs $ UserConf
+  <$> aopt emailField (fieldSettingsLabel MsgEmailNotify) (Just $ userEmail user)
+  <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) (Just $ userAvatar user)
+  where
+    avatars = do
+      ents <- runDB $ selectList [] [Asc AvatarIdent]
+      optionsPairs $ map (\ent -> ((avatarIdent $ entityVal ent), entityKey ent)) ents
 
 notify :: User -> Maybe Text -> IO ()
 notify user email

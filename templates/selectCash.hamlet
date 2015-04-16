@@ -7,3 +7,5 @@ $forall (Entity bId bev) <- beverages
     <a href=@{BuyCashR bId}>
       <p>
         #{beverageIdent bev}
+        $if beverageAvatar bev /= Nothing
+          <img src=@{GetAvatarR $ fromJust $ beverageAvatar bev}>

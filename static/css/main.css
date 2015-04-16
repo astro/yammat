@@ -35,12 +35,15 @@ article#func.article {
 	position: relative;
 	top: -7.75em;
 	text-align: left;
+	z-index: 0;
 }
 
 .article a p {
+	position: relative;
 	display: inline-block;
 	vertical-align: middle;
 	line-height: normal;
+	z-index: 1;
 }
 
 img.flag {

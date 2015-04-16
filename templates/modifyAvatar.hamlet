@@ -1,0 +1,8 @@
+$doctype 5
+
+<h3>_{MsgModifyAvatar}
+
+<form method=post enctype=#{enctype}>
+  ^{avatarModifyWidget}
+  <div>
+    <input type=submit value=_{MsgSubmit}>

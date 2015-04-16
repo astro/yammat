@@ -83,3 +83,14 @@ RestoreFromBackup: Inventar wiederherstellen
 NegativeRecharge: Keine negativen Beträge aufladen
 Increment: ++
 Decrement: --
+SelectAvatar: Avatar auswählen
+Avatars: Avatare
+NoAvatars: Keine Avatare
+ModifyAvatar: Avatar bearbeiten
+AvatarUnknown: Unbekannter Avatar
+AvatarUpdateSuccessfull: Avatar erfolgreich aktualisiert
+AvatarIdent: Avtarname
+AvatarFileChange: Datei auswählen um Avatar zu ändern
+AvatarFile: Datei für den Avatar
+NewAvatar: Neuer Avatar
+AvatarUploadSuccessfull: Avatar erfolgreich hochgeladen

@@ -26,8 +26,15 @@ getSummaryJsonR = do
                  ]
         ) bevs
 
-instance ToJSON Beverage where
-  toJSON (Beverage ident price amount alertAmount) =
+data BevStore = BevStore
+  { bevStoreIdent :: Text
+  , bevStorePrice :: Int
+  , bevStoreAmount :: Int
+  , bevStoreAlertAmount :: Int
+  }
+
+instance ToJSON BevStore where
+  toJSON (BevStore ident price amount alertAmount) =
     object
       [ "name" .= ident
       , "price" .= price
@@ -35,8 +42,8 @@ instance ToJSON Beverage where
       , "alertAt" .= alertAmount
       ]
 
-instance FromJSON Beverage where
-  parseJSON (Object o) = Beverage
+instance FromJSON BevStore where
+  parseJSON (Object o) = BevStore
     <$> o .: "name"
     <*> o .: "price"
     <*> o .: "amount"
@@ -49,7 +56,12 @@ getInventoryJsonR = do
   bevs <- runDB $ selectList [] [Asc BeverageIdent]
   return $
     repJson $ array $
-      map (\(Entity _ bev) -> toJSON bev) bevs
+      map (\(Entity _ bev) -> toJSON $ BevStore
+        (beverageIdent bev)
+        (beveragePrice bev)
+        (beverageAmount bev)
+        (beverageAlertAmount bev)
+        ) bevs
 
 getUploadInventoryJsonR :: Handler Html
 getUploadInventoryJsonR = do
@@ -65,7 +77,7 @@ postUploadInventoryJsonR = do
       case fileContentType file == "application/json" of
         True -> do
           source <- runResourceT $ fileSource file $$ sinkLbs
-          bevs <- return $ fromMaybe [] $ (decode source :: Maybe [Beverage])
+          bevs <- return $ fromMaybe [] $ (decode source :: Maybe [BevStore])
           _ <- return $ map insOrUpd bevs
           setMessageI MsgRestoreSuccess
           redirect $ HomeR
@@ -80,15 +92,20 @@ uploadJsonForm :: Form FileInfo
 uploadJsonForm = renderDivs
   $ areq fileField (fieldSettingsLabel MsgSelectFile) Nothing
 
-insOrUpd :: Beverage -> Handler ()
+insOrUpd :: BevStore -> Handler ()
 insOrUpd bev = do
-  meb <- runDB $ getBy $ UniqueBeverage $ beverageIdent bev
+  meb <- runDB $ getBy $ UniqueBeverage $ bevStoreIdent bev
   case meb of
     Just eb -> do
       runDB $ update (entityKey eb)
-        [ BeveragePrice =. beveragePrice bev
-        , BeverageAmount =. beverageAmount bev
-        , BeverageAlertAmount =. beverageAlertAmount bev
+        [ BeveragePrice =. bevStorePrice bev
+        , BeverageAmount =. bevStoreAmount bev
+        , BeverageAlertAmount =. bevStoreAlertAmount bev
         ]
     Nothing -> do
-      runDB $ insert_ bev
+      runDB $ insert_ $ Beverage
+        (bevStoreIdent bev)
+        (bevStorePrice bev)
+        (bevStoreAmount bev)
+        (bevStoreAlertAmount bev)
+        Nothing

@@ -83,3 +83,6 @@ RestoreFromBackup: przywróć z kopii zapasowej
 NegativeRecharge: You can not recharge negative amounts
 Increment: ++
 Decrement: --
+SelectAvatar: SelectAvatar
+NoAvatars: No avatars
+ModifyAvatar: Modify avatar

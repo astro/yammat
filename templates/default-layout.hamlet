@@ -26,3 +26,5 @@
       <a href=@{JournalR}>_{MsgJournal}
     <span>
       <a href=@{SummaryR}>_{MsgSummary}
+    <span>
+      <a href=@{AvatarR}>_{MsgAvatars}

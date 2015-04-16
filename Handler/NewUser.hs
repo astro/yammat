@@ -33,6 +33,11 @@ newUserForm secs = renderDivs $ User
   <*> pure 0
   <*> pure secs
   <*> aopt emailField (fieldSettingsLabel MsgEmailNotify) Nothing
+  <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) Nothing
+  where
+    avatars = do
+      ents <- runDB $ selectList [] [Asc AvatarIdent]
+      optionsPairs $ map (\ent -> ((avatarIdent $ entityVal ent), entityKey ent)) ents
 
 data UserConf = UserConf
   { userConfEmail :: Maybe Text

@@ -30,6 +30,7 @@ library
                      Handler.Summary
                      Handler.Modify
                      Handler.CashCheck
+                     Handler.Avatar
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT
@@ -96,6 +97,7 @@ library
                  , blaze-builder                 < 0.4.0.0
                  , split
                  , conduit-extra
+                 , imagemagick
 
 executable         yammat
     if flag(library-only)

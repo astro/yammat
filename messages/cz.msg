@@ -83,3 +83,6 @@ RestoreFromBackup: Nahrát záĺohu
 NegativeRecharge: Nelze nabít negativní obnos
 Increment: ++
 Decrement: --
+SelectAvatar: Vyber avatar
+NoAvatars: žádné avatary
+ModifyAvatar: Modify avatar

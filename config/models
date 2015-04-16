@@ -3,6 +3,7 @@ User
     balance Int
     timestamp Int
     email Text Maybe
+    avatar AvatarId Maybe
     UniqueUser ident
     deriving Typeable Show
 Beverage
@@ -10,6 +11,7 @@ Beverage
     price Int
     amount Int
     alertAmount Int
+    avatar AvatarId Maybe
     UniqueBeverage ident
     deriving Typeable Show
 Transaction
@@ -24,6 +26,10 @@ Cashier
 CashCheck
     balance Int
     time UTCTime
+    deriving Typeable Show
+Avatar
+    ident Text
+    data ByteString
     deriving Typeable Show
 
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)

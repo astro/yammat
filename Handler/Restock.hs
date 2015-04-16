@@ -72,3 +72,8 @@ newArticleForm = renderDivs $ Beverage
   <*> areq currencyField (fieldSettingsLabel MsgPrice) (Just 100)
   <*> areq amountField (fieldSettingsLabel MsgAmount) (Just 0)
   <*> areq amountField (fieldSettingsLabel MsgAmountWarning) (Just 0)
+  <*> aopt (selectField albums) (fieldSettingsLabel MsgSelectAvatar) Nothing
+  where
+    albums = do
+      ents <- runDB $ selectList [] [Asc AvatarIdent]
+      optionsPairs $ map (\ent -> ((avatarIdent $ entityVal ent), entityKey ent)) ents

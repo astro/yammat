@@ -1,0 +1,18 @@
+$doctype 5
+
+<h3>
+  Avatars
+
+$if null avatars
+  <p>
+    _{MsgNoAvatars}
+$else
+  $forall (Entity aId avatar) <- avatars
+    <article .article>
+      <a href=@{ModifyAvatarR aId}>
+        <p>#{avatarIdent avatar}
+        <img src=@{GetAvatarR aId}>
+
+<ul>
+  <li>
+    <a href=@{NewAvatarR}>_{MsgNewAvatar}

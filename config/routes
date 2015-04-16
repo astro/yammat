@@ -25,3 +25,7 @@
 /cashcheck			CashCheckR		GET POST
 /backup				UploadInventoryJsonR	GET POST
 /backup/inventory.json		InventoryJsonR		GET
+/avatars			AvatarR			GET
+/avatar/#AvatarId		GetAvatarR		GET
+/avatar/#AvatarId/modify	ModifyAvatarR		GET POST
+/newavatar			NewAvatarR		GET POST

@@ -10,7 +10,7 @@ This project aims to be an implementation for a trust based POS for hackerspaces
 
 ###External dependencies
 
-In order to build yammat you need the packages `cabal-install`, `ghc` and `postgresql`. Furthermore you need the Haskell packages `alex` and `happy`. To install these enter `cabal install alex happy` into your command line.
+In order to build yammat you need the packages `cabal-install`, `ghc`, `libmagick++-dev` and `postgresql`. Furthermore you need the Haskell packages `alex` and `happy`. To install these enter `cabal install alex happy` into your command line.
 
 ###Internal dependencies
 

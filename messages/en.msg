@@ -84,5 +84,15 @@ NegativeRecharge: You can not recharge negative amounts
 Increment: ++
 Decrement: --
 SelectAvatar: Select avatar
+Avatars: Avatars
 NoAvatars: No avatars
 ModifyAvatar: Modify avatar
+AvatarUnknown: Avatar unknown
+AvatarUpdateSuccessfull: Avatar update successfull
+AvatarIdent: Avatar name
+AvatarFileChange: Enter file to change this avatar
+AvatarFile: Avatar file
+NewAvatar: New avatar
+AvatarUploadSuccessfull: Avatar upload successfull
+DeleteAvatar: Delete avatar
+AvatarDeleted: Avatar successfully deleted

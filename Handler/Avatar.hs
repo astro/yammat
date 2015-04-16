@@ -1,7 +1,6 @@
 module Handler.Avatar where
 
 import Import
-import Data.Conduit
 import Data.Conduit.Binary
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as L
@@ -113,3 +112,15 @@ getGetAvatarR :: AvatarId -> Handler TypedContent
 getGetAvatarR aId = do
   avatar <- runDB $ get404 aId
   return $ TypedContent typePng $ toContent $ avatarData avatar
+
+getAvatarDeleteR :: AvatarId -> Handler Html
+getAvatarDeleteR aId = do
+  ma <- runDB $ get aId
+  case ma of
+    Just _ -> do
+      runDB $ delete aId
+      setMessageI MsgAvatarDeleted
+      redirect $ HomeR
+    Nothing -> do
+      setMessageI MsgAvatarUnknown
+      redirect $ AvatarR

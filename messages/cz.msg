@@ -84,5 +84,15 @@ NegativeRecharge: Nelze nabít negativní obnos
 Increment: ++
 Decrement: --
 SelectAvatar: Vyber avatar
+Avatars: Avatary
 NoAvatars: žádné avatary
 ModifyAvatar: Modify avatar
+AvatarUnknown: Avatar neznámý
+AvatarUpdateSuccessfull: Aktualizace avataru se zdařila
+AvatarIdent: Jméno avataru
+AvatarFileChange: Zadej soubor k změnně avataru
+AvatarFile: Soubor avataru
+NewAvatar: Nový avatar
+AvatarUploadSuccessfull: Avatar úspěšně nahrán
+DeleteAvatar: Smazat avatar
+AvatarDeleted: Avatar úspěšně smazán

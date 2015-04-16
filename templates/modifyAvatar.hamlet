@@ -6,3 +6,5 @@ $doctype 5
   ^{avatarModifyWidget}
   <div>
     <input type=submit value=_{MsgSubmit}>
+
+<a href=@{AvatarDeleteR aId}>_{MsgDeleteAvatar}

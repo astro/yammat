@@ -89,8 +89,10 @@ NoAvatars: Keine Avatare
 ModifyAvatar: Avatar bearbeiten
 AvatarUnknown: Unbekannter Avatar
 AvatarUpdateSuccessfull: Avatar erfolgreich aktualisiert
-AvatarIdent: Avtarname
+AvatarIdent: Avatarname
 AvatarFileChange: Datei auswählen um Avatar zu ändern
 AvatarFile: Datei für den Avatar
 NewAvatar: Neuer Avatar
 AvatarUploadSuccessfull: Avatar erfolgreich hochgeladen
+DeleteAvatar: Diesen Avatar löschen
+AvatarDeleted: Avatar gelöscht

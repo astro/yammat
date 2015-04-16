@@ -28,4 +28,5 @@
 /avatars			AvatarR			GET
 /avatar/#AvatarId		GetAvatarR		GET
 /avatar/#AvatarId/modify	ModifyAvatarR		GET POST
+/avatar/#AvatarId/delete	AvatarDeleteR		GET
 /newavatar			NewAvatarR		GET POST

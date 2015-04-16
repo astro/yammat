@@ -19,8 +19,9 @@ $if null beverages
 
 $forall (Entity bId bev) <- beverages
   <article .article>
-    <a href=@{BuyR uId bId}>
-      <p>
-        #{beverageIdent bev}
-        $if beverageAvatar bev /= Nothing
-          <img src=@{GetAvatarR $ fromJust $ beverageAvatar bev}>
+    $if beverageAvatar bev /= Nothing
+      <a href=@{BuyR uId bId} style="background-image: url(@{GetAvatarR $ fromJust $ beverageAvatar bev})">
+        <p>#{beverageIdent bev}
+    $else
+      <a href=@{BuyR uId bId}>
+        <p>#{beverageIdent bev}

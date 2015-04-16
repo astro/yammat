@@ -4,8 +4,9 @@ $doctype 5
 
 $forall (Entity bId bev) <- beverages
   <article .article>
-    <a href=@{BuyCashR bId}>
-      <p>
-        #{beverageIdent bev}
-        $if beverageAvatar bev /= Nothing
-          <img src=@{GetAvatarR $ fromJust $ beverageAvatar bev}>
+    $if beverageAvatar bev /= Nothing
+      <a href=@{BuyCashR bId} style="background-image: url(@{GetAvatarR $ fromJust $ beverageAvatar bev})">
+        <p>#{beverageIdent bev}
+    $else
+      <a href=@{BuyCashR bId}>
+        <p>#{beverageIdent bev}

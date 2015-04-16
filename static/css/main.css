@@ -29,13 +29,7 @@ article#func.article {
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
-}
-
-.article a img {
-	position: relative;
-	top: -7.75em;
-	text-align: left;
-	z-index: 0;
+	background-size: 100%;
 }
 
 .article a p {
@@ -187,10 +181,6 @@ input[type] {
 		width: 7em;
 		height: 7em;
 		line-height: 7em;
-	}
-
-	.article a img {
-		top: -5.45em;
 	}
 }
 

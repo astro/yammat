@@ -188,6 +188,10 @@ input[type] {
 		height: 7em;
 		line-height: 7em;
 	}
+
+	.article a img {
+		top: -5.45em;
+	}
 }
 
 @keyframes shake {

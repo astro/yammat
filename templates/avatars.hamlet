@@ -9,9 +9,8 @@ $if null avatars
 $else
   $forall (Entity aId avatar) <- avatars
     <article .article>
-      <a href=@{ModifyAvatarR aId}>
+      <a href=@{ModifyAvatarR aId} style="background-image: url(@{GetAvatarR aId})">
         <p>#{avatarIdent avatar}
-        <img src=@{GetAvatarR aId}>
 
 <ul>
   <li>

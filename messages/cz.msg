@@ -96,3 +96,4 @@ NewAvatar: Nový avatar
 AvatarUploadSuccessfull: Avatar úspěšně nahrán
 DeleteAvatar: Smazat avatar
 AvatarDeleted: Avatar úspěšně smazán
+AvatarInUseError: Avatar nelze smazat dokud je v užitku

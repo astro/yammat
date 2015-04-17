@@ -96,3 +96,4 @@ NewAvatar: New avatar
 AvatarUploadSuccessfull: Avatar upload successfull
 DeleteAvatar: Delete avatar
 AvatarDeleted: Avatar successfully deleted
+AvatarInUseError: You can not delete avatars that are currently in use

@@ -118,9 +118,15 @@ getAvatarDeleteR aId = do
   ma <- runDB $ get aId
   case ma of
     Just _ -> do
-      runDB $ delete aId
-      setMessageI MsgAvatarDeleted
-      redirect $ HomeR
+      c <- runDB $ selectList [UserAvatar ==. Just aId] []
+      case null c of
+        True -> do
+          runDB $ delete aId
+          setMessageI MsgAvatarDeleted
+          redirect $ HomeR
+        False -> do
+          setMessageI MsgAvatarInUseError
+          redirect $ AvatarR
     Nothing -> do
       setMessageI MsgAvatarUnknown
       redirect $ AvatarR

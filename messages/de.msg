@@ -96,3 +96,4 @@ NewAvatar: Neuer Avatar
 AvatarUploadSuccessfull: Avatar erfolgreich hochgeladen
 DeleteAvatar: Diesen Avatar löschen
 AvatarDeleted: Avatar gelöscht
+AvatarInUseError: Avatare können nicht gelöscht werden, solange sie in Benutzung sind.

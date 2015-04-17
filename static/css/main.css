@@ -30,6 +30,8 @@ article#func.article {
 	height: 100%;
 	overflow: hidden;
 	background-size: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
 }
 
 .article a p {

@@ -82,3 +82,5 @@ RestoreFromBackup: Reconstituer une sécurisation
 NegativeRecharge: Ne pas charger les valeurs opposées
 Increment: ++
 Decrement: --
+Plus5: +=5
+Minus5: -=5

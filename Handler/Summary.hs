@@ -1,6 +1,6 @@
 module Handler.Summary where
 
-import Import
+import Import as I
 import qualified Data.List as L
 import Data.Aeson
 import Data.Conduit.Binary
@@ -78,7 +78,7 @@ postUploadInventoryJsonR = do
         True -> do
           source <- runResourceT $ fileSource file $$ sinkLbs
           bevs <- return $ fromMaybe [] $ (decode source :: Maybe [BevStore])
-          _ <- return $ map insOrUpd bevs
+          I.mapM_ insOrUpd bevs
           setMessageI MsgRestoreSuccess
           redirect $ HomeR
         False -> do

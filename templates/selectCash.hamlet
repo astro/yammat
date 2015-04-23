@@ -5,7 +5,7 @@ $doctype 5
 $forall (Entity bId bev) <- beverages
   <article .article>
     $if beverageAvatar bev /= Nothing
-      <a href=@{BuyCashR bId} style="background-image: url(@{GetAvatarR $ fromJust $ beverageAvatar bev})">
+      <a href=@{BuyCashR bId} style="background-image: url(@{GetAvatarR $ fromJust $ beverageAvatar bev})" .avatar>
         <p>#{beverageIdent bev}
     $else
       <a href=@{BuyCashR bId}>

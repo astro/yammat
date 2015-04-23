@@ -42,6 +42,10 @@ article#func.article {
 	z-index: 1;
 }
 
+.article .avatar p {
+	text-shadow: -1px 0 1px white, 0 1px 1px white, 1px 0 1px white, 0 -1px 1px white;
+}
+
 img.flag {
 	height: 2em;
 }

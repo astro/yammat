@@ -14,7 +14,7 @@ $if null beverages
 $forall (Entity uId user) <- users
   <article .article>
     $if userAvatar user /= Nothing
-      <a href=@{SelectR uId} style="background-image: url(@{GetAvatarR $ fromJust $ userAvatar user})">
+      <a href=@{SelectR uId} style="background-image: url(@{GetAvatarR $ fromJust $ userAvatar user})" .avatar>
         <p>#{userIdent user}
     $else
       <a href=@{SelectR uId}>

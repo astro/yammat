@@ -10,3 +10,5 @@ $doctype 5
   ^{rechargeWidget}
   <div>
     <input type=submit value="_{MsgRecharge}">
+    <input onclick="crmnt( document.getElementById('hident2'), 5 )" value="_{MsgPlus5}" type="button">
+    <input onclick="crmnt( document.getElementById('hident2'), -5 )" value="_{MsgMinus5}" type="button">

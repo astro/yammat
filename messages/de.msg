@@ -83,6 +83,8 @@ RestoreFromBackup: Inventar wiederherstellen
 NegativeRecharge: Keine negativen Beträge aufladen
 Increment: ++
 Decrement: --
+Plus5: +=5
+Minus5: -=5
 SelectAvatar: Avatar auswählen
 Avatars: Avatare
 NoAvatars: Keine Avatare

@@ -8,5 +8,5 @@ calling like
 */
 function crmnt( e, i ) { /* read: in-/decrement ( dom-element, signed-integer ) */
   var d = parseInt( e.value ) + i;
-  e.value = ( d < 1 )? 1 : e.value = d;
+  e.value = ( d <= 0 )? 0 : d;
 }

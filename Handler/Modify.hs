@@ -28,6 +28,7 @@ postModifyR bId = do
             , BeveragePrice =. beveragePrice nBev
             , BeverageAmount =. beverageAmount nBev
             , BeverageAlertAmount =. beverageAlertAmount nBev
+            , BeverageAvatar =. beverageAvatar nBev
             ]
           setMessageI MsgEditSuccess
           redirect $ SummaryR

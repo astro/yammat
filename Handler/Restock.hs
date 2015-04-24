@@ -72,6 +72,7 @@ newArticleForm = renderDivs $ Beverage
   <*> areq currencyField (fieldSettingsLabel MsgPrice) (Just 100)
   <*> areq amountField (fieldSettingsLabel MsgAmount) (Just 0)
   <*> areq amountField (fieldSettingsLabel MsgAmountWarning) (Just 0)
+  <*> areq currencyField (fieldSettingsLabel MsgVolume) (Just 500)
   <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) Nothing
   where
     avatars = do

@@ -3,7 +3,11 @@ $doctype 5
 <h3>_{MsgPurchaseOf $ beverageIdent bev}
 
 <p>
-  _{MsgPricePerUnit (beveragePrice bev) (appCurrency $ appSettings master)}
+  <ul>
+    <li>
+      _{MsgPricePerUnit (beveragePrice bev) (appCurrency $ appSettings master)}
+    <li>
+      _{MsgVolume}: #{formatIntVolume (beverageMl bev)}
 
 <form method=post enctype=#{enctype}>
   ^{buyWidget}

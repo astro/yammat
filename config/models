@@ -11,6 +11,7 @@ Beverage
     price Int
     amount Int
     alertAmount Int
+    ml Int default=500
     avatar AvatarId Maybe
     UniqueBeverage ident
     deriving Typeable Show

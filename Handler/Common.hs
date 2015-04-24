@@ -110,3 +110,6 @@ sendMail to subject body =
         , partContent = E.encodeUtf8 body
         }]]
       }
+
+formatIntVolume :: Int -> Text
+formatIntVolume x = formatFloat $ ((fromIntegral x) / 1000)

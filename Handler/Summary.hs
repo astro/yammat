@@ -4,6 +4,7 @@ import Import as I
 import qualified Data.List as L
 import Data.Aeson
 import Data.Conduit.Binary
+import Handler.Common
 
 getSummaryR :: Handler Html
 getSummaryR = do
@@ -21,6 +22,7 @@ getSummaryJsonR = do
     map (\(Entity _ bev) ->
           object [ "name" .= beverageIdent bev
                  , "value" .= beverageAmount bev
+                 , "volume" .= ((fromIntegral (beverageMl bev)) / 1000 :: Double)
                  , "price" .= ((fromIntegral (beveragePrice bev)) / 100 :: Double)
                  , "currency" .= appCurrency (appSettings master)
                  ]
@@ -31,15 +33,17 @@ data BevStore = BevStore
   , bevStorePrice :: Int
   , bevStoreAmount :: Int
   , bevStoreAlertAmount :: Int
+  , bevStoreMl :: Int
   }
 
 instance ToJSON BevStore where
-  toJSON (BevStore ident price amount alertAmount) =
+  toJSON (BevStore ident price amount alertAmount ml) =
     object
       [ "name" .= ident
       , "price" .= price
       , "amount" .= amount
       , "alertAt" .= alertAmount
+      , "ml" .= ml
       ]
 
 instance FromJSON BevStore where
@@ -48,6 +52,7 @@ instance FromJSON BevStore where
     <*> o .: "price"
     <*> o .: "amount"
     <*> o .: "alertAt"
+    <*> o .: "ml"
   -- For errors
   parseJSON _ = mzero
 
@@ -61,6 +66,7 @@ getInventoryJsonR = do
         (beveragePrice bev)
         (beverageAmount bev)
         (beverageAlertAmount bev)
+        (beverageMl bev)
         ) bevs
 
 getUploadInventoryJsonR :: Handler Html
@@ -101,6 +107,7 @@ insOrUpd bev = do
         [ BeveragePrice =. bevStorePrice bev
         , BeverageAmount =. bevStoreAmount bev
         , BeverageAlertAmount =. bevStoreAlertAmount bev
+        , BeverageMl =. bevStoreMl bev
         ]
     Nothing -> do
       runDB $ insert_ $ Beverage
@@ -108,4 +115,5 @@ insOrUpd bev = do
         (bevStorePrice bev)
         (bevStoreAmount bev)
         (bevStoreAlertAmount bev)
+        (bevStoreMl bev)
         Nothing

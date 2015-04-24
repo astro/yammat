@@ -28,6 +28,7 @@ postModifyR bId = do
             , BeveragePrice =. beveragePrice nBev
             , BeverageAmount =. beverageAmount nBev
             , BeverageAlertAmount =. beverageAlertAmount nBev
+            , BeverageMl =. beverageMl nBev
             , BeverageAvatar =. beverageAvatar nBev
             ]
           setMessageI MsgEditSuccess
@@ -45,6 +46,7 @@ modifyForm bev = renderDivs $ Beverage
   <*> areq currencyField (fieldSettingsLabel MsgPrice) (Just $ beveragePrice bev)
   <*> areq amountField (fieldSettingsLabel MsgCurrentStock) (Just $ beverageAmount bev)
   <*> areq amountField (fieldSettingsLabel MsgAnnouncedStock) (Just $ beverageAlertAmount bev)
+  <*> areq currencyField (fieldSettingsLabel MsgVolume) (Just $ beverageMl bev)
   <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) (Just $ beverageAvatar bev)
   where
     avatars = do

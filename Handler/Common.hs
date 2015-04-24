@@ -101,7 +101,8 @@ sendMail to subject body =
       , mailTo = [Address Nothing to]
       , mailCc = []
       , mailBcc = []
-      , mailHeaders = [("Subject", subject)]
+      , mailHeaders = [("Subject", subject),
+         ("List-Id", "\"Matemat\" <matemat@matemat.hq.c3d2.de>")]
       , mailParts =[[Part
         { partType = "text/plain; charset=utf-8"
         , partEncoding = None

@@ -58,6 +58,21 @@ currencyField = Field
     showVal = either id (pack . showA)
     showA x = show ((fromIntegral x :: Double) / 100)
 
+volumeField :: (RenderMessage (HandlerSite m) FormMessage, Show a, Monad m, Integral a) => Field m a
+volumeField = Field
+  { fieldParse = parseHelper $ \rawVals ->
+      case R.double (prependZero rawVals) of
+        Right (a, "") -> Right $ floor $ 1000 * a
+        _             -> Left $ MsgInvalidNumber rawVals
+  , fieldView = \theId name attr val req -> toWidget [hamlet|$newline never
+      <input id=#{theId} name=#{name} *{attr} type="number" step=0.01 min=0 :req:required="required" value=#{showVal val}>
+      |]
+  , fieldEnctype = UrlEncoded
+  }
+  where
+    showVal = either id (pack . showA)
+    showA x = show ((fromIntegral x :: Double) / 1000)
+
 amountField :: (RenderMessage (HandlerSite m) FormMessage, Show a, Monad m, Integral a) => Field m a
 amountField = Field
   { fieldParse = parseHelper $ \s ->

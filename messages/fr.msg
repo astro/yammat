@@ -69,7 +69,7 @@ EditUser: Modifier compte
 ChoosePrompt text@Text: Faites un choix , #{text}
 SelectItem: Sélectionnes quelque chose
 CurrentAmount: Quantité actuel
-NoItems: Rien des choses
+NoItems: Pas de choses
 StockUp name@Text: Provisionner de #{name}
 Fillup: Remplir
 CashCheckOf date@String: Contrôle de caisse de #{date}

@@ -115,5 +115,6 @@ insOrUpd bev = do
         (bevStorePrice bev)
         (bevStoreAmount bev)
         (bevStoreAlertAmount bev)
+        0
         (bevStoreMl bev)
         Nothing

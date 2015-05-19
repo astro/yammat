@@ -100,3 +100,4 @@ DeleteAvatar: Smazat avatar
 AvatarDeleted: Avatar úspěšně smazán
 AvatarInUseError: Avatar nelze smazat dokud je v užitku
 Volume: Objem v l
+CorrectedAmount: Stráta

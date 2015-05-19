@@ -9,6 +9,7 @@ $if not $ L.null bevs
         <th>_{MsgName}
         <th>_{MsgVolume}
         <th>_{MsgCurrentAmount}
+        <th>_{MsgCorrectedAmount}
         <th>_{MsgAnnouncedStock}
         <th>_{MsgValueIn $ appCurrency $ appSettings master}
         <th>
@@ -17,6 +18,7 @@ $if not $ L.null bevs
         <td>#{beverageIdent bev}
         <td>#{formatIntVolume (beverageMl bev)}
         <td>#{beverageAmount bev}
+        <td>#{beverageCorrectedAmount bev}
         <td>#{beverageAlertAmount bev}
         <td>#{formatIntCurrency (beveragePrice bev)} #{appCurrency $ appSettings master}
         <td><a href=@{ModifyR bId}>bearbeiten

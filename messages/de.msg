@@ -100,3 +100,4 @@ DeleteAvatar: Diesen Avatar löschen
 AvatarDeleted: Avatar gelöscht
 AvatarInUseError: Avatare können nicht gelöscht werden, solange sie in Benutzung sind.
 Volume: Volumen in l
+CorrectedAmount: Schwund

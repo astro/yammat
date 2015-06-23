@@ -119,7 +119,8 @@ getAvatarDeleteR aId = do
   case ma of
     Just _ -> do
       c <- runDB $ selectList [UserAvatar ==. Just aId] []
-      case null c of
+      d <- runDB $ selectList [BeverageAvatar ==. Just aId] []
+      case null c && null d of
         True -> do
           runDB $ delete aId
           setMessageI MsgAvatarDeleted

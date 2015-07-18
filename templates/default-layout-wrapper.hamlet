@@ -22,7 +22,10 @@ $newline never
 
         <script>
           document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/,'js');
-    <body>
+    <body onkeypress="barcodeKeyPress(event)">
+      <aside #barcode>
+        <p #barcodeContent> 
+
       ^{pageBody pc}
 
         $maybe analytics <- appAnalytics $ appSettings master

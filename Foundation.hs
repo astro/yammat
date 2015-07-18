@@ -117,6 +117,7 @@ instance Yesod App where
                 ])
             $(combineScripts 'StaticR
                 [ js_crementing_js
+                , js_barcode_js
                 ])
             $(widgetFile "default-layout")
         withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")

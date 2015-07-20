@@ -30,4 +30,5 @@
 /avatar/#AvatarId/modify	ModifyAvatarR		GET POST
 /avatar/#AvatarId/delete	AvatarDeleteR		GET
 /newavatar			NewAvatarR		GET POST
-/user/#UserId/barcode/#Text	BarcodeR		GET
+/barcode			HomeBarcodeR		POST
+/user/#UserId/barcode		SelectBarcodeR		POST

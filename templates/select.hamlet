@@ -26,4 +26,5 @@ $forall (Entity bId bev) <- beverages
       <a href=@{BuyR uId bId}>
         <p>#{beverageIdent bev}
 
-<input type=hidden id=uid value=#{toPathPiece uId}>
+<form action=@{SelectBarcodeR uId} method=POST>
+  <input type=hidden #barcodeInput name=barcode>

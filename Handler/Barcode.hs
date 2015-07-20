@@ -6,5 +6,8 @@ import qualified Data.Text as T
 import Text.Blaze.Internal
 import Text.Shakespeare.Text
 
-getBarcodeR :: UserId -> Text -> Handler Html
-getBarcodeR uId barcode = undefined
+postHomeBarcodeR :: Handler Html
+postHomeBarcodeR = return mempty
+
+postSelectBarcodeR :: UserId -> Handler Html
+postSelectBarcodeR uId = return mempty

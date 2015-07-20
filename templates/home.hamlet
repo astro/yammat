@@ -24,5 +24,5 @@ $forall (Entity uId user) <- users
   <a href=@{ReactivateR}>
     <p>_{MsgReactivateOldUser}
 
-<form action=@{HomeBarcodeR} method=POST>
+<form action=@{HomeBarcodeR} method=GET>
   <input type=hidden #barcodeInput name=barcode>

@@ -11,7 +11,10 @@ function showBarcode(text) {
 function barcodeKeyPress(event) {
     var key = String.fromCharCode(event.charCode)
     if (event.keyCode === 13) {
-        // window.location = "" + barcodeBuf
+        var uid = document.getElementById('uid').getAttribute('value')
+        if (uid) {
+            window.location = "/user/" + encodeURIComponent(uid) + "/barcode/" + encodeURIComponent(barcodeBuf)
+        }
         barcodeBuf = ""
         event.preventDefault()
     } else {

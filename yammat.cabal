@@ -31,6 +31,7 @@ library
                      Handler.Modify
                      Handler.CashCheck
                      Handler.Avatar
+                     Handler.Barcode
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT

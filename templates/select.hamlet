@@ -25,3 +25,5 @@ $forall (Entity bId bev) <- beverages
     $else
       <a href=@{BuyR uId bId}>
         <p>#{beverageIdent bev}
+
+<input type=hidden id=uid value=#{toPathPiece uId}>

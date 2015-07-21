@@ -10,3 +10,6 @@ $forall (Entity bId bev) <- beverages
     $else
       <a href=@{BuyCashR bId}>
         <p>#{beverageIdent bev}
+
+<form action=@{SelectCashBarcodeR} method=GET>
+  <input type=hidden #barcodeInput name=barcode>

@@ -32,3 +32,4 @@
 /newavatar			NewAvatarR		GET POST
 /barcode			HomeBarcodeR		GET
 /user/#UserId/barcode		SelectBarcodeR		GET
+!/user/cash/barcode		SelectCashBarcodeR	GET

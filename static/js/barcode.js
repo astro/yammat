@@ -4,6 +4,7 @@ var barcodeShown = false
 function showBarcode(text) {
     if (!barcodeShown) {
         document.getElementById('barcode').classList.add('shown')
+        barcodeShown = true
     }
     document.getElementById('barcodeContent').textContent = text
 }
@@ -11,8 +12,9 @@ function showBarcode(text) {
 function hideBarcode() {
     if (barcodeShown) {
         document.getElementById('barcode').classList.remove('shown')
+        barcodeShown = false
     }
-    return document.getElementById('barcodeContent').textContent
+    return ""
 }
 
 function barcodeKeyPress(event) {
@@ -30,7 +32,7 @@ function barcodeKeyPress(event) {
     if ( focused == null || focused.tagName != "INPUT" ) {
         if ( event.keyCode === 13 ) {
             var input = document.getElementById('barcodeInput')
-            if (input) {
+            if (input && barcodeBuf.length > 0) {
                 input.setAttribute('value', barcodeBuf)
                 input.parentNode.submit()
                 return

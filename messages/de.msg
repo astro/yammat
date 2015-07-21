@@ -102,7 +102,7 @@ AvatarInUseError: Avatare können nicht gelöscht werden, solange sie in Benutzu
 Volume: Volumen in l
 CorrectedAmount: Schwund
 BarcodeNotUser: Dieser Barcode ist keinem Benutzer zugeordnet, sondern einem Produkt
-ProvideBarcode: Bitte Barcode angeben
+ProvideBarcode: Bitte korrekten Barcode angeben
 BarcodeNotBev: Dieser Barcode ist keinem Produkt zugeordnet, sondern einem Benutzer
 BarcodeUnknown: Dieser Barcode ist unbekannt
 BarcodeField: Barcodes

@@ -7,6 +7,7 @@ import qualified Data.List as L
 import qualified Data.Text.Lazy.Encoding as E
 import qualified Data.Text.Read as R
 import Data.Maybe
+import qualified Data.Char as C
 import Yesod.Form.Functions
 import Text.Shakespeare.Text
 import Network.Mail.Mime
@@ -93,53 +94,52 @@ handleBarcodes :: Either UserId BeverageId -> [Text] -> Handler ()
 handleBarcodes (Left uId) nbs = do
   raws <- runDB $ selectList [BarcodeUser ==. Just uId] []
   obs <- return $ map (barcodeCode . entityVal) raws
-  case length nbs > length obs of
-    True -> do
-      sect <- return $ nbs L.\\ obs
-      _ <- mapM (\b -> runDB $ insert $ Barcode
-        b
-        True
-        (Just uId)
-        Nothing
-        ) sect
-      return ()
-    False -> do
-      sect <- return $ obs L.\\ nbs
-      ents <- mapM (runDB . getBy . UniqueBarcode) sect
-      mapM_ (runDB . delete . entityKey . fromJust) ents
+  toDel <- return $ obs L.\\ nbs
+  toAdd <- return $ nbs L.\\ obs
+  _ <- mapM (\b -> runDB $ insert_ $ Barcode
+    b
+    True
+    (Just uId)
+    Nothing
+    ) toAdd
+  ents <- mapM (runDB . getBy . UniqueBarcode) toDel
+  mapM_ (runDB . delete . entityKey . fromJust) ents
 handleBarcodes (Right bId) nbs = do
   raws <- runDB $ selectList [BarcodeBev ==. Just bId] []
   obs <- return $ map (barcodeCode . entityVal) raws
-  case length nbs > length obs of
-    True -> do
-      sect <- return $ nbs L.\\ obs
-      _ <- mapM (\b -> runDB $ insert $ Barcode
-        b
-        False
-        Nothing
-        (Just bId)
-        ) sect
-      return ()
-    False -> do
-      sect <- return $ obs L.\\ nbs
-      ents <- mapM (runDB . getBy . UniqueBarcode) sect
-      mapM_ (runDB . delete . entityKey . fromJust) ents
+  toDel <- return $ obs L.\\ nbs
+  toAdd <- return $ nbs L.\\ obs
+  _ <- mapM (\b -> runDB $ insert $ Barcode
+    b
+    False
+    Nothing
+    (Just bId)
+    ) toAdd
+  ents <- mapM (runDB . getBy . UniqueBarcode) toDel
+  mapM_ (runDB . delete . entityKey . fromJust) ents
 
 handleGetParam :: Maybe Text -> Either UserId BeverageId -> Handler ()
 handleGetParam Nothing _ =
   return ()
 handleGetParam (Just b) eub = do
-  e <- runDB $ getBy $ UniqueBarcode b
-  case e of
-    Nothing -> do
-      _ <- case eub of
-        Left uId -> do
-          runDB $ insert_ $ Barcode b True (Just uId) Nothing
-        Right bId -> do
-          runDB $ insert_ $ Barcode b False Nothing (Just bId)
-      setMessageI MsgBarcodeAdded
-    Just _ ->
-      setMessageI MsgBarcodeDuplicate
+  f <- return $ T.filter C.isAlphaNum b
+  case (T.length f) > 0 of
+    True -> do
+      e <- runDB $ getBy $ UniqueBarcode f
+      case e of
+        Nothing -> do
+          _ <- case eub of
+            Left uId -> do
+              -- should usernames containing, among other, spaces cause problems, replace b for f here
+              runDB $ insert_ $ Barcode b True (Just uId) Nothing
+            Right bId -> do
+              -- and here
+              runDB $ insert_ $ Barcode b False Nothing (Just bId)
+          setMessageI MsgBarcodeAdded
+        Just _ ->
+          setMessageI MsgBarcodeDuplicate
+    False -> do
+      setMessageI MsgProvideBarcode
 
 amountField :: (RenderMessage (HandlerSite m) FormMessage, Show a, Monad m, Integral a) => Field m a
 amountField = Field

@@ -102,7 +102,7 @@ AvatarInUseError: Avatar nelze smazat dokud je v užitku
 Volume: Objem v l
 CorrectedAmount: Stráta
 BarcodeNotUser: Tento kód není pro uživatele, ale pro produkt
-ProvideBarcode: Prosím zadej kód
+ProvideBarcode: Prosím zadej správný kód
 BarcodeNotBev: Tento kód není pro produkt, ale pro uživatele
 BarcodeUnknown: Tento kód je neznámý
 BarcodeField: Čárový kódy

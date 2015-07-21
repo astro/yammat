@@ -102,7 +102,7 @@ AvatarInUseError: You can not delete avatars that are currently in use
 Volume: Volume in l
 CorrectedAmount: Loss
 BarcodeNotUser: This barcode is no user, but a product
-ProvideBarcode: Please provide a barcode
+ProvideBarcode: Please provide a correct barcode
 BarcodeNotBev: This barcode is no product, but a user
 BarcodeUnknown: This barcode is unknown
 BarcodeField: Barcodes

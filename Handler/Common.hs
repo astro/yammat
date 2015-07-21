@@ -3,8 +3,10 @@ module Handler.Common where
 
 import Data.FileEmbed (embedFile)
 import qualified Data.Text as T
+import qualified Data.List as L
 import qualified Data.Text.Lazy.Encoding as E
 import qualified Data.Text.Read as R
+import Data.Maybe
 import Yesod.Form.Functions
 import Text.Shakespeare.Text
 import Network.Mail.Mime
@@ -20,6 +22,12 @@ getFaviconR = return $ TypedContent "image/x-icon"
 getRobotsR :: Handler TypedContent
 getRobotsR = return $ TypedContent typePlain
                     $ toContent $(embedFile "config/robots.txt")
+
+removeItem :: Eq a => a -> [a] -> [a]
+removeItem _ [] = []
+removeItem x (y:ys)
+  | x == y = removeItem x ys
+  | otherwise = y : (removeItem x ys)
 
 updateCashier :: Int -> Text -> Handler ()
 updateCashier amount desc = do
@@ -72,6 +80,66 @@ volumeField = Field
   where
     showVal = either id (pack . showA)
     showA x = show ((fromIntegral x :: Double) / 1000)
+
+barcodeField = Field
+  { fieldParse = parseHelper $ Right . removeItem "" . L.nub . T.splitOn ", "
+  , fieldView = \theId name attrs val isReq -> toWidget [hamlet|$newline never
+      <input type="text" id="#{theId}" name="#{name}" :isReq:required="" *{attrs} value="#{either id (T.intercalate ", ") val}">
+      |]
+  , fieldEnctype = UrlEncoded
+  }
+
+handleBarcodes :: Either UserId BeverageId -> [Text] -> Handler ()
+handleBarcodes (Left uId) nbs = do
+  raws <- runDB $ selectList [BarcodeUser ==. Just uId] []
+  obs <- return $ map (barcodeCode . entityVal) raws
+  case length nbs > length obs of
+    True -> do
+      sect <- return $ nbs L.\\ obs
+      _ <- mapM (\b -> runDB $ insert $ Barcode
+        b
+        True
+        (Just uId)
+        Nothing
+        ) sect
+      return ()
+    False -> do
+      sect <- return $ obs L.\\ nbs
+      ents <- mapM (runDB . getBy . UniqueBarcode) sect
+      mapM_ (runDB . delete . entityKey . fromJust) ents
+handleBarcodes (Right bId) nbs = do
+  raws <- runDB $ selectList [BarcodeBev ==. Just bId] []
+  obs <- return $ map (barcodeCode . entityVal) raws
+  case length nbs > length obs of
+    True -> do
+      sect <- return $ nbs L.\\ obs
+      _ <- mapM (\b -> runDB $ insert $ Barcode
+        b
+        False
+        Nothing
+        (Just bId)
+        ) sect
+      return ()
+    False -> do
+      sect <- return $ obs L.\\ nbs
+      ents <- mapM (runDB . getBy . UniqueBarcode) sect
+      mapM_ (runDB . delete . entityKey . fromJust) ents
+
+handleGetParam :: Maybe Text -> Either UserId BeverageId -> Handler ()
+handleGetParam Nothing _ =
+  return ()
+handleGetParam (Just b) eub = do
+  e <- runDB $ getBy $ UniqueBarcode b
+  case e of
+    Nothing -> do
+      _ <- case eub of
+        Left uId -> do
+          runDB $ insert_ $ Barcode b True (Just uId) Nothing
+        Right bId -> do
+          runDB $ insert_ $ Barcode b False Nothing (Just bId)
+      setMessageI MsgBarcodeAdded
+    Just _ ->
+      setMessageI MsgBarcodeDuplicate
 
 amountField :: (RenderMessage (HandlerSite m) FormMessage, Show a, Monad m, Integral a) => Field m a
 amountField = Field

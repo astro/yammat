@@ -8,7 +8,11 @@ getModifyR bId = do
   mBev <- runDB $ get bId
   case mBev of
     Just bev -> do
-      (modifyWidget, enctype) <- generateFormPost $ modifyForm bev
+      p <- lookupGetParam "barcode"
+      _ <- handleGetParam p (Right bId)
+      rawbs <- runDB $ selectList [BarcodeBev ==. Just bId] []
+      bs <- return $ map (barcodeCode . entityVal) rawbs
+      (modifyWidget, enctype) <- generateFormPost $ modifyForm bev bs
       defaultLayout $ do
         $(widgetFile "modify")
     Nothing -> do
@@ -20,17 +24,19 @@ postModifyR bId = do
   mBev <- runDB $ get bId
   case mBev of
     Just bev -> do
-      ((res, _), _) <- runFormPost $ modifyForm bev
+      rawbs <- runDB $ selectList [BarcodeBev ==. Just bId] []
+      bs <- return $ map (barcodeCode . entityVal) rawbs
+      ((res, _), _) <- runFormPost $ modifyForm bev bs
       case res of
         FormSuccess nBev -> do
           runDB $ update bId
-            [ BeverageIdent =. beverageIdent nBev
-            , BeveragePrice =. beveragePrice nBev
-            , BeverageAmount =. beverageAmount nBev
-            , BeverageAlertAmount =. beverageAlertAmount nBev
-            , BeverageCorrectedAmount +=. ((beverageAmount nBev) - (beverageAmount bev))
-            , BeverageMl =. beverageMl nBev
-            , BeverageAvatar =. beverageAvatar nBev
+            [ BeverageIdent =. modBevIdent nBev
+            , BeveragePrice =. modBevPrice nBev
+            , BeverageAmount =. modBevAmount nBev
+            , BeverageAlertAmount =. modBevAlertAmount nBev
+            , BeverageCorrectedAmount +=. ((modBevAmount nBev) - (beverageAmount bev))
+            , BeverageMl =. modBevMl nBev
+            , BeverageAvatar =. modBevAvatar nBev
             ]
           setMessageI MsgEditSuccess
           redirect $ SummaryR
@@ -41,15 +47,25 @@ postModifyR bId = do
       setMessageI MsgItemUnknown
       redirect $ SummaryR
 
-modifyForm :: Beverage -> Form Beverage
-modifyForm bev = renderDivs $ Beverage
+data ModBev = ModBev
+  { modBevIdent :: Text
+  , modBevPrice :: Int
+  , modBevAmount :: Int
+  , modBevAlertAmount :: Int
+  , modBevMl :: Int
+  , modBevAvatar :: Maybe AvatarId
+  , modBevBarcodes :: Maybe [Text]
+  }
+
+modifyForm :: Beverage -> [Text] -> Form ModBev
+modifyForm bev bs = renderDivs $ ModBev
   <$> areq textField (fieldSettingsLabel MsgName) (Just $ beverageIdent bev)
   <*> areq currencyField (fieldSettingsLabel MsgPrice) (Just $ beveragePrice bev)
   <*> areq amountField (fieldSettingsLabel MsgCurrentStock) (Just $ beverageAmount bev)
   <*> areq amountField (fieldSettingsLabel MsgAnnouncedStock) (Just $ beverageAlertAmount bev)
-  <*> pure (beverageCorrectedAmount bev)
   <*> areq volumeField (fieldSettingsLabel MsgVolume) (Just $ beverageMl bev)
   <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) (Just $ beverageAvatar bev)
+  <*> aopt barcodeField (fieldSettingsLabel MsgBarcodeField) (Just $ Just bs)
   where
     avatars = do
       ents <- runDB $ selectList [] [Asc AvatarIdent]

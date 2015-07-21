@@ -42,6 +42,7 @@ newUserForm secs = renderDivs $ User
 data UserConf = UserConf
   { userConfEmail :: Maybe Text
   , userConfAvatar :: Maybe AvatarId
+  , userConfBarcode :: Maybe [Text]
   }
 
 getModifyUserR :: UserId -> Handler Html
@@ -49,9 +50,13 @@ getModifyUserR uId = do
   mUser <- runDB $ I.get uId
   case mUser of
     Just user -> do
-      (modifyUserWidget, enctype) <- generateFormPost $ modifyUserForm user
+      p <- lookupGetParam "barcode"
+      _ <- handleGetParam p (Left uId)
+      rawbs <- runDB $ selectList [BarcodeUser ==. Just uId] []
+      bs <- return $ map (barcodeCode . entityVal) rawbs
+      (modifyUserWidget, enctype) <- generateFormPost $ modifyUserForm user bs
       defaultLayout $ do
-      $(widgetFile "modifyUser")
+        $(widgetFile "modifyUser")
     Nothing -> do
       setMessageI MsgUserUnknown
       redirect $ HomeR
@@ -61,7 +66,9 @@ postModifyUserR uId = do
   mUser <- runDB $ I.get uId
   case mUser of
     Just user -> do
-      ((res, _), _) <- runFormPost $ modifyUserForm user
+      rawbs <- runDB $ selectList [BarcodeUser ==. Just uId] []
+      bs <- return $ map (barcodeCode . entityVal) rawbs
+      ((res, _), _) <- runFormPost $ modifyUserForm user bs
       case res of
         FormSuccess uc -> do
           runDB $ update uId
@@ -69,6 +76,7 @@ postModifyUserR uId = do
             , UserAvatar =. userConfAvatar uc
             ]
           liftIO $ notify user (userConfEmail uc)
+          handleBarcodes (Left uId) (fromMaybe [] $ userConfBarcode uc)
           setMessageI MsgUserEdited
           redirect $ SelectR uId
         _ -> do
@@ -78,10 +86,11 @@ postModifyUserR uId = do
       setMessageI MsgUserUnknown
       redirect $ HomeR
 
-modifyUserForm :: User -> Form UserConf
-modifyUserForm user = renderDivs $ UserConf
+modifyUserForm :: User -> [Text] -> Form UserConf
+modifyUserForm user bs = renderDivs $ UserConf
   <$> aopt emailField (fieldSettingsLabel MsgEmailNotify) (Just $ userEmail user)
   <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) (Just $ userAvatar user)
+  <*> aopt barcodeField (fieldSettingsLabel MsgBarcodeField) (Just $ Just bs)
   where
     avatars = do
       ents <- runDB $ selectList [] [Asc AvatarIdent]

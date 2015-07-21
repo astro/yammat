@@ -101,3 +101,10 @@ AvatarDeleted: Avatar úspěšně smazán
 AvatarInUseError: Avatar nelze smazat dokud je v užitku
 Volume: Objem v l
 CorrectedAmount: Stráta
+BarcodeNotUser: Tento kód není pro uživatele, ale pro produkt
+ProvideBarcode: Prosím zadej kód
+BarcodeNotBev: Tento kód není pro produkt, ale pro uživatele
+BarcodeUnknown: Tento kód je neznámý
+BarcodeField: Čárový kódy
+BarcodeAdded: Kód zadán
+BarcodeDuplicate: Tento kód se již používá

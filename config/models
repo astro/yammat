@@ -33,5 +33,12 @@ Avatar
     ident Text
     data ByteString
     deriving Typeable Show
+Barcode
+    code Text
+    isUser Bool
+    user UserId Maybe
+    bev BeverageId Maybe
+    UniqueBarcode code
+    deriving Show
 
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)

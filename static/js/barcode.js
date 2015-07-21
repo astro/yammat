@@ -10,18 +10,26 @@ function showBarcode(text) {
 
 function barcodeKeyPress(event) {
     var key = String.fromCharCode(event.charCode)
-    if (event.keyCode === 13) {
-        var input = document.getElementById('barcodeInput')
-        if (input) {
-            input.setAttribute('value', barcodeBuf)
-            input.parentNode.submit()
-            return
+    var focused = document.activeElement
+    if (! focused || focused == document.body) {
+        focused = null
+    } else if (document.querySelector) {
+        focused = document.querySelector(":focus")
+    }
+    if (focused == null || focused.tagName != "INPUT") {
+        if (event.keyCode === 13) {
+            var input = document.getElementById('barcodeInput')
+            if (input) {
+                input.setAttribute('value', barcodeBuf)
+                input.parentNode.submit()
+                return
+            }
+            barcodeBuf = ""
+            event.preventDefault()
+        } else {
+            barcodeBuf += key
+            showBarcode(barcodeBuf)
+            event.preventDefault()
         }
-        barcodeBuf = ""
-        event.preventDefault()
-    } else {
-        barcodeBuf += key
-        showBarcode(barcodeBuf)
-        event.preventDefault()
     }
 }

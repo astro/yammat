@@ -6,3 +6,6 @@ $doctype 5
   ^{modifyUserWidget}
   <div>
     <input type=submit value="_{MsgSubmit}">
+
+<form action=@{ModifyUserR uId} method=GET>
+  <input type=hidden #barcodeInput name=barcode>

@@ -17,6 +17,10 @@ function hideBarcode() {
 
 function barcodeKeyPress(event) {
     var key = String.fromCharCode(event.charCode)
+    var input = document.getElementById('crement')
+    if ( input ) {
+        input.focus()
+    }
     var focused = document.activeElement
     if (! focused || focused == document.body) {
         focused = null

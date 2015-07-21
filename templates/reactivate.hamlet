@@ -4,5 +4,9 @@ $doctype 5
 
 $forall (Entity uId user) <- users
   <article .article>
-    <a href=@{UserReactivateR uId}>
-      <p>#{userIdent user}
+    $if userAvatar user /= Nothing
+      <a href=@{UserReactivateR uId} style="background-image: url(@{GetAvatarR $ fromJust $ userAvatar user})" .avatar>
+        <p>#{userIdent user}
+    $else
+      <a href=@{UserReactivateR uId}>
+        <p>#{userIdent user}

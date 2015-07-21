@@ -27,7 +27,7 @@ postHomeR = do
 getReactivateR :: Handler Html
 getReactivateR = do
   time <- liftIO getCurrentTime
-  secs <- return $ (R.read $ formatTime defaultTimeLocale "%s" time) - 8640000
+  secs <- return $ (R.read $ formatTime defaultTimeLocale "%s" time) - 2592000
   users <- runDB $ selectList [UserTimestamp <. secs] [Asc UserIdent]
   defaultLayout $ do
     $(widgetFile "reactivate")

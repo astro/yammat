@@ -20,16 +20,17 @@ function hideBarcode() {
 function barcodeKeyPress(event) {
     var key = String.fromCharCode(event.charCode)
     var input = document.getElementById('crement')
-    if ( input ) {
+    var inputcount = document.querySelectorAll('[type="text"]').length + document.querySelectorAll('[type="number"]').length 
+    if ( input && inputcount == 1 ) {
         input.focus()
     }
     var focused = document.activeElement
-    if (! focused || focused == document.body) {
+    if ( !focused || focused == document.body ) {
         focused = null
-    } else if (document.querySelector) {
+    } else if ( document.querySelector ) {
         focused = document.querySelector(":focus")
     }
-    if ( focused == null || focused.tagName != "INPUT" ) {
+    if ( inputcount <= 1 && ( focused == null || focused.tagName != "INPUT" ) ) {
         if ( event.keyCode === 13 ) {
             var input = document.getElementById('barcodeInput')
             if (input && barcodeBuf.length > 0) {

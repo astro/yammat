@@ -38,6 +38,7 @@ postModifyR bId = do
             , BeverageMl =. modBevMl nBev
             , BeverageAvatar =. modBevAvatar nBev
             ]
+          handleBarcodes (Right bId) (fromMaybe [] $ modBevBarcodes nBev)
           setMessageI MsgEditSuccess
           redirect $ SummaryR
         _ -> do

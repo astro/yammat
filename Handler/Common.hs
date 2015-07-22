@@ -123,7 +123,7 @@ handleGetParam Nothing _ =
   return ()
 handleGetParam (Just b) eub = do
   f <- return $ T.filter C.isAlphaNum b
-  case (T.length f) > 0 of
+  case (T.length f) > 0 && b /= ", " of
     True -> do
       e <- runDB $ getBy $ UniqueBarcode f
       case e of

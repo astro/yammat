@@ -15,7 +15,7 @@ getHomeR :: Handler Html
 getHomeR = do
   beverages <- runDB $ selectList [BeverageAmount !=. 0] [Desc BeverageIdent]
   time <- liftIO getCurrentTime
-  secs <- return $ (R.read $ formatTime defaultTimeLocale "%s" time) - 8640000
+  secs <- return $ (R.read $ formatTime defaultTimeLocale "%s" time) - 2592000
   users <- runDB $ selectList [UserTimestamp >=. secs] [Asc UserIdent]
   defaultLayout $ do
     $(widgetFile "home")

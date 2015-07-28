@@ -112,4 +112,4 @@ Transfer: Převod
 TransferTo: Převést kredit na
 NegativeTransfer: Nelze převést negativní počty
 TransferComplete: Převod dokončen
-Transfererror: Chyba při převodu
+TransferError: Chyba při převodu

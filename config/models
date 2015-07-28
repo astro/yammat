@@ -32,6 +32,7 @@ CashCheck
 Avatar
     ident Text
     data ByteString
+    altTime UTCTime default=now()
     deriving Typeable Show
 Barcode
     code Text

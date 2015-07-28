@@ -25,7 +25,8 @@ postNewAvatarR = do
     FormSuccess na -> do
       raw <- runResourceT $ fileSource (avatarNewFile na) $$ sinkLbs
       thumb <- generateThumb $ B.concat $ L.toChunks raw
-      runDB $ insert_ $ Avatar (avatarNewIdent na) thumb
+      now <- liftIO $ getCurrentTime
+      runDB $ insert_ $ Avatar (avatarNewIdent na) thumb now
       setMessageI MsgAvatarUploadSuccessfull
       redirect $ HomeR
     _ -> do

@@ -1,0 +1,12 @@
+$doctype 5
+
+<h3>_{MsgTransferTo}
+
+$forall (Entity uId user) <- users
+  <article .article>
+    $if userAvatar user /= Nothing
+      <a href=@{TransferR from uId} style="background-image: url(@{GetAvatarR $ fromJust $ userAvatar user})" .avatar>
+        <p>#{userIdent user}
+    $else
+      <a href=@{TransferR from uId}>
+        <p>#{userIdent user}

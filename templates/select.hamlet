@@ -10,6 +10,9 @@ $doctype 5
     <li>
       <a href=@{ModifyUserR uId}>
         _{MsgEditUser}
+    <li>
+      <a href=@{TransferSelectR uId}>
+        _{MsgTransfer}
 
 <h3>_{MsgChoosePrompt $ userIdent user}
 

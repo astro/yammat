@@ -1,0 +1,14 @@
+$doctype 5
+
+<h3>
+  _{MsgTransferTo} #{userIdent recpt}
+
+<p>
+  _{MsgCurrentCharge (userBalance sender) currency}
+
+<form method=post enctype=#{enctype}>
+  ^{transferWidget}
+  <div>
+    <input type=submit value="_{MsgTransfer}">
+    <input onclick="crmnt( document.getElementById('hident2'), 5 )" value="_{MsgPlus5}" type="button">
+    <input onclick="crmnt( document.getElementById('hident2'), -5 )" value="_{MsgMinus5}" type="button">

@@ -33,3 +33,5 @@
 /barcode			HomeBarcodeR		GET
 /user/#UserId/barcode		SelectBarcodeR		GET
 !/user/cash/barcode		SelectCashBarcodeR	GET
+/user/#UserId/transfer		TransferSelectR		GET
+/user/#UserId/to/#UserId	TransferR		GET POST

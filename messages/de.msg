@@ -108,3 +108,8 @@ BarcodeUnknown: Dieser Barcode ist unbekannt
 BarcodeField: Barcodes
 BarcodeAdded: Barcode erfolgreich hinzugefügt
 BarcodeDuplicate: Dieser barcode wird schon verwendet
+Transfer: Transferieren
+TransferTo: Guthaben transferieren an
+NegativeTransfer: Keine negativen Beträge transferieren
+TransferComplete: Transfer abgeschlossen
+TransferError: Fehler beim Transfer

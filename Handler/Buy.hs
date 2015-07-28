@@ -94,7 +94,7 @@ postBuyCashR bId = do
           case quant > beverageAmount bev of
             False -> do
               master <- getYesod
-              price <- return $ quant * (beveragePrice bev + 50)
+              price <- return $ quant * (beveragePrice bev + (appCashCharge $ appSettings master))
               runDB $ update bId [BeverageAmount -=. quant]
               updateCashier price "Barzahlung"
               checkAlert bId

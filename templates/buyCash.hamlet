@@ -5,7 +5,7 @@ $doctype 5
 <p>
   <ul>
     <li>
-      _{MsgPricePerUnit (beveragePrice bev + 50) (appCurrency $ appSettings master)}
+      _{MsgPricePerUnit (beveragePrice bev + (appCashCharge $ appSettings master)) (appCurrency $ appSettings master)}
     <li>
       _{MsgVolume}: #{formatIntVolume (beverageMl bev)}
 

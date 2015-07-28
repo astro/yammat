@@ -55,6 +55,9 @@ data AppSettings = AppSettings
     , appEmail 	                :: Text
     -- ^ notification address
     , appCurrency               :: Text
+    -- ^ Currency character
+    , appCashCharge             :: Int
+    -- ^ Extra charge for paying in cash in cents
     }
 
 instance FromJSON AppSettings where
@@ -82,6 +85,7 @@ instance FromJSON AppSettings where
         appAnalytics              <- o .:? "analytics"
         appEmail                  <- o .: "email"
         appCurrency               <- o .: "currency"
+        appCashCharge             <- o .: "cash_charge"
 
         return AppSettings {..}
 

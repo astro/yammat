@@ -108,3 +108,8 @@ BarcodeUnknown: This barcode is unknown
 BarcodeField: Barcodes
 BarcodeAdded: barcode succesfully added
 BarcodeDuplicate: This barcode is already in use
+Transfer: Credit transfer
+TransferTo: Transfer credit to
+NegativeTransfer: Please do not transfer negative amounts
+TransferComplete: Transfer complete
+TransferError: Transfer error

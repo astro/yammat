@@ -108,3 +108,8 @@ BarcodeUnknown: Tento kód je neznámý
 BarcodeField: Čárový kódy
 BarcodeAdded: Kód zadán
 BarcodeDuplicate: Tento kód se již používá
+Transfer: Převod
+Transfer to: Převést kredit na
+NegativeTransfer: Nelze převést negativní počty
+TransferComplete: Převod dokončen
+Transfererror: Chyba při převodu

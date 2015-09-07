@@ -113,3 +113,5 @@ TransferTo: Transfer credit to
 NegativeTransfer: Please do not transfer negative amounts
 TransferComplete: Transfer complete
 TransferError: Transfer error
+PreviousPage: previous page
+NextPage: next page

@@ -27,6 +27,10 @@ $if not $ L.null entries
         <td>#{formatIntCurrency (fromIntegral total)} #{appCurrency $ appSettings master}
   <p>
     _{MsgCashStock}: #{formatIntCurrency (fromIntegral cashBalance)} #{appCurrency $ appSettings master}
+  $if not $ L.null next
+    <div>
+      <div .right>
+        <a href="@{JournalPageR 1}">_{MsgNextPage}
 
   <ul>
     <li>

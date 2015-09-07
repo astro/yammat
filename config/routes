@@ -17,6 +17,7 @@
 /user/#UserId/buy/#BeverageId 	BuyR			GET POST
 !/user/cash/buy/#BeverageId	BuyCashR		GET POST
 /journal 			JournalR		GET
+/journal/#Int			JournalPageR		GET
 /payout				PayoutR			GET POST
 /summary			SummaryR		GET
 /summary.json			SummaryJsonR		GET

@@ -23,6 +23,7 @@ getJournalR :: Handler Html
 getJournalR = do
   master <- getYesod
   rawEntries <- runDB $ selectList [] [Desc TransactionId]
+  next <- runDB $ selectList [] [Desc TransactionId, OffsetBy 30]
   entries <- return $ L.reverse $ L.take 30 rawEntries
   total <- return $ L.sum $ I.map (transactionAmount . entityVal) rawEntries
   timeLimit <- case L.null entries of
@@ -41,3 +42,20 @@ merge (t:ts) [] = (Left $ entityVal t) : merge ts []
 merge (t:ts) (c:cs)
   | transactionTime (entityVal t) < cashCheckTime (entityVal c) = (Left $ entityVal t)  : merge ts (c:cs)
   | transactionTime (entityVal t) > cashCheckTime (entityVal c) = (Right $ entityVal c) : merge (t:ts) cs
+
+getJournalPageR :: Int -> Handler Html
+getJournalPageR p = do
+  master <- getYesod
+  rawEntries <- runDB $ selectList [] [Desc TransactionId, OffsetBy (p * 30)]
+  next <- runDB $ selectList [] [Desc TransactionId, OffsetBy ((p + 1) * 30)]
+  entries <- return $ L.reverse $ L.take 30 rawEntries
+  lTimeLimit <- case L.null entries of
+    False -> return $ transactionTime $ entityVal $ L.head $ entries
+    True -> liftIO getCurrentTime
+  uTimeLimit <- case L.null entries of
+    False -> return $ transactionTime $ entityVal $ L.last $ entries
+    True -> liftIO getCurrentTime
+  cashChecks <- runDB $ selectList [CashCheckTime >=. lTimeLimit, CashCheckTime <. uTimeLimit] [Asc CashCheckId]
+  list <- return $ merge entries cashChecks
+  defaultLayout $ do
+    $(widgetFile "journalPage")

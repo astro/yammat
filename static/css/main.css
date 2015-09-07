@@ -19,6 +19,18 @@
 	text-align: right;	
 }
 
+.left {
+	display: inline-block;
+	/*float: left;*/
+	padding: 2em;
+}
+
+.right {
+	display: inline-block;
+	/*float: right;*/
+	padding: 2em;
+}
+
 article#func.article {
 	background-color: #fff7bd;
 }

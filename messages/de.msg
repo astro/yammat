@@ -113,3 +113,5 @@ TransferTo: Guthaben transferieren an
 NegativeTransfer: Keine negativen Beträge transferieren
 TransferComplete: Transfer abgeschlossen
 TransferError: Fehler beim Transfer
+PreviousPage: vorherige Seite
+NextPage: nächste Seite

@@ -21,23 +21,17 @@ $if not $ L.null entries
             <td colspan="2">
               _{MsgCashCheckOf $ formatTime defaultTimeLocale "%A %F %H:%M" $ cashCheckTime cash}:
             <td>#{formatIntCurrency (cashCheckBalance cash)} #{appCurrency $ appSettings master}
-    <tfoot>
-      <tr>
-        <td colspan="2">_{MsgTotalValue}:
-        <td>#{formatIntCurrency (fromIntegral total)} #{appCurrency $ appSettings master}
-  <p>
-    _{MsgCashStock}: #{formatIntCurrency (fromIntegral cashBalance)} #{appCurrency $ appSettings master}
-  $if not $ L.null next
-    <div>
-      <div .right>
-        <a href="@{JournalPageR 1}">_{MsgNextPage}
 
-  <ul>
-    <li>
-      <a href=@{PayoutR}>
-        _{MsgPayoutFromCash}
-    <li>
-      <a href=@{CashCheckR}>
-        _{MsgCashCheck}
+  <div>
+    <div .left>
+      $case (p <= 1)
+        $of True
+          <a href="@{JournalR}">_{MsgPreviousPage}
+        $of False
+          <a href="@{JournalPageR (p - 1)}">_{MsgPreviousPage}
+    $if not $ L.null next
+      <div .right>
+        <a href="@{JournalPageR (p + 1)}">_{MsgNextPage}
+
 $else
   <p>_{MsgNothingToShow}

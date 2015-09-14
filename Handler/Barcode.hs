@@ -21,19 +21,19 @@ getHomeBarcodeR :: Handler Html
 getHomeBarcodeR = do
   eub <- handleSelectParam
   case eub of
-    Just (Left uId) -> do
+    Just (Left uId) ->
       redirect $ SelectR uId
     Just (Right _) -> do
       setMessageI MsgBarcodeNotUser
-      redirect $ HomeR
-    Nothing -> do
-      redirect $ HomeR
+      redirect HomeR
+    Nothing ->
+      redirect HomeR
 
 getSelectBarcodeR :: UserId -> Handler Html
 getSelectBarcodeR uId = do
   eub <- handleSelectParam
   case eub of
-    Just (Right bId) -> do
+    Just (Right bId) ->
       redirect $ BuyR uId bId
     Just (Left _) -> do
       setMessageI MsgBarcodeNotBev
@@ -45,13 +45,13 @@ getSelectCashBarcodeR :: Handler Html
 getSelectCashBarcodeR = do
   eub <- handleSelectParam
   case eub of
-    Just (Right bId) -> do
+    Just (Right bId) ->
       redirect $ BuyCashR bId
     Just (Left _) -> do
       setMessageI MsgBarcodeNotBev
-      redirect $ SelectCashR
-    Nothing -> do
-      redirect $ SelectCashR
+      redirect SelectCashR
+    Nothing ->
+      redirect SelectCashR
 
 handleSelectParam :: Handler (Maybe (Either UserId BeverageId))
 handleSelectParam = do
@@ -60,15 +60,15 @@ handleSelectParam = do
     Just code -> do
       be <- runDB $ getBy $ UniqueBarcode code
       case be of
-        Just (Entity _ bar) -> do
-          case barcodeIsUser bar of
-            True -> do
+        Just (Entity _ bar) ->
+          if barcodeIsUser bar
+            then
               case (barcodeUser bar, barcodeBev bar) of
                 (Just uId, Nothing) ->
                   return $ Just $ Left uId
                 _ ->
                   error "Malformed barcode"
-            False -> do
+            else
               case (barcodeBev bar, barcodeUser bar) of
                 (Just bId, Nothing) ->
                   return $ Just $ Right bId

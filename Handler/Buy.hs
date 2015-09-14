@@ -28,11 +28,11 @@ getBuyR uId bId = do
     Just (user, bev) -> do
       master <- getYesod
       (buyWidget, enctype) <- generateFormPost buyForm
-      defaultLayout $ do
+      defaultLayout $
         $(widgetFile "buy")
     Nothing -> do
       setMessageI MsgUserOrArticleUnknown
-      redirect $ HomeR
+      redirect HomeR
 
 postBuyR :: UserId -> BeverageId -> Handler Html
 postBuyR uId bId = do
@@ -42,10 +42,13 @@ postBuyR uId bId = do
       ((res, _), _) <- runFormPost buyForm
       case res of
         FormSuccess quant -> do
-          case quant > beverageAmount bev of
-            False -> do
-              price <- return $ quant * (beveragePrice bev)
-              sw <- return $ price > (userBalance user)
+          if quant > beverageAmount bev
+            then do
+              setMessageI MsgNotEnoughItems
+              redirect $ BuyR uId bId
+            else do
+              let price = quant * (beveragePrice bev)
+              let sw = price > (userBalance user)
               runDB $ update uId [UserBalance -=. price]
               runDB $ update bId [BeverageAmount -=. quant]
               checkAlert bId
@@ -54,19 +57,16 @@ postBuyR uId bId = do
               case sw of
                 False -> do
                   setMessageI MsgPurchaseSuccess
-                  redirect $ HomeR
+                  redirect HomeR
                 True -> do
                   setMessageI MsgPurchaseDebtful
-                  redirect $ HomeR
-            True -> do
-              setMessageI MsgNotEnoughItems
-              redirect $ BuyR uId bId
+                  redirect HomeR
         _ -> do
           setMessageI MsgErrorOccured
-          redirect $ HomeR
+          redirect HomeR
     Nothing -> do
       setMessageI MsgUserUnknown
-      redirect $ HomeR
+      redirect HomeR
 
 notifyUser :: User -> Beverage -> Int -> App -> IO ()
 notifyUser user bev price master = do
@@ -92,11 +92,11 @@ getBuyCashR bId = do
     Just bev -> do
       master <- getYesod
       (buyCashWidget, enctype) <- generateFormPost buyForm
-      defaultLayout $ do
+      defaultLayout $
         $(widgetFile "buyCash")
     Nothing -> do
       setMessageI MsgItemUnknown
-      redirect $ HomeR
+      redirect HomeR
 
 postBuyCashR :: BeverageId -> Handler Html
 postBuyCashR bId = do
@@ -106,25 +106,25 @@ postBuyCashR bId = do
       ((res, _), _) <- runFormPost buyForm
       case res of
         FormSuccess quant -> do
-          case quant > beverageAmount bev of
-            False -> do
+          if quant > beverageAmount bev
+            then do
+              setMessageI MsgNotEnoughItems
+              redirect $ BuyCashR bId
+            else do
               master <- getYesod
-              price <- return $ quant * (beveragePrice bev + (appCashCharge $ appSettings master))
+              let price = quant * (beveragePrice bev + appCashCharge (appSettings master))
               runDB $ update bId [BeverageAmount -=. quant]
               updateCashier price "Barzahlung"
               checkAlert bId
               let currency = appCurrency $ appSettings master
               setMessageI $ MsgPurchaseSuccessCash price currency
               redirect HomeR
-            True -> do
-              setMessageI MsgNotEnoughItems
-              redirect $ BuyCashR bId
         _ -> do
           setMessageI MsgItemDisappeared
-          redirect $ HomeR
+          redirect HomeR
     Nothing -> do
       setMessageI MsgItemUnknown
-      redirect $ HomeR
+      redirect HomeR
 
 checkData :: UserId -> BeverageId -> Handler (Maybe (User, Beverage))
 checkData uId bId = do

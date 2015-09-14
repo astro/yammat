@@ -21,7 +21,7 @@ import Handler.Common
 getRestockR :: Handler Html
 getRestockR = do
   beverages <- runDB $ selectList [] [Asc BeverageIdent]
-  defaultLayout $ do
+  defaultLayout $
     $(widgetFile "restock")
 
 getUpstockR :: BeverageId -> Handler Html
@@ -30,26 +30,26 @@ getUpstockR bId = do
   case mBev of
     Just bev -> do
       (upstockWidget, enctype) <- generateFormPost upstockForm
-      defaultLayout $ do
+      defaultLayout $
         $(widgetFile "upstock")
     Nothing -> do
       setMessageI MsgItemUnknown
-      redirect $ HomeR
+      redirect HomeR
 
 postUpstockR :: BeverageId -> Handler Html
 postUpstockR bId = do
   mBev <- runDB $ get bId
   case mBev of
-    Just bev -> do
+    Just _ -> do
       ((res, _), _) <- runFormPost upstockForm
       case res of
-        FormSuccess c -> do
-          case c > 0 of
-            True -> do
+        FormSuccess c ->
+          if c > 0
+            then do
               runDB $ update bId [BeverageAmount +=. c]
               setMessageI MsgStockedUp
-              redirect $ HomeR
-            False -> do
+              redirect HomeR
+            else do
               setMessageI MsgNotStockedUp
               redirect $ UpstockR bId
         _ -> do
@@ -57,7 +57,7 @@ postUpstockR bId = do
           redirect $ UpstockR bId
     Nothing -> do
       setMessageI MsgItemUnknown
-      redirect $ HomeR
+      redirect HomeR
 
 upstockForm :: Form Int
 upstockForm = renderDivs
@@ -66,7 +66,7 @@ upstockForm = renderDivs
 getNewArticleR :: Handler Html
 getNewArticleR = do
   (newArticleWidget, enctype) <- generateFormPost newArticleForm
-  defaultLayout $ do
+  defaultLayout $
     $(widgetFile "newArticle")
 
 postNewArticleR :: Handler Html
@@ -76,10 +76,10 @@ postNewArticleR = do
     FormSuccess bev -> do
       runDB $ insert_ bev
       setMessageI MsgItemAdded
-      redirect $ HomeR
+      redirect HomeR
     _ -> do
       setMessageI MsgItemNotAdded
-      redirect $ HomeR
+      redirect HomeR
 
 newArticleForm :: Form Beverage
 newArticleForm = renderDivs $ Beverage
@@ -93,4 +93,4 @@ newArticleForm = renderDivs $ Beverage
   where
     avatars = do
       ents <- runDB $ selectList [] [Asc AvatarIdent]
-      optionsPairs $ map (\ent -> ((avatarIdent $ entityVal ent), entityKey ent)) ents
+      optionsPairs $ map (\ent -> (avatarIdent $ entityVal ent, entityKey ent)) ents

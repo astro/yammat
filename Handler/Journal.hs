@@ -24,15 +24,15 @@ getJournalR = do
   master <- getYesod
   rawEntries <- runDB $ selectList [] [Desc TransactionId]
   next <- runDB $ selectList [] [Desc TransactionId, OffsetBy 30]
-  entries <- return $ L.reverse $ L.take 30 rawEntries
-  total <- return $ L.sum $ I.map (transactionAmount . entityVal) rawEntries
-  timeLimit <- case L.null entries of
-    False -> return $ transactionTime $ entityVal $ L.head $ entries
-    True -> liftIO getCurrentTime
+  let entries = L.reverse $ L.take 30 rawEntries
+  let total = L.sum $ I.map (transactionAmount . entityVal) rawEntries
+  timeLimit <- if L.null entries
+    then liftIO getCurrentTime
+    else return $ transactionTime $ entityVal $ L.head entries
   cashChecks <- runDB $ selectList [CashCheckTime >=. timeLimit] [Asc CashCheckId]
-  list <- return $ merge entries cashChecks
+  let list = merge entries cashChecks
   cashBalance <- getCashierBalance
-  defaultLayout $ do
+  defaultLayout $
     $(widgetFile "journal")
 
 merge :: [Entity Transaction] -> [Entity CashCheck] -> [Either Transaction CashCheck]
@@ -48,14 +48,14 @@ getJournalPageR p = do
   master <- getYesod
   rawEntries <- runDB $ selectList [] [Desc TransactionId, OffsetBy (p * 30)]
   next <- runDB $ selectList [] [Desc TransactionId, OffsetBy ((p + 1) * 30)]
-  entries <- return $ L.reverse $ L.take 30 rawEntries
-  lTimeLimit <- case L.null entries of
-    False -> return $ transactionTime $ entityVal $ L.head $ entries
-    True -> liftIO getCurrentTime
-  uTimeLimit <- case L.null entries of
-    False -> return $ transactionTime $ entityVal $ L.last $ entries
-    True -> liftIO getCurrentTime
+  let entries = L.reverse $ L.take 30 rawEntries
+  lTimeLimit <- if L.null entries
+    then liftIO getCurrentTime
+    else return $ transactionTime $ entityVal $ L.head entries
+  uTimeLimit <- if L.null entries
+    then liftIO getCurrentTime
+    else return $ transactionTime $ entityVal $ L.last entries
   cashChecks <- runDB $ selectList [CashCheckTime >=. lTimeLimit, CashCheckTime <. uTimeLimit] [Asc CashCheckId]
-  list <- return $ merge entries cashChecks
-  defaultLayout $ do
+  let list = merge entries cashChecks
+  defaultLayout $
     $(widgetFile "journalPage")

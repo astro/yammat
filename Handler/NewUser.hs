@@ -23,24 +23,24 @@ import Text.Shakespeare.Text
 getNewUserR :: Handler Html
 getNewUserR = do
   time <- liftIO getCurrentTime
-  secs <- return $ read $ formatTime defaultTimeLocale "%s" time
+  let secs = read $ formatTime defaultTimeLocale "%s" time
   (newUserWidget, enctype) <- generateFormPost $ newUserForm secs
-  defaultLayout $ do
+  defaultLayout $
     $(widgetFile "newUser")
 
 postNewUserR :: Handler Html
 postNewUserR = do
   time <- liftIO getCurrentTime
-  secs <- return $ read $ formatTime defaultTimeLocale "%s" time
+  let secs = read $ formatTime defaultTimeLocale "%s" time
   ((res, _), _) <- runFormPost $ newUserForm secs
   case res of
     FormSuccess user -> do
-      _ <- runDB $ insert user
+      runDB $ insert_ user
       setMessageI MsgUserCreated
-      redirect $ HomeR
+      redirect HomeR
     _ -> do
       setMessageI MsgUserNotCreated
-      redirect $ NewUserR
+      redirect NewUserR
 
 newUserForm :: Int -> Form User
 newUserForm secs = renderDivs $ User
@@ -68,13 +68,13 @@ getModifyUserR uId = do
       p <- lookupGetParam "barcode"
       _ <- handleGetParam p (Left uId)
       rawbs <- runDB $ selectList [BarcodeUser ==. Just uId] []
-      bs <- return $ map (barcodeCode . entityVal) rawbs
+      let bs = map (barcodeCode . entityVal) rawbs
       (modifyUserWidget, enctype) <- generateFormPost $ modifyUserForm user bs
-      defaultLayout $ do
+      defaultLayout $
         $(widgetFile "modifyUser")
     Nothing -> do
       setMessageI MsgUserUnknown
-      redirect $ HomeR
+      redirect HomeR
 
 postModifyUserR :: UserId -> Handler Html
 postModifyUserR uId = do
@@ -82,7 +82,7 @@ postModifyUserR uId = do
   case mUser of
     Just user -> do
       rawbs <- runDB $ selectList [BarcodeUser ==. Just uId] []
-      bs <- return $ map (barcodeCode . entityVal) rawbs
+      let bs = map (barcodeCode . entityVal) rawbs
       ((res, _), _) <- runFormPost $ modifyUserForm user bs
       case res of
         FormSuccess uc -> do
@@ -99,7 +99,7 @@ postModifyUserR uId = do
           redirect $ SelectR uId
     Nothing -> do
       setMessageI MsgUserUnknown
-      redirect $ HomeR
+      redirect HomeR
 
 modifyUserForm :: User -> [Text] -> Form UserConf
 modifyUserForm user bs = renderDivs $ UserConf

@@ -28,16 +28,16 @@ getSelectR uId = do
     Just user -> do
       master <- getYesod
       beverages <- runDB $ selectList [BeverageAmount >. 0] [Asc BeverageIdent]
-      defaultLayout $ do
+      defaultLayout $
         $(widgetFile "select")
     Nothing -> do
       setMessageI MsgUserUnknown
-      redirect $ HomeR
+      redirect HomeR
 
 getSelectCashR :: Handler Html
 getSelectCashR = do
   beverages <- runDB $ selectList [BeverageAmount >. 0] [Asc BeverageIdent]
-  defaultLayout $ do
+  defaultLayout $
     $(widgetFile "selectCash")
 
 getRechargeR :: UserId -> Handler Html
@@ -47,11 +47,11 @@ getRechargeR uId = do
     Just user -> do
       (rechargeWidget, enctype) <- generateFormPost rechargeForm
       currency <- appCurrency <$> appSettings <$> getYesod
-      defaultLayout $ do
+      defaultLayout $
         $(widgetFile "recharge")
     Nothing -> do
       setMessageI MsgUserUnknown
-      redirect $ HomeR
+      redirect HomeR
 
 postRechargeR :: UserId -> Handler Html
 postRechargeR uId = do
@@ -60,24 +60,24 @@ postRechargeR uId = do
     Just user -> do
       ((res, _), _) <- runFormPost rechargeForm
       case res of
-        FormSuccess amount -> do
-          case amount < 0 of
-            False -> do
-              updateCashier amount ("Guthaben: " `T.append` (userIdent user))
-              time <- liftIO getCurrentTime
-              secs <- return $ R.read $ formatTime defaultTimeLocale "%s" time
-              runDB $ update uId [UserBalance +=. amount, UserTimestamp =. secs]
-              setMessageI MsgRecharged
-              redirect $ HomeR
-            True -> do
+        FormSuccess amount ->
+          if amount < 0
+            then do
               setMessageI MsgNegativeRecharge
               redirect $ RechargeR uId
+            else do
+              updateCashier amount ("Guthaben: " `T.append` userIdent user)
+              time <- liftIO getCurrentTime
+              let secs = R.read $ formatTime defaultTimeLocale "%s" time
+              runDB $ update uId [UserBalance +=. amount, UserTimestamp =. secs]
+              setMessageI MsgRecharged
+              redirect HomeR
         _ -> do
           setMessageI MsgRechargeError
-          redirect $ HomeR
+          redirect HomeR
     Nothing -> do
       setMessageI MsgUserUnknown
-      redirect $ HomeR
+      redirect HomeR
 
 rechargeForm :: Form Int
 rechargeForm = renderDivs

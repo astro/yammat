@@ -32,29 +32,26 @@ import Text.Printf
 
 
 prependZero :: Text -> Text
-prependZero t0 = if T.null t1
-                 then t1
-                 else if T.head t1 == '.'
-                      then '0' `T.cons` t1
-                      else if "-." `T.isPrefixOf` t1
-                           then "-0." `T.append` (T.drop 2 t1)
-                           else t1
-
-  where t1 = T.dropWhile ((==) ' ') t0
+prependZero t0
+ | T.null t1              = t1
+ | T.head t1 == '.'       = '0' `T.cons` t1
+ | "-." `T.isPrefixOf` t1 = "-0." `T.append` T.drop 2 t1
+ | otherwise              = t1
+ where t1 = T.dropWhile (' ' ==) t0
 
 formatFloat :: Double -> Text
 formatFloat d = T.pack (pre ++ t ++ c)
   where
     t = reverse (intercalate "." $ chunksOf 3 $ reverse $ fst sp)
     c = "," ++ tail (snd sp)
-    sp = (break (== '.') (printf "%.2f" (abs d)))
-    pre = case d < 0 of
-      True -> "-"
-      False -> ""
+    sp = break (== '.') (printf "%.2f" (abs d))
+    pre = if d < 0
+      then "-"
+      else ""
     -- T.pack . (splitEvery 3) . (printf "%,2f")
 
 formatIntCurrency :: Int -> Text
-formatIntCurrency x = formatFloat $ ((fromIntegral x) / 100)
+formatIntCurrency x = formatFloat $ fromIntegral x / 100
 
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -97,9 +94,9 @@ approotRequest master req =
         Nothing -> appRoot $ appSettings master
     where
         prefix =
-            case isSecure req of
-                True  -> "https://"
-                False -> "http://"
+            if isSecure req
+                then "https://"
+                else "http://"
 
 -- Please see the documentation for the Yesod typeclass. There are a number
 -- of settings which can be configured by overriding methods here.
@@ -111,7 +108,7 @@ instance Yesod App where
 
     -- Store session data on the client in encrypted cookies,
     -- default session idle timeout is 120 minutes
-    makeSessionBackend _ = fmap Just $ defaultClientSessionBackend
+    makeSessionBackend _ = Just <$> defaultClientSessionBackend
         120    -- timeout in minutes
         "config/client_session_key.aes"
 

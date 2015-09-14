@@ -21,7 +21,7 @@ import Handler.Common
 getCashCheckR :: Handler Html
 getCashCheckR = do
   (cashCheckWidget, enctype) <- generateFormPost createCashCheckForm
-  defaultLayout $ do
+  defaultLayout $
     $(widgetFile "cashCheck")
 
 postCashCheckR :: Handler Html
@@ -33,10 +33,10 @@ postCashCheckR = do
       runDB $ insert_ c
       runDB $ insert_ $ Cashier (cashCheckBalance c) currentTime
       setMessageI MsgCashChecked
-      redirect $ HomeR
+      redirect HomeR
     _ -> do
       setMessageI MsgCashCheckError
-      redirect $ CashCheckR
+      redirect CashCheckR
 
 createCashCheckForm :: Form CashCheck
 createCashCheckForm = renderDivs $ CashCheck

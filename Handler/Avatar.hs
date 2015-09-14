@@ -24,29 +24,29 @@ import Graphics.ImageMagick.MagickWand
 getAvatarR :: Handler Html
 getAvatarR = do
   avatars <- runDB $ selectList [] [Asc AvatarIdent]
-  defaultLayout $ do
+  defaultLayout $
     $(widgetFile "avatars")
 
 getNewAvatarR :: Handler Html
 getNewAvatarR = do
-  (newAvatarWidget, enctype) <- generateFormPost $ avatarNewForm
-  defaultLayout $ do
+  (newAvatarWidget, enctype) <- generateFormPost avatarNewForm
+  defaultLayout $
     $(widgetFile "newAvatar")
 
 postNewAvatarR :: Handler Html
 postNewAvatarR = do
-  ((res, _), _) <- runFormPost $ avatarNewForm
+  ((res, _), _) <- runFormPost avatarNewForm
   case res of
     FormSuccess na -> do
       raw <- runResourceT $ fileSource (avatarNewFile na) $$ sinkLbs
       thumb <- generateThumb $ B.concat $ L.toChunks raw
-      now <- liftIO $ getCurrentTime
+      now <- liftIO getCurrentTime
       runDB $ insert_ $ Avatar (avatarNewIdent na) thumb now
       setMessageI MsgAvatarUploadSuccessfull
-      redirect $ HomeR
+      redirect HomeR
     _ -> do
       setMessageI MsgErrorOccured
-      redirect $ NewAvatarR
+      redirect NewAvatarR
 
 avatarNewForm :: Form AvatarNew
 avatarNewForm = renderDivs $ AvatarNew
@@ -64,11 +64,11 @@ getModifyAvatarR aId = do
   case ma of
     Just avatar -> do
       (avatarModifyWidget, enctype) <- generateFormPost $ avatarModForm avatar
-      defaultLayout $ do
+      defaultLayout $
         $(widgetFile "modifyAvatar")
     Nothing -> do
       setMessageI MsgAvatarUnknown
-      redirect $ AvatarR
+      redirect AvatarR
 
 postModifyAvatarR :: AvatarId -> Handler Html
 postModifyAvatarR aId = do
@@ -80,13 +80,13 @@ postModifyAvatarR aId = do
         FormSuccess md -> do
           updateAvatar aId md
           setMessageI MsgAvatarUpdateSuccessfull
-          redirect $ AvatarR
+          redirect AvatarR
         _ -> do
           setMessageI MsgErrorOccured
           redirect $ ModifyAvatarR aId
     Nothing -> do
       setMessageI MsgAvatarUnknown
-      redirect $ HomeR
+      redirect HomeR
 
 avatarModForm :: Avatar -> Form AvatarMod
 avatarModForm a = renderDivs $ AvatarMod
@@ -99,7 +99,7 @@ data AvatarMod = AvatarMod
   }
 
 updateAvatar :: AvatarId -> AvatarMod -> Handler ()
-updateAvatar aId (AvatarMod ident Nothing) = do
+updateAvatar aId (AvatarMod ident Nothing) =
   runDB $ update aId [AvatarIdent =. ident]
 updateAvatar aId (AvatarMod ident (Just fi)) = do
   raw <- runResourceT $ fileSource fi $$ sinkLbs
@@ -110,19 +110,18 @@ updateAvatar aId (AvatarMod ident (Just fi)) = do
     ]
 
 generateThumb :: ByteString -> Handler ByteString
-generateThumb raw = do
-  thumb <- liftIO $ withMagickWandGenesis $ do
+generateThumb raw =
+  liftIO $ withMagickWandGenesis $ do
     (_, w) <- magickWand
     readImageBlob w raw
     w1 <- getImageWidth w
     h1 <- getImageHeight w
-    h2 <- return 140
-    w2 <- return $ floor (((fromIntegral w1) / (fromIntegral h1)) * (fromIntegral h2) :: Double)
+    let h2 = 140
+    let w2 = floor (fromIntegral w1 / fromIntegral h1 * fromIntegral h2 :: Double)
     resizeImage w w2 h2 lanczosFilter 1
     setImageCompressionQuality w 95
     setImageFormat w "png"
     getImageBlob w
-  return thumb
 
 getGetAvatarR :: AvatarId -> Handler TypedContent
 getGetAvatarR aId = do
@@ -136,14 +135,14 @@ getAvatarDeleteR aId = do
     Just _ -> do
       c <- runDB $ selectList [UserAvatar ==. Just aId] []
       d <- runDB $ selectList [BeverageAvatar ==. Just aId] []
-      case null c && null d of
-        True -> do
+      if null c && null d
+        then do
           runDB $ delete aId
           setMessageI MsgAvatarDeleted
-          redirect $ HomeR
-        False -> do
+          redirect HomeR
+        else do
           setMessageI MsgAvatarInUseError
-          redirect $ AvatarR
+          redirect AvatarR
     Nothing -> do
       setMessageI MsgAvatarUnknown
-      redirect $ AvatarR
+      redirect AvatarR

@@ -30,21 +30,17 @@ getHomeR :: Handler Html
 getHomeR = do
   beverages <- runDB $ selectList [BeverageAmount !=. 0] [Desc BeverageIdent]
   time <- liftIO getCurrentTime
-  secs <- return $ (R.read $ formatTime defaultTimeLocale "%s" time) - 2592000
+  let secs = R.read (formatTime defaultTimeLocale "%s" time) - 2592000
   users <- runDB $ selectList [UserTimestamp >=. secs] [Asc UserIdent]
-  defaultLayout $ do
+  defaultLayout $
     $(widgetFile "home")
-
-postHomeR :: Handler Html
-postHomeR = do
-  error "Not yet implemented"
 
 getReactivateR :: Handler Html
 getReactivateR = do
   time <- liftIO getCurrentTime
-  secs <- return $ (R.read $ formatTime defaultTimeLocale "%s" time) - 2592000
+  let secs = R.read (formatTime defaultTimeLocale "%s" time) - 2592000
   users <- runDB $ selectList [UserTimestamp <. secs] [Asc UserIdent]
-  defaultLayout $ do
+  defaultLayout $
     $(widgetFile "reactivate")
 
 getUserReactivateR :: UserId -> Handler Html
@@ -53,10 +49,10 @@ getUserReactivateR uId = do
   case mUser of
     Just user -> do
       time <- liftIO getCurrentTime
-      secs <- return $ R.read $ formatTime defaultTimeLocale "%s" time
+      let secs = R.read $ formatTime defaultTimeLocale "%s" time
       runDB $ update uId [UserTimestamp =. secs]
       setMessageI MsgUserReactivated
-      redirect $ HomeR
+      redirect HomeR
     Nothing -> do
       setMessageI MsgUserUnknown
-      redirect $ HomeR
+      redirect HomeR

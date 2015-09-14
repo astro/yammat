@@ -33,22 +33,22 @@ import Import
 
 getFaviconR :: Handler TypedContent
 getFaviconR = return $ TypedContent "image/x-icon"
-                     $ toContent $(embedFile "config/favicon.ico")
+  $ toContent $(embedFile "config/favicon.ico")
 
 getRobotsR :: Handler TypedContent
 getRobotsR = return $ TypedContent typePlain
-                    $ toContent $(embedFile "config/robots.txt")
+  $ toContent $(embedFile "config/robots.txt")
 
 removeItem :: Eq a => a -> [a] -> [a]
 removeItem _ [] = []
 removeItem x (y:ys)
-  | x == y = removeItem x ys
+  | x == y    = removeItem x ys
   | otherwise = y : (removeItem x ys)
 
 updateCashier :: Int -> Text -> Handler ()
 updateCashier amount desc = do
   mCashier <- runDB $ selectFirst [] [Desc CashierId]
-  trans <- liftIO $ (\time -> return $ Transaction desc amount time) =<< getCurrentTime
+  trans <- liftIO $ (return . Transaction desc amount) =<< getCurrentTime
   case mCashier of
     Just entCash -> do
       runDB $ update (entityKey entCash) [CashierBalance +=. amount]
@@ -62,9 +62,9 @@ getCashierBalance :: Handler Int
 getCashierBalance = do
   mCashier <- runDB $ selectFirst [] [Desc CashierId]
   case mCashier of
-    Just cashier -> do
+    Just cashier ->
       return $ cashierBalance $ entityVal cashier
-    Nothing -> do
+    Nothing ->
       return 0
 
 currencyField :: (RenderMessage (HandlerSite m) FormMessage, Show a, Monad m, Integral a) => Field m a
@@ -108,10 +108,10 @@ barcodeField = Field
 handleBarcodes :: Either UserId BeverageId -> [Text] -> Handler ()
 handleBarcodes (Left uId) nbs = do
   raws <- runDB $ selectList [BarcodeUser ==. Just uId] []
-  obs <- return $ map (barcodeCode . entityVal) raws
-  toDel <- return $ obs L.\\ nbs
-  toAdd <- return $ nbs L.\\ obs
-  _ <- mapM (\b -> runDB $ insert_ $ Barcode
+  let obs = map (barcodeCode . entityVal) raws
+  let toDel = obs L.\\ nbs
+  let toAdd = nbs L.\\ obs
+  mapM_ (\b -> runDB $ insert_ $ Barcode
     b
     True
     (Just uId)
@@ -121,10 +121,10 @@ handleBarcodes (Left uId) nbs = do
   mapM_ (runDB . delete . entityKey . fromJust) ents
 handleBarcodes (Right bId) nbs = do
   raws <- runDB $ selectList [BarcodeBev ==. Just bId] []
-  obs <- return $ map (barcodeCode . entityVal) raws
-  toDel <- return $ obs L.\\ nbs
-  toAdd <- return $ nbs L.\\ obs
-  _ <- mapM (\b -> runDB $ insert $ Barcode
+  let obs = map (barcodeCode . entityVal) raws
+  let toDel = obs L.\\ nbs
+  let toAdd = nbs L.\\ obs
+  mapM_ (\b -> runDB $ insert_ $ Barcode
     b
     False
     Nothing
@@ -138,11 +138,11 @@ handleGetParam Nothing _ =
   return ()
 handleGetParam (Just b) eub = do
   f <- return $ T.filter C.isAlphaNum b
-  case (T.length f) > 0 && b /= ", " of
-    True -> do
+  if T.length f > 0 && b /= ", "
+    then do
       e <- runDB $ getBy $ UniqueBarcode f
-      case e of
-        Nothing -> do
+      if isNothing e
+        then do
           _ <- case eub of
             Left uId -> do
               -- should usernames containing, among other, spaces cause problems, replace b for f here
@@ -151,9 +151,9 @@ handleGetParam (Just b) eub = do
               -- and here
               runDB $ insert_ $ Barcode b False Nothing (Just bId)
           setMessageI MsgBarcodeAdded
-        Just _ ->
+        else
           setMessageI MsgBarcodeDuplicate
-    False -> do
+    else
       setMessageI MsgProvideBarcode
 
 amountField :: (RenderMessage (HandlerSite m) FormMessage, Show a, Monad m, Integral a) => Field m a
@@ -174,10 +174,10 @@ amountField = Field
 checkAlert :: BeverageId -> Handler ()
 checkAlert bId = do
   bev <- runDB $ getJust bId
-  case beverageAmount bev < beverageAlertAmount bev of
-    True -> do
+  if beverageAmount bev < beverageAlertAmount bev
+    then do
       master <- getYesod
-      to <- return $ appEmail $ appSettings master 
+      let to = appEmail $ appSettings master 
       liftIO $ sendMail to "Niedriger Bestand"
         [stext|
 Hallo,
@@ -189,7 +189,8 @@ Viele Grüße,
 
 der Matemat
         |]
-    False -> return () -- do nothing
+    else
+      return () -- do nothing
 
 --sendMail :: MonadIO m => Text -> Text -> Text -> m ()
 sendMail to subject body =
@@ -211,4 +212,4 @@ sendMail to subject body =
       }
 
 formatIntVolume :: Int -> Text
-formatIntVolume x = formatFloat $ ((fromIntegral x) / 1000)
+formatIntVolume x = formatFloat (fromIntegral x / 1000)

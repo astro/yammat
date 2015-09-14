@@ -24,9 +24,9 @@ getTransferSelectR :: UserId -> Handler Html
 getTransferSelectR from = do
   mUser <- runDB $ get from
   case mUser of
-    Just user -> do
+    Just _ -> do
       users <- runDB $ selectList [UserId !=. from] [Asc UserIdent]
-      defaultLayout $ do
+      defaultLayout $
         $(widgetFile "transferSelect")
     Nothing -> do
       setMessageI MsgUserUnknown
@@ -62,17 +62,17 @@ postTransferR from to = do
           ((res, _), _) <- runFormPost transferForm
           case res of
             FormSuccess amount -> do
-              case amount < 0 of
-                False -> do
+              if amount < 0
+                then do
+                  setMessageI MsgNegativeTransfer
+                  redirect $ TransferR from to
+                else do
                   runDB $ update from [UserBalance -=. amount]
                   runDB $ update to [UserBalance +=. amount]
                   master <- getYesod
                   liftIO $ notify sender recpt amount master
                   setMessageI MsgTransferComplete
                   redirect HomeR
-                True -> do
-                  setMessageI MsgNegativeTransfer
-                  redirect $ TransferR from to
             _ -> do
               setMessageI MsgTransferError
               redirect HomeR

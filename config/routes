@@ -3,7 +3,7 @@
 /favicon.ico FaviconR GET
 /robots.txt RobotsR GET
 
-/ 				HomeR 			GET POST
+/ 				HomeR 			GET
 /reactivate			ReactivateR		GET
 /user/#UserId/reactivate	UserReactivateR		GET
 /user/#UserId		 	SelectR			GET

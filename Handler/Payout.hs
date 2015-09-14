@@ -27,7 +27,7 @@ data Payment = Payment
 getPayoutR :: Handler Html
 getPayoutR = do
   (payoutWidget, enctype) <- generateFormPost payoutForm
-  defaultLayout $ do
+  defaultLayout $
     $(widgetFile "payout")
 
 postPayoutR :: Handler Html
@@ -38,10 +38,10 @@ postPayoutR = do
       msg <- renderMessage' $ MsgPayout $ paymentDesc payment
       updateCashier (- (paymentAmount payment)) msg
       setMessageI MsgPaidOut
-      redirect $ HomeR
+      redirect HomeR
     _ -> do
       setMessageI MsgNotPaidOut
-      redirect $ JournalR
+      redirect JournalR
 
 payoutForm :: Form Payment
 payoutForm = renderDivs $ Payment

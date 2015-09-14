@@ -26,13 +26,13 @@ getModifyR bId = do
       p <- lookupGetParam "barcode"
       _ <- handleGetParam p (Right bId)
       rawbs <- runDB $ selectList [BarcodeBev ==. Just bId] []
-      bs <- return $ map (barcodeCode . entityVal) rawbs
+      let bs = map (barcodeCode . entityVal) rawbs
       (modifyWidget, enctype) <- generateFormPost $ modifyForm bev bs
-      defaultLayout $ do
+      defaultLayout $
         $(widgetFile "modify")
     Nothing -> do
       setMessageI MsgItemUnknown
-      redirect $ SummaryR
+      redirect SummaryR
 
 postModifyR :: BeverageId -> Handler Html
 postModifyR bId = do
@@ -40,7 +40,7 @@ postModifyR bId = do
   case mBev of
     Just bev -> do
       rawbs <- runDB $ selectList [BarcodeBev ==. Just bId] []
-      bs <- return $ map (barcodeCode . entityVal) rawbs
+      let bs = map (barcodeCode . entityVal) rawbs
       ((res, _), _) <- runFormPost $ modifyForm bev bs
       case res of
         FormSuccess nBev -> do
@@ -49,19 +49,19 @@ postModifyR bId = do
             , BeveragePrice =. modBevPrice nBev
             , BeverageAmount =. modBevAmount nBev
             , BeverageAlertAmount =. modBevAlertAmount nBev
-            , BeverageCorrectedAmount +=. ((modBevAmount nBev) - (beverageAmount bev))
+            , BeverageCorrectedAmount +=. (modBevAmount nBev - beverageAmount bev)
             , BeverageMl =. modBevMl nBev
             , BeverageAvatar =. modBevAvatar nBev
             ]
           handleBarcodes (Right bId) (fromMaybe [] $ modBevBarcodes nBev)
           setMessageI MsgEditSuccess
-          redirect $ SummaryR
+          redirect SummaryR
         _ -> do
           setMessageI MsgEditFail
-          redirect $ SummaryR
+          redirect SummaryR
     Nothing -> do
       setMessageI MsgItemUnknown
-      redirect $ SummaryR
+      redirect SummaryR
 
 data ModBev = ModBev
   { modBevIdent :: Text
@@ -85,7 +85,7 @@ modifyForm bev bs = renderDivs $ ModBev
   where
     avatars = do
       ents <- runDB $ selectList [] [Asc AvatarIdent]
-      optionsPairs $ map (\ent -> ((avatarIdent $ entityVal ent), entityKey ent)) ents
+      optionsPairs $ map (\ent -> (avatarIdent $ entityVal ent, entityKey ent)) ents
 
 getDeleteBeverageR :: BeverageId -> Handler Html
 getDeleteBeverageR bId = do
@@ -94,7 +94,7 @@ getDeleteBeverageR bId = do
     Just bev -> do
       runDB $ delete bId
       setMessageI MsgItemDeleted
-      redirect $ HomeR
+      redirect HomeR
     Nothing -> do
       setMessageI MsgItemUnknown
-      redirect $ HomeR
+      redirect HomeR

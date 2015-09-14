@@ -25,7 +25,7 @@ getSummaryR :: Handler Html
 getSummaryR = do
   master <- getYesod
   bevs <- runDB $ selectList [] [Asc BeverageIdent]
-  defaultLayout $ do
+  defaultLayout $
     $(widgetFile "summary")
 
 getSummaryJsonR :: Handler RepJson
@@ -37,8 +37,8 @@ getSummaryJsonR = do
     map (\(Entity _ bev) ->
           object [ "name" .= beverageIdent bev
                  , "value" .= beverageAmount bev
-                 , "volume" .= ((fromIntegral (beverageMl bev)) / 1000 :: Double)
-                 , "price" .= ((fromIntegral (beveragePrice bev)) / 100 :: Double)
+                 , "volume" .= (fromIntegral (beverageMl bev) / 1000 :: Double)
+                 , "price" .= (fromIntegral (beveragePrice bev) / 100 :: Double)
                  , "currency" .= appCurrency (appSettings master)
                  ]
         ) bevs
@@ -87,27 +87,27 @@ getInventoryJsonR = do
 getUploadInventoryJsonR :: Handler Html
 getUploadInventoryJsonR = do
   (uploadJsonWidget, enctype) <- generateFormPost uploadJsonForm
-  defaultLayout $ do
+  defaultLayout $
     $(widgetFile "uploadJson")
 
 postUploadInventoryJsonR :: Handler Html
 postUploadInventoryJsonR = do
   ((res, _), _) <- runFormPost uploadJsonForm
   case res of
-    FormSuccess file -> do
-      case fileContentType file == "application/json" of
-        True -> do
+    FormSuccess file ->
+      if fileContentType file == "application/json"
+        then do
           source <- runResourceT $ fileSource file $$ sinkLbs
-          bevs <- return $ fromMaybe [] $ (decode source :: Maybe [BevStore])
+          let bevs = fromMaybe [] (decode source :: Maybe [BevStore])
           I.mapM_ insOrUpd bevs
           setMessageI MsgRestoreSuccess
-          redirect $ HomeR
-        False -> do
+          redirect HomeR
+        else do
           setMessageI MsgNotJson
-          redirect $ UploadInventoryJsonR
+          redirect UploadInventoryJsonR
     _ -> do
       setMessageI MsgErrorOccured
-      redirect $ UploadInventoryJsonR
+      redirect UploadInventoryJsonR
 
 uploadJsonForm :: Form FileInfo
 uploadJsonForm = renderDivs
@@ -117,14 +117,14 @@ insOrUpd :: BevStore -> Handler ()
 insOrUpd bev = do
   meb <- runDB $ getBy $ UniqueBeverage $ bevStoreIdent bev
   case meb of
-    Just eb -> do
+    Just eb ->
       runDB $ update (entityKey eb)
         [ BeveragePrice =. bevStorePrice bev
         , BeverageAmount =. bevStoreAmount bev
         , BeverageAlertAmount =. bevStoreAlertAmount bev
         , BeverageMl =. bevStoreMl bev
         ]
-    Nothing -> do
+    Nothing ->
       runDB $ insert_ $ Beverage
         (bevStoreIdent bev)
         (bevStorePrice bev)

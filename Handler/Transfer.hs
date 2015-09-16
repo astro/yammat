@@ -88,16 +88,30 @@ transferForm = renderDivs
   $ areq currencyField (fieldSettingsLabel MsgValue) (Just 0)
 
 notify :: User -> User -> Int -> App -> IO ()
-notify sender recpt amount master = do
+notify sender rcpt amount master = do
   case userEmail sender of
     Just email ->
       liftIO $ sendMail email "Guthabentransfer beim Matematen"
         [stext|
 Hallo #{userIdent sender}
 
-Du hast gerade #{formatIntCurrency amount}#{appCurrency $ appSettings master} an #{userIdent recpt} transferiert.
+Du hast gerade #{formatIntCurrency amount}#{appCurrency $ appSettings master} an #{userIdent rcpt} transferiert.
 
-Viele Grüßem
+Viele Grüße,
+
+Der Matemat
+        |]
+    Nothing ->
+      return ()
+  case userEmail rcpt of
+    Just email ->
+      liftIO $ sendMail email "Guthabentransfer eingetroffen"
+        [stext|
+Hallo #{userIdent rcpt}
+
+Du hast gerade #{formatIntCurrency amount}#{appCurrency $ appSettings master} von #{userIdent sender} erhalten.
+
+Viele Grüße,
 
 Der Matemat
         |]

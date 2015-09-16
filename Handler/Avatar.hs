@@ -125,6 +125,7 @@ generateThumb raw =
 
 getGetAvatarR :: AvatarId -> Handler TypedContent
 getGetAvatarR aId = do
+  neverExpires
   avatar <- runDB $ get404 aId
   return $ TypedContent typePng $ toContent $ avatarData avatar
 

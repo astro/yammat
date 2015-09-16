@@ -116,8 +116,8 @@ generateThumb raw =
     readImageBlob w raw
     w1 <- getImageWidth w
     h1 <- getImageHeight w
-    let h2 = 140
-    let w2 = floor (fromIntegral w1 / fromIntegral h1 * fromIntegral h2 :: Double)
+    let h2 = 140 :: Int
+    let w2 = floor (fromIntegral w1 / fromIntegral h1 * fromIntegral h2 :: Double) :: Int
     resizeImage w w2 h2 lanczosFilter 1
     setImageCompressionQuality w 95
     setImageFormat w "png"

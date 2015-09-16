@@ -17,9 +17,11 @@ module Handler.Avatar where
 
 import Import
 import Data.Conduit.Binary
+import qualified Data.Text as T
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as L
 import Graphics.ImageMagick.MagickWand
+import qualified Crypto.Hash.SHA3 as SHA3
 
 getAvatarR :: Handler Html
 getAvatarR = do
@@ -39,9 +41,8 @@ postNewAvatarR = do
   case res of
     FormSuccess na -> do
       raw <- runResourceT $ fileSource (avatarNewFile na) $$ sinkLbs
-      thumb <- generateThumb $ B.concat $ L.toChunks raw
-      now <- liftIO getCurrentTime
-      runDB $ insert_ $ Avatar (avatarNewIdent na) thumb now
+      (thumb, hash) <- generateThumb $ B.concat $ L.toChunks raw
+      runDB $ insert_ $ Avatar (avatarNewIdent na) thumb hash
       setMessageI MsgAvatarUploadSuccessfull
       redirect HomeR
     _ -> do
@@ -103,15 +104,16 @@ updateAvatar aId (AvatarMod ident Nothing) =
   runDB $ update aId [AvatarIdent =. ident]
 updateAvatar aId (AvatarMod ident (Just fi)) = do
   raw <- runResourceT $ fileSource fi $$ sinkLbs
-  thumb <- generateThumb $ B.concat $ L.toChunks raw
+  (thumb, hash) <- generateThumb $ B.concat $ L.toChunks raw
   runDB $ update aId
     [ AvatarIdent =. ident
     , AvatarData =. thumb
+    , AvatarHash =. hash
     ]
 
-generateThumb :: ByteString -> Handler ByteString
-generateThumb raw =
-  liftIO $ withMagickWandGenesis $ do
+generateThumb :: ByteString -> Handler (ByteString, ByteString)
+generateThumb raw = do
+  thumb <- liftIO $ withMagickWandGenesis $ do
     (_, w) <- magickWand
     readImageBlob w raw
     w1 <- getImageWidth w
@@ -122,11 +124,13 @@ generateThumb raw =
     setImageCompressionQuality w 95
     setImageFormat w "png"
     getImageBlob w
+  let h = SHA3.hash 16 thumb
+  return (thumb, h)
 
 getGetAvatarR :: AvatarId -> Handler TypedContent
 getGetAvatarR aId = do
-  neverExpires
   avatar <- runDB $ get404 aId
+  setEtag $ decodeUtf8 $ avatarHash avatar
   return $ TypedContent typePng $ toContent $ avatarData avatar
 
 getAvatarDeleteR :: AvatarId -> Handler Html

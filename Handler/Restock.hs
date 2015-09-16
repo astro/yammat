@@ -17,6 +17,7 @@ module Handler.Restock where
 
 import Import
 import Handler.Common
+import Data.Maybe (fromJust)
 
 getRestockR :: Handler Html
 getRestockR = do

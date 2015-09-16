@@ -20,6 +20,7 @@ import Data.Conduit.Binary
 import qualified Data.Text as T
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as L
+import Data.ByteString.Base64
 import Graphics.ImageMagick.MagickWand
 import qualified Crypto.Hash.SHA3 as SHA3
 
@@ -124,7 +125,7 @@ generateThumb raw = do
     setImageCompressionQuality w 95
     setImageFormat w "png"
     getImageBlob w
-  let h = SHA3.hash 16 thumb
+  let h = encode (SHA3.hash 8 thumb)
   return (thumb, h)
 
 getGetAvatarR :: AvatarId -> Handler TypedContent

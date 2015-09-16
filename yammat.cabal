@@ -101,6 +101,7 @@ library
                  , conduit-extra
                  , imagemagick
                  , cryptohash
+                 , base64-bytestring
 
 executable         yammat
     if flag(library-only)

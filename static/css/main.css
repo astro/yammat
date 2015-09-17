@@ -27,7 +27,7 @@
 
 .right {
 	display: inline-block;
-	/*float: right;*/
+	float: right;
 	padding: 2em;
 }
 
@@ -131,7 +131,7 @@ footer {
 	margin-top: 1em;
 }
 
-footer a {
+footer span a {
 	margin-top: 1em;
 	display: inline-block;
 	position: relative;

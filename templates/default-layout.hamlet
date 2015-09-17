@@ -30,3 +30,5 @@
       <a href=@{SummaryR}>_{MsgSummary}
     <span>
       <a href=@{AvatarR}>_{MsgAvatars}
+    <div .right>
+      ^{pageBody copyrightWidget}

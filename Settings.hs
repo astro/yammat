@@ -67,12 +67,15 @@ data AppSettings = AppSettings
     -- ^ Copyright text to appear in the footer of the page
     , appAnalytics              :: Maybe Text
     -- ^ Google Analytics code
-    , appEmail 	                :: Text
+    , appEmail                  :: Text
     -- ^ notification address
     , appCurrency               :: Text
     -- ^ Currency character
     , appCashCharge             :: Int
     -- ^ Extra charge for paying in cash in cents
+    , appCopyright              :: Text
+    , appCopyrightLink          :: Text
+    -- ^ Text and link to source
     }
 
 instance FromJSON AppSettings where
@@ -96,11 +99,12 @@ instance FromJSON AppSettings where
         appMutableStatic          <- o .:? "mutable-static"   .!= defaultDev
         appSkipCombining          <- o .:? "skip-combining"   .!= defaultDev
 
-        -- appCopyright              <- o .: "copyright"
         appAnalytics              <- o .:? "analytics"
         appEmail                  <- o .: "email"
         appCurrency               <- o .: "currency"
         appCashCharge             <- o .: "cash_charge"
+        appCopyright              <- o .: "copyright"
+        appCopyrightLink          <- o .: "copyright_link"
 
         return AppSettings {..}
 

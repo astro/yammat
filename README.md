@@ -20,7 +20,7 @@ All internal dependencies are in the file `yammat.cabal` and will be installed a
 
 ##Building
 
-To build this project enter `cabal configure && cabal build` into your command line
+To build this project enter `cabal configure && cabal build yammat` into your command line
 
 ##Deployment
 
@@ -42,6 +42,7 @@ For better control You can wrap an init script around this. How to do this is de
 
 ###0.0.0-0.0.1
 
-* delete column "alt_time" from table "avatar" in your Database with `alter table "avatar" drop column "alt_time";`
-* start yammat normally to fill database with dummy data and stop it again
-* run migration executable frim `dist/build/Migrate1/Migrate1`
+* Delete column `alt_time` from table `avatar` in your Database with `alter table "avatar" drop column "alt_time";`
+* Start yammat normally to fill database with dummy data and stop it again
+* Run migration executable from `dist/build/Migrate1/Migrate1`
+* Enjoy your freshly migrated Matemat

@@ -20,7 +20,7 @@ All internal dependencies are in the file `yammat.cabal` and will be installed a
 
 ##Building
 
-To build this project enter `cabal configure && cabal build yammat` into your command line
+To build this project enter `cabal configure && cabal build exe:yammat` into your command line
 
 ##Deployment
 

@@ -25,7 +25,7 @@ main = do
   tups <- return $ map (\entry ->
     case entry of
       [("id", theId), ("ident", _), ("data", SqlByteString theData), ("hash", _)] ->
-        [SqlByteString $ encode $ SHA3.hash 24 theData, theId]
+        [SqlByteString $ encode $ SHA3.hash 32 theData, theId]
       _ ->
         error "malformed entry"
     ) rows

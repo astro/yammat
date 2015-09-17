@@ -125,7 +125,7 @@ generateThumb raw = do
     setImageCompressionQuality w 95
     setImageFormat w "png"
     getImageBlob w
-  let h = encode (SHA3.hash 24 thumb)
+  let h = encode (SHA3.hash 32 thumb)
   return (thumb, h)
 
 getGetAvatarR :: AvatarId -> Handler TypedContent

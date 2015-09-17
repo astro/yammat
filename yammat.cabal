@@ -109,7 +109,7 @@ library
 
 executable         yammat
     if flag(library-only)
-        Buildable: False
+        Buildable: True
 
     main-is:           main.hs
     hs-source-dirs:    app

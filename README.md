@@ -37,3 +37,11 @@ Run `./yammat config/settings.yml` in your desired run location. Finally point a
 For better control You can wrap an init script around this. How to do this is described [in my blog][blog].
 
 [blog]: http://nek0.eu/posts/2014-10-23-Daemonize-a-yesod-app.html
+
+##Migrations
+
+###0.0.0-0.0.1
+
+* delete column "alt_time" from table "avatar" in your Database with `alter table "avatar" drop column "alt_time";`
+* start yammat normally to fill database with dummy data and stop it again
+* run migration executable frim `dist/build/Migrate1/Migrate1`

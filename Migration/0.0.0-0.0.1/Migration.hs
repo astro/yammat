@@ -19,13 +19,13 @@ main = do
   dbPasswd <- getPasswd
   let dbString = "host=" ++ dbHost ++ " port=" ++ dbPort ++ " user=" ++ dbUser ++ " dbname=" ++ dbName ++ " password=" ++ dbPasswd
   conn <- connectPostgreSQL dbString
-  stmt1 <- prepare conn "select * from avatar where hash = 'fill_me!'"
+  stmt1 <- prepare conn "select * from avatar"
   _ <- execute stmt1 []
   rows <- fetchAllRowsAL stmt1
   tups <- return $ map (\entry ->
     case entry of
       [("id", theId), ("ident", _), ("data", SqlByteString theData), ("hash", _)] ->
-        [SqlByteString $ encode $ SHA3.hash 8 theData, theId]
+        [SqlByteString $ encode $ SHA3.hash 24 theData, theId]
       _ ->
         error "malformed entry"
     ) rows

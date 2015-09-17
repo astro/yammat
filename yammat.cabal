@@ -113,6 +113,18 @@ executable         yammat
 
     ghc-options:       -threaded -O2 -rtsopts -with-rtsopts=-N
 
+executable         Migrate1
+
+    main-is:           Migration.hs
+    hs-source-dirs:    Migration/0.0.0-0.0.1
+    ghc-options:       -Wall
+    build-depends:     base
+                     , HDBC
+                     , HDBC-postgresql
+                     , bytestring
+                     , cryptohash
+                     , base64-bytestring
+
 test-suite test
     type:              exitcode-stdio-1.0
     main-is:           Spec.hs

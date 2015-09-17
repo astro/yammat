@@ -2,6 +2,10 @@ name:              yammat
 version:           0.0.1
 cabal-version:     >= 1.8
 build-type:        Simple
+license:           AGPL-3
+license-file:      LICENSE.md
+author:            Amedeo Molnár
+maintainer:        nek0@chelnok.de
 
 Flag dev
     Description:   Turn on development settings, like auto-reload templates.

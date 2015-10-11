@@ -27,7 +27,7 @@ getSupplierDigestR sId = do
   case mSup of
     Just sup -> do
       master <- getYesod
-      bevs <- runDB $ selectList [BeverageSupplier ==. (Just sId)] [Desc BeverageIdent]
+      bevs <- runDB $ selectList [BeverageSupplier ==. (Just sId)] [Asc BeverageIdent]
       digests <- return $ map genBevDigest bevs
       w <- return $ [whamlet|$newline always
         <body>
@@ -56,7 +56,9 @@ getSupplierDigestR sId = do
                   <td>#{T.pack $ show $ bdCrates dig}
                   <td>#{formatIntCurrency $ fromMaybe 0 $ beveragePricePerCrate $ bdBev dig} #{appCurrency $ appSettings master}
                   <td>#{formatIntCurrency $ bdTotal dig} #{appCurrency $ appSettings master}
-            <td colspan="5">_{MsgBuyValue}
+            <td colspan="3">_{MsgTotalCrates}
+            <td>#{T.pack $ show $ sum $ map bdCrates digests}
+            <td>_{MsgBuyValue}
             <td>#{formatIntCurrency $ sum $ map bdTotal digests} #{appCurrency $ appSettings master}
         |]
       tableLayout w

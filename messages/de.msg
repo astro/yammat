@@ -139,3 +139,4 @@ PricePerCrate: Preis Pro Kasten
 CrateCount: AnzahlKästen
 BuyValue: Zahlbetrag
 CustomerId: Kundennummer
+TotalCrates: Gesamtanzahl Kästen

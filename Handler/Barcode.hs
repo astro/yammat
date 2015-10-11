@@ -53,6 +53,18 @@ getSelectCashBarcodeR = do
     Nothing ->
       redirect SelectCashR
 
+getRestockBarcodeR :: Handler Html
+getRestockBarcodeR = do
+  eub <- handleSelectParam
+  case eub of
+    Just (Right bId) ->
+      redirect $ UpstockR bId
+    Just (Left _) -> do
+      setMessageI MsgBarcodeNotBev
+      redirect RestockR
+    Nothing ->
+      redirect RestockR
+
 handleSelectParam :: Handler (Maybe (Either UserId BeverageId))
 handleSelectParam = do
   c <- lookupGetParam "barcode"

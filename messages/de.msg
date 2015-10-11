@@ -115,3 +115,27 @@ TransferComplete: Transfer abgeschlossen
 TransferError: Fehler beim Transfer
 PreviousPage: vorherige Seite
 NextPage: nächste Seite
+MaxAmount: Maximale Lagermenge
+AmountPerCrate: Anzahl pro Kasten
+SelectSupplier: Lieferanten wählen
+CreateSupplier: Neuen Lieferanten anlegen
+SupplierCreated: Neuer Lieferant wurde erstellt
+SupplierNotCreated: Neuer Lieferant konnte nicht angelegt werden
+Suppliers: Lieferanten
+NewSupplier: Neuer Lieferant
+Address: Adresse
+TelNr: Telefonnummer
+Email: Email
+EditSupplier: Lieferanten bearbeiten
+SupplierUnknown: Dieser Lieferant ist nicht bekannt
+SupplierEdited: Lieferant wurde bearbeitet
+SupplierNotEdited: Lieferant konnte nicht bearbeitet werden
+CreateSupplierDigest: Bestellübersicht für diesen Lieferanten erstellen
+DeleteSupplier: diesen Lieferanten löschen
+SupplierDeleted: Lieferant erfolgreich gelöscht
+SupplierInUseError: Dieser Lieferant wird noch von Produkten benutzt.
+ArtNr: Artikelnummer
+PricePerCrate: Preis Pro Kasten
+CrateCount: AnzahlKästen
+BuyValue: Zahlbetrag
+CustomerId: Kundennummer

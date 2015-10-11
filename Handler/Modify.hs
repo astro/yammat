@@ -52,6 +52,11 @@ postModifyR bId = do
             , BeverageCorrectedAmount +=. (modBevAmount nBev - beverageAmount bev)
             , BeverageMl =. modBevMl nBev
             , BeverageAvatar =. modBevAvatar nBev
+            , BeverageSupplier =. modBevSupp nBev
+            , BeverageMaxAmount =. modBevMaxAmount nBev
+            , BeveragePerCrate =. modBevPC nBev
+            , BeverageArtNr =. modBevArtNr nBev
+            , BeveragePricePerCrate =. modBevPricePC nBev
             ]
           handleBarcodes (Right bId) (fromMaybe [] $ modBevBarcodes nBev)
           setMessageI MsgEditSuccess
@@ -68,9 +73,14 @@ data ModBev = ModBev
   , modBevPrice :: Int
   , modBevAmount :: Int
   , modBevAlertAmount :: Int
+  , modBevMaxAmount :: Int
   , modBevMl :: Int
+  , modBevPC :: Maybe Int
+  , modBevPricePC :: Maybe Int
   , modBevAvatar :: Maybe AvatarId
   , modBevBarcodes :: Maybe [Text]
+  , modBevSupp :: Maybe SupplierId
+  , modBevArtNr :: Maybe Text
   }
 
 modifyForm :: Beverage -> [Text] -> Form ModBev
@@ -79,13 +89,17 @@ modifyForm bev bs = renderDivs $ ModBev
   <*> areq currencyField (fieldSettingsLabel MsgPrice) (Just $ beveragePrice bev)
   <*> areq amountField (fieldSettingsLabel MsgCurrentStock) (Just $ beverageAmount bev)
   <*> areq amountField (fieldSettingsLabel MsgAnnouncedStock) (Just $ beverageAlertAmount bev)
+  <*> areq amountField (fieldSettingsLabel MsgMaxAmount) (Just $ beverageMaxAmount bev)
   <*> areq volumeField (fieldSettingsLabel MsgVolume) (Just $ beverageMl bev)
+  <*> aopt amountField (fieldSettingsLabel MsgAmountPerCrate) (Just $ beveragePerCrate bev)
+  <*> aopt currencyField (fieldSettingsLabel MsgPricePerCrate) (Just $ beveragePricePerCrate bev)
   <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) (Just $ beverageAvatar bev)
   <*> aopt barcodeField (fieldSettingsLabel MsgBarcodeField) (Just $ Just bs)
+  <*> aopt (selectField sups) (fieldSettingsLabel MsgSelectSupplier) (Just $ beverageSupplier bev)
+  <*> aopt textField (fieldSettingsLabel MsgArtNr) Nothing
   where
-    avatars = do
-      ents <- runDB $ selectList [] [Asc AvatarIdent]
-      optionsPairs $ map (\ent -> (avatarIdent $ entityVal ent, entityKey ent)) ents
+    avatars = optionsPersistKey [] [Asc AvatarIdent] avatarIdent
+    sups = optionsPersistKey [] [Asc SupplierIdent] supplierIdent
 
 getDeleteBeverageR :: BeverageId -> Handler Html
 getDeleteBeverageR bId = do

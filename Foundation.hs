@@ -31,6 +31,7 @@ import Data.List.Split
 import Text.Printf
 
 
+
 prependZero :: Text -> Text
 prependZero t0
  | T.null t1              = t1
@@ -134,6 +135,7 @@ instance Yesod App where
                 ])
             $(widgetFile "default-layout")
         withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
+
 
     -- The page to be redirected to when authentication is required.
     -- authRoute _ = Just $ AuthR LoginR

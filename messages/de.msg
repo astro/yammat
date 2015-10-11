@@ -136,7 +136,7 @@ SupplierDeleted: Lieferant erfolgreich gelöscht
 SupplierInUseError: Dieser Lieferant wird noch von Produkten benutzt.
 ArtNr: Artikelnummer
 PricePerCrate: Preis Pro Kasten
-CrateCount: AnzahlKästen
+CrateCount: Anzahl Kästen
 BuyValue: Zahlbetrag
 CustomerId: Kundennummer
 TotalCrates: Gesamtanzahl Kästen

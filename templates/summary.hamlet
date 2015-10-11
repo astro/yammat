@@ -21,7 +21,7 @@ $if not $ L.null bevs
         <td>#{beverageCorrectedAmount bev}
         <td>#{beverageAlertAmount bev}
         <td>#{formatIntCurrency (beveragePrice bev)} #{appCurrency $ appSettings master}
-        <td><a href=@{ModifyR bId}>bearbeiten
+        <td><a href=@{ModifyR bId}>_{MsgModify}
 $else
   <p>_{MsgNoItems}
 

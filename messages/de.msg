@@ -140,3 +140,4 @@ CrateCount: Anzahl Kästen
 BuyValue: Zahlbetrag
 CustomerId: Kundennummer
 TotalCrates: Gesamtanzahl Kästen
+Modify: bearbeiten

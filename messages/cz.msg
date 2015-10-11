@@ -140,3 +140,4 @@ CrateCount: Počet Přepravek
 BuyValue: K placení
 CustomerId: Kód zákazníka
 TotalCrates: Celkový počet přepravek
+Modify: upravit

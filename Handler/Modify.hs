@@ -96,7 +96,7 @@ modifyForm bev bs = renderDivs $ ModBev
   <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) (Just $ beverageAvatar bev)
   <*> aopt barcodeField (fieldSettingsLabel MsgBarcodeField) (Just $ Just bs)
   <*> aopt (selectField sups) (fieldSettingsLabel MsgSelectSupplier) (Just $ beverageSupplier bev)
-  <*> aopt textField (fieldSettingsLabel MsgArtNr) Nothing
+  <*> aopt textField (fieldSettingsLabel MsgArtNr) (Just $ beverageArtNr bev)
   where
     avatars = optionsPersistKey [] [Asc AvatarIdent] avatarIdent
     sups = optionsPersistKey [] [Asc SupplierIdent] supplierIdent

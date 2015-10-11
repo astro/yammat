@@ -83,19 +83,19 @@ postNewArticleR = do
       redirect HomeR
 
 newArticleForm :: Form Beverage
-newArticleForm = renderDivs $ (\a b c d e f g h i j k-> Beverage a b c d g h i j e f k)
+newArticleForm = renderDivs $ (\a b c d e f g h i j k l -> Beverage a b c d e i j k f g l h)
   <$> areq textField (fieldSettingsLabel MsgName) Nothing
   <*> areq currencyField (fieldSettingsLabel MsgPrice) (Just 100)
   <*> areq amountField (fieldSettingsLabel MsgAmount) (Just 0)
   <*> areq amountField (fieldSettingsLabel MsgAmountWarning) (Just 0)
+  <*> pure 0
   <*> areq amountField (fieldSettingsLabel MsgMaxAmount) (Just 200)
   <*> aopt amountField (fieldSettingsLabel MsgAmountPerCrate) (Just $ Just 20)
-  <*> pure 0
+  <*> aopt currencyField (fieldSettingsLabel MsgPricePerCrate) Nothing
   <*> areq volumeField (fieldSettingsLabel MsgVolume) (Just 500)
   <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) Nothing
   <*> aopt (selectField sups) (fieldSettingsLabel MsgSelectSupplier) Nothing
   <*> aopt textField (fieldSettingsLabel MsgArtNr) Nothing
-  <*> aopt currencyField (fieldSettingsLabel MsgPricePerCrate) Nothing
   where
     avatars = optionsPersistKey [] [Asc AvatarIdent] avatarIdent
     sups = optionsPersistKey [] [Asc SupplierIdent] supplierIdent

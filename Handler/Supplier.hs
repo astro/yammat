@@ -41,7 +41,8 @@ newSupplierForm = renderDivs $ Supplier
       optionsPairs $ map (\ent -> ((avatarIdent $ entityVal ent), entityKey ent)) ents
 
 data SupConf = SupConf
-  { supConfAddr :: Textarea
+  { supConfIdent :: Text
+  , supConfAddr :: Textarea
   , supConfTel :: Text
   , supConfEmail :: Text
   , supConfCustomerId :: Text
@@ -86,7 +87,8 @@ postModifySupplierR sId = do
 
 modifySupplierForm :: Supplier -> Form SupConf
 modifySupplierForm sup = renderDivs $ SupConf
-  <$> areq textareaField (fieldSettingsLabel MsgAddress) (Just $ supplierAddress sup)
+  <$> areq textField (fieldSettingsLabel MsgName) (Just $ supplierIdent sup)
+  <*> areq textareaField (fieldSettingsLabel MsgAddress) (Just $ supplierAddress sup)
   <*> areq textField (fieldSettingsLabel MsgTelNr) (Just $ supplierTel sup)
   <*> areq textField (fieldSettingsLabel MsgEmail) (Just $ supplierEmail sup)
   <*> areq textField (fieldSettingsLabel MsgCustomerId) (Just $ supplierCustomerId sup)

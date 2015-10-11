@@ -34,5 +34,12 @@
 /barcode			HomeBarcodeR		GET
 /user/#UserId/barcode		SelectBarcodeR		GET
 !/user/cash/barcode		SelectCashBarcodeR	GET
+/restock/barcode		RestockBarcodeR		GET
 /user/#UserId/transfer		TransferSelectR		GET
 /user/#UserId/to/#UserId	TransferR		GET POST
+/supply				SupplierR		GET
+/newsupply			NewSupplierR		GET POST
+/supply/#SupplierId		SupplierActionsR	GET
+/supply/#SupplierId/modify	ModifySupplierR		GET POST
+/supply/#SupplierId/digest	SupplierDigestR		GET
+/supply/#SupplierId/delete	DeleteSupplierR		GET

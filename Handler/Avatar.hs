@@ -141,7 +141,8 @@ getAvatarDeleteR aId = do
     Just _ -> do
       c <- runDB $ selectList [UserAvatar ==. Just aId] []
       d <- runDB $ selectList [BeverageAvatar ==. Just aId] []
-      if null c && null d
+      e <- runDB $ selectList [SupplierAvatar ==. Just aId] []
+      if null c && null d && null e
         then do
           runDB $ delete aId
           setMessageI MsgAvatarDeleted

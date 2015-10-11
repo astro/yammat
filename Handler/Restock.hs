@@ -83,15 +83,19 @@ postNewArticleR = do
       redirect HomeR
 
 newArticleForm :: Form Beverage
-newArticleForm = renderDivs $ Beverage
+newArticleForm = renderDivs $ (\a b c d e f g h i j k-> Beverage a b c d g h i j e f k)
   <$> areq textField (fieldSettingsLabel MsgName) Nothing
   <*> areq currencyField (fieldSettingsLabel MsgPrice) (Just 100)
   <*> areq amountField (fieldSettingsLabel MsgAmount) (Just 0)
   <*> areq amountField (fieldSettingsLabel MsgAmountWarning) (Just 0)
+  <*> areq amountField (fieldSettingsLabel MsgMaxAmount) (Just 200)
+  <*> aopt amountField (fieldSettingsLabel MsgAmountPerCrate) (Just $ Just 20)
   <*> pure 0
   <*> areq volumeField (fieldSettingsLabel MsgVolume) (Just 500)
   <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) Nothing
+  <*> aopt (selectField sups) (fieldSettingsLabel MsgSelectSupplier) Nothing
+  <*> aopt textField (fieldSettingsLabel MsgArtNr) Nothing
+  <*> aopt currencyField (fieldSettingsLabel MsgPricePerCrate) Nothing
   where
-    avatars = do
-      ents <- runDB $ selectList [] [Asc AvatarIdent]
-      optionsPairs $ map (\ent -> (avatarIdent $ entityVal ent, entityKey ent)) ents
+    avatars = optionsPersistKey [] [Asc AvatarIdent] avatarIdent
+    sups = optionsPersistKey [] [Asc SupplierIdent] supplierIdent

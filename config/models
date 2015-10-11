@@ -6,6 +6,7 @@ User
     avatar AvatarId Maybe
     UniqueUser ident
     deriving Typeable Show
+
 Beverage
     ident Text
     price Int
@@ -14,32 +15,52 @@ Beverage
     correctedAmount Int default=0
     ml Int default=500
     avatar AvatarId Maybe
+    supplier SupplierId Maybe
+    maxAmount Int default=0
+    perCrate Int Maybe
+    artNr Text Maybe
+    pricePerCrate Int Maybe
     UniqueBeverage ident
     deriving Typeable Show
+
 Transaction
     description Text
     amount Int
     time UTCTime
     deriving Typeable Show
+
 Cashier
     balance Int
     created UTCTime default=now()
     deriving Typeable Show
+
 CashCheck
     balance Int
     time UTCTime
     deriving Typeable Show
+
 Avatar
     ident Text
     data ByteString
     hash ByteString default='fill_me!'
     deriving Typeable Show
+
 Barcode
     code Text
     isUser Bool
     user UserId Maybe
     bev BeverageId Maybe
     UniqueBarcode code
+    deriving Show
+
+Supplier
+    ident Text
+    address Textarea
+    tel Text
+    email Text
+    customerId Text
+    avatar AvatarId Maybe
+    UniqueSupplier ident
     deriving Show
 
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)

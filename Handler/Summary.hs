@@ -47,18 +47,26 @@ data BevStore = BevStore
   { bevStoreIdent :: Text
   , bevStorePrice :: Int
   , bevStoreAmount :: Int
+  , bevStoreMaxAmount :: Int
+  , bevStorePerCrate :: Maybe Int
   , bevStoreAlertAmount :: Int
   , bevStoreMl :: Int
+  , bevStoreArtNr :: Maybe Text
+  , bevStorePricePerCrate :: Maybe Int
   }
 
 instance ToJSON BevStore where
-  toJSON (BevStore ident price amount alertAmount ml) =
+  toJSON (BevStore ident price amount alertAmount maxAmount perCrate ml artNr ppc) =
     object
       [ "name" .= ident
       , "price" .= price
       , "amount" .= amount
       , "alertAt" .= alertAmount
+      , "max" .= maxAmount
+      , "perCrate" .= perCrate
       , "ml" .= ml
+      , "artNr" .= artNr
+      , "pricePerCrate" .= ppc
       ]
 
 instance FromJSON BevStore where
@@ -66,8 +74,12 @@ instance FromJSON BevStore where
     <$> o .: "name"
     <*> o .: "price"
     <*> o .: "amount"
+    <*> o .: "max"
+    <*> o .:? "perCrate"
     <*> o .: "alertAt"
     <*> o .: "ml"
+    <*> o .:? "artNr"
+    <*> o .:? "pricePerCrate"
   -- For errors
   parseJSON _ = mzero
 
@@ -80,8 +92,12 @@ getInventoryJsonR = do
         (beverageIdent bev)
         (beveragePrice bev)
         (beverageAmount bev)
+        (beverageMaxAmount bev)
+        (beveragePerCrate bev)
         (beverageAlertAmount bev)
         (beverageMl bev)
+        (beverageArtNr bev)
+        (beveragePricePerCrate bev)
         ) bevs
 
 getUploadInventoryJsonR :: Handler Html
@@ -99,7 +115,7 @@ postUploadInventoryJsonR = do
         then do
           source <- runResourceT $ fileSource file $$ sinkLbs
           let bevs = fromMaybe [] (decode source :: Maybe [BevStore])
-          I.mapM_ insOrUpd bevs
+          _ <- I.mapM insOrUpd bevs
           setMessageI MsgRestoreSuccess
           redirect HomeR
         else do
@@ -113,23 +129,29 @@ uploadJsonForm :: Form FileInfo
 uploadJsonForm = renderDivs
   $ areq fileField (fieldSettingsLabel MsgSelectFile) Nothing
 
-insOrUpd :: BevStore -> Handler ()
+insOrUpd :: BevStore -> Handler (Entity Beverage)
 insOrUpd bev = do
-  meb <- runDB $ getBy $ UniqueBeverage $ bevStoreIdent bev
-  case meb of
-    Just eb ->
-      runDB $ update (entityKey eb)
-        [ BeveragePrice =. bevStorePrice bev
-        , BeverageAmount =. bevStoreAmount bev
-        , BeverageAlertAmount =. bevStoreAlertAmount bev
-        , BeverageMl =. bevStoreMl bev
-        ]
-    Nothing ->
-      runDB $ insert_ $ Beverage
-        (bevStoreIdent bev)
-        (bevStorePrice bev)
-        (bevStoreAmount bev)
-        (bevStoreAlertAmount bev)
-        0
-        (bevStoreMl bev)
-        Nothing
+  nbev <- return $ Beverage
+    (bevStoreIdent bev)
+    (bevStorePrice bev)
+    (bevStoreAmount bev)
+    (bevStoreAlertAmount bev)
+    0
+    (bevStoreMl bev)
+    Nothing
+    Nothing
+    (bevStoreMaxAmount bev)
+    (bevStorePerCrate bev)
+    (bevStoreArtNr bev)
+    (bevStorePricePerCrate bev)
+  runDB $ upsert nbev
+    [ BeverageIdent =. bevStoreIdent bev
+    , BeveragePrice =. bevStorePrice bev
+    , BeverageAmount =. bevStoreAmount bev
+    , BeverageAlertAmount =. bevStoreAlertAmount bev
+    , BeverageMl =. bevStoreMl bev
+    , BeverageMaxAmount =. bevStoreMaxAmount bev
+    , BeveragePerCrate =. bevStorePerCrate bev
+    , BeverageArtNr =. bevStoreArtNr bev
+    , BeveragePricePerCrate =. bevStorePricePerCrate bev
+    ]

@@ -1,5 +1,5 @@
 name:              yammat
-version:           0.0.1
+version:           0.0.2
 cabal-version:     >= 1.8
 build-type:        Simple
 license:           AGPL-3
@@ -37,9 +37,11 @@ library
                      Handler.Avatar
                      Handler.Barcode
                      Handler.Transfer
+                     Handler.Supplier
+                     Handler.SupplierActions
 
     if flag(dev) || flag(library-only)
-        cpp-options:   -DDEVELOPMENT
+        cpp-options:   -DDEVELOPMENT -DHTTP_CLIENT
         ghc-options:   -Wall -fwarn-tabs -O0
     else
         ghc-options:   -Wall -fwarn-tabs -O2
@@ -78,14 +80,14 @@ library
                  , template-haskell
                  , shakespeare                   >= 2.0        && < 2.1
                  , hjsmin                        >= 0.1        && < 0.2
-                 , monad-control                 >= 0.3        && < 0.4
+                 , monad-control                 >= 0.3        && < 1.1
                  , wai-extra                     >= 3.0        && < 3.1
                  , yaml                          >= 0.8        && < 0.9
                  , http-conduit                  >= 2.1        && < 2.2
                  , directory                     >= 1.1        && < 1.3
                  , warp                          >= 3.0        && < 3.1
                  , data-default
-                 , aeson                         >= 0.6        && < 0.9
+                 , aeson                         >= 0.6        && < 0.11
                  , conduit                       >= 1.0        && < 2.0
                  , monad-logger                  >= 0.3        && < 0.4
                  , fast-logger                   >= 2.2        && < 2.3
@@ -100,16 +102,22 @@ library
                  , mime-mail
                  , blaze-markup
                  , wai
-                 , blaze-builder                 < 0.4.0.0
+                 , blaze-builder
                  , split
                  , conduit-extra
                  , imagemagick
                  , cryptohash
                  , base64-bytestring
+                 -- for Migrations
+                 , HDBC
+                 , HDBC-postgresql
+                 , bytestring
+                 , cryptohash
+                 , base64-bytestring
 
 executable         yammat
     if flag(library-only)
-        Buildable: True
+        Buildable: False
 
     main-is:           main.hs
     hs-source-dirs:    app
@@ -117,17 +125,17 @@ executable         yammat
 
     ghc-options:       -threaded -O2 -rtsopts -with-rtsopts=-N
 
-executable         Migrate1
-
-    main-is:           Migration.hs
-    hs-source-dirs:    Migration/0.0.0-0.0.1
-    ghc-options:       -Wall
-    build-depends:     base
-                     , HDBC
-                     , HDBC-postgresql
-                     , bytestring
-                     , cryptohash
-                     , base64-bytestring
+-- executable         Migrate1
+-- 
+--     main-is:           Migration.hs
+--     hs-source-dirs:    Migration/0.0.0-0.0.1
+--     ghc-options:       -Wall
+--     build-depends:     base
+--                      , HDBC
+--                      , HDBC-postgresql
+--                      , bytestring
+--                      , cryptohash
+--                      , base64-bytestring
 
 test-suite test
     type:              exitcode-stdio-1.0

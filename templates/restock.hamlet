@@ -16,3 +16,6 @@ $forall (Entity bId bev) <- beverages
   <a href=@{NewArticleR}>
     <p>
       _{MsgAddItem}
+
+<form action=@{RestockBarcodeR} method=GET>
+  <input type=hidden #barcodeInput name=barcode>

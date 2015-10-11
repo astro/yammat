@@ -1,12 +1,8 @@
 $doctype 5
 
-<h3>_{MsgCashCheck}
-
-<p>
-  _{MsgPleaseCountAndCheck}
-  
+<h3>_{MsgNewSupplier}
 
 <form method=post enctype=#{enctype}>
-  ^{cashCheckWidget}
+  ^{newSupplierWidget}
   <div>
     <input type=submit value="_{MsgSubmit}">

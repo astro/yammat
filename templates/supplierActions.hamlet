@@ -1,0 +1,13 @@
+
+<h3>#{supplierIdent sup}
+
+<ul>
+  <li>
+    <a href=@{SupplierDigestR sId}>
+      _{MsgCreateSupplierDigest}
+  <li>
+    <a href=@{ModifySupplierR sId}>
+      _{MsgEditSupplier}
+  <li>
+    <a href=@{DeleteSupplierR sId}>
+      _{MsgDeleteSupplier}

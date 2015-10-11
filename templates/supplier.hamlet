@@ -1,0 +1,14 @@
+$doctype 5
+
+<article .article #func>
+  <a href=@{NewSupplierR}>
+    <p>_{MsgCreateSupplier}
+
+$forall (Entity sId sup) <- sups
+  <article .article>
+    $if supplierAvatar sup /= Nothing
+      <a href=@{SupplierActionsR sId} style="background-image: url(@{GetAvatarR $ fromJust $ supplierAvatar sup})" .avatar>
+        <p>#{supplierIdent sup}
+    $else
+      <a href=@{SupplierActionsR sId}>
+        <p>#{supplierIdent sup}

@@ -5,7 +5,7 @@ import Data.Maybe
 
 getSupplierR :: Handler Html
 getSupplierR = do
-  sups <- runDB $ selectList [] [Desc SupplierIdent]
+  sups <- runDB $ selectList [] [Asc SupplierIdent]
   defaultLayout $
     $(widgetFile "supplier")
 

@@ -48,7 +48,7 @@ getSupplierDigestR sId = do
                 <th>_{MsgPricePerCrate}
                 <th>_{MsgTotalValue}
             $forall dig <- digests
-              $if bdCrates dig > 0
+              $if bdCrates dig /= 0
                 <tr>
                   <td>#{fromMaybe "" $ beverageArtNr $ bdBev dig}
                   <td>#{beverageIdent $ bdBev dig}
@@ -87,7 +87,12 @@ genBevDigest bev =
   BevDigest amount (amount * (fromMaybe 0 $ beveragePricePerCrate $ entityVal bev)) (entityVal bev)
   where
     amount =
-      ((beverageMaxAmount (entityVal bev) - beverageAmount (entityVal bev)) `div` ( fromMaybe 1 $ beveragePerCrate (entityVal bev)))
+      if ((beverageMaxAmount (entityVal bev) - beverageAmount (entityVal bev)) `div` (fromMaybe 1 $ beveragePerCrate (entityVal bev))) < 0
+        then
+          0
+        else
+          ((beverageMaxAmount (entityVal bev) - beverageAmount (entityVal bev)) `div` (fromMaybe 1 $ beveragePerCrate (entityVal bev)))
+
 
 getDeleteSupplierR :: SupplierId -> Handler Html
 getDeleteSupplierR sId = do

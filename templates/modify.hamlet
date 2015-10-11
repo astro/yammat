@@ -5,7 +5,7 @@ $doctype 5
 <form method=post enctype=#{enctype}>
   ^{modifyWidget}
   <div>
-    <input type=submit value="Absenden">
+    <input type=submit value=_{MsgSubmit}>
 
 <a href=@{DeleteBeverageR bId}>
   _{MsgDeleteItem}

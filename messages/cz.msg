@@ -113,3 +113,30 @@ TransferTo: Převést kredit na
 NegativeTransfer: Nelze převést negativní počty
 TransferComplete: Převod dokončen
 TransferError: Chyba při převodu
+PreviousPage: předchozí strana
+NextPage: další strana
+MaxAmount: Maximální počet v zásobě
+AmountPerCrate: Počet v Přepravce
+SelectSupplier: Vyber dodavatele
+CreateSupplier: Vytvoř dodavatele
+SupplierCreated: Dodavatel vytvořen
+SupplierNotCreated: Dodavatel nevytvořen!
+Suppliers: Dodavatele
+NewSupplier: Nový dodavatel
+Address: Adresa
+TelNr: Telefonní číslo
+Email: Email
+EditSupplier: Uprav Dodavatele
+SupplierUnknown: Dodavatel neznámý!
+SupplierEdited: Dodavatel byl upraven
+SupplierNotEdited: Dodavatel nebyl upraven!
+CreateSupplierDigest: Vytvoř přehled objednávky u tohoto dodavatele
+DeleteSupplier: Vymaž Dodavatele
+SupplierDeleted: Dodavatel vymazán
+SupplierInUseError: Tento dodavatel se stále používá
+ArtNr: Kód zboží
+PricePerCrate: Cena za přepravku
+CrateCount: Počet Přepravek
+BuyValue: K placení
+CustomerId: Kód zákazníka
+TotalCrates: Celkový počet přepravek

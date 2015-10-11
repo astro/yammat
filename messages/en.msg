@@ -115,3 +115,28 @@ TransferComplete: Transfer complete
 TransferError: Transfer error
 PreviousPage: previous page
 NextPage: next page
+MaxAmount: Max amount
+AmountPerCrate: Amount per crate
+SelectSupplier: Select supplier
+CreateSupplier: Create supplier
+SupplierCreated: Supplier created
+SupplierNotCreated: Supplier not created!
+Suppliers: Suppliers
+NewSupplier: new Supplier
+Address: Adress
+TelNr: Telephone number
+Email: Email
+EditSupplier: Edit Supplier
+SupplierUnknown: Supplier unknown
+SupplierEdited: Supplier edited
+SupplierNotEdited: Supplier not edited!
+CreateSupplierDigest: Create order overview for this supplier
+DeleteSupplier: Delete this Supplier
+SupplierDeleted: Supplier successfully deleted
+SupplierInUseError: This supplier is still in use!
+ArtNr: Article number
+PricePerCrate: Price per Crate
+CrateCount: Crate count
+BuyValue: Payment amount
+CustomerId: Customer id
+TotalCrates: Total crates

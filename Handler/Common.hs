@@ -71,7 +71,7 @@ currencyField :: (RenderMessage (HandlerSite m) FormMessage, Show a, Monad m, In
 currencyField = Field
   { fieldParse = parseHelper $ \rawVals ->
       case R.double (prependZero rawVals) of
-        Right (a, "") -> Right $ floor $ 100 * a
+        Right (a, "") -> Right $ floor $ (100 * a) + 0.5
         _             -> Left $ MsgInvalidNumber rawVals
   , fieldView = \theId name attr val req -> toWidget [hamlet|$newline never
       <input id=#{theId} name=#{name} *{attr} type="number" step=0.01 min=0 :req:required="required" value=#{showVal val}>

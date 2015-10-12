@@ -44,6 +44,8 @@ For better control You can wrap an init script around this. How to do this is de
 
 * Delete column `alt_time` from table `avatar` in your Database with `alter table "avatar" drop column "alt_time";`
 * Start yammat normally to fill database with dummy data and stop it again
-* Compile migration script with `cabal build Migrate1`
-* Run migration executable from `dist/build/Migrate1/Migrate1`
+* Run migration script
+	* if you have built yammat with a sandbox, run `runghc -package-db/full/path/to/sandbox(XXX-ghc-version-packages.conf.d /path/to/yammat/Migration/0.0.0-0.0.1/Migration.hs`
+		* Note: No space between the option `-package-db` and its argument
+	* without sandbox: `runghc /path/to/yammat/Migration/0.0.0-0.0.1/Migration.hs`
 * Enjoy your freshly migrated Matemat

@@ -56,7 +56,7 @@ data BevStore = BevStore
   }
 
 instance ToJSON BevStore where
-  toJSON (BevStore ident price amount alertAmount maxAmount perCrate ml artNr ppc) =
+  toJSON (BevStore ident price amount maxAmount perCrate alertAmount ml artNr ppc) =
     object
       [ "name" .= ident
       , "price" .= price

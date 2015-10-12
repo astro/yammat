@@ -73,9 +73,10 @@ tr#check {
 	background-color: lightgrey;
 }
 
-header {
-	border-bottom: 1px solid black;
-	margin-bottom: 1em;
+hr {
+	margin-bottom: 2em;
+	margin-top: 2em;
+	border-top: 1px solid black;
 }
 
 header a {
@@ -124,11 +125,6 @@ header li {
 
 footer span {
 	padding-right: 20px;
-}
-
-footer {
-	border-top: 1px solid black;
-	margin-top: 1em;
 }
 
 footer span a {

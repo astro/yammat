@@ -16,10 +16,14 @@
           <a onclick="document.cookie = '_LANG=pl'; location.reload()">
             <img .flag src=@{StaticR images_pl_svg}>
 
+  <hr>
+
   <div id="main" role="main">
     $maybe msg <- mmsg
       <div #message>#{msg}
     ^{widget}
+
+  <hr>
 
   <footer>
     <span>

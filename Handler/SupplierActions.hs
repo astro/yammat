@@ -30,36 +30,35 @@ getSupplierDigestR sId = do
       bevs <- runDB $ selectList [BeverageSupplier ==. (Just sId)] [Asc BeverageIdent]
       digests <- return $ map genBevDigest bevs
       w <- return $ [whamlet|$newline always
-        <body>
-          #{supplierIdent sup}<br>
-          #{unTextarea $ supplierAddress sup}<br>
-          #{supplierTel sup}<br>
-          #{supplierEmail sup}<br>
-          <hr>
-          <b>
-            _{MsgCustomerId}: #{supplierCustomerId sup}
-          <table>
-            <thead>
+        #{supplierIdent sup}<br>
+        #{unTextarea $ supplierAddress sup}<br>
+        #{supplierTel sup}<br>
+        #{supplierEmail sup}<br>
+        <hr>
+        <b>
+          _{MsgCustomerId}: #{supplierCustomerId sup}
+        <table>
+          <thead>
+            <tr>
+              <th>_{MsgArtNr}
+              <th>_{MsgName}
+              <th>_{MsgVolume}
+              <th>_{MsgCrateCount}
+              <th>_{MsgPricePerCrate}
+              <th>_{MsgTotalValue}
+          $forall dig <- digests
+            $if bdCrates dig /= 0
               <tr>
-                <th>_{MsgArtNr}
-                <th>_{MsgName}
-                <th>_{MsgVolume}
-                <th>_{MsgCrateCount}
-                <th>_{MsgPricePerCrate}
-                <th>_{MsgTotalValue}
-            $forall dig <- digests
-              $if bdCrates dig /= 0
-                <tr>
-                  <td>#{fromMaybe "" $ beverageArtNr $ bdBev dig}
-                  <td>#{beverageIdent $ bdBev dig}
-                  <td>#{formatIntVolume $ beverageMl $ bdBev dig}
-                  <td>#{T.pack $ show $ bdCrates dig}
-                  <td>#{formatIntCurrency $ fromMaybe 0 $ beveragePricePerCrate $ bdBev dig} #{appCurrency $ appSettings master}
-                  <td>#{formatIntCurrency $ bdTotal dig} #{appCurrency $ appSettings master}
-            <td colspan="3">_{MsgTotalCrates}
-            <td>#{T.pack $ show $ sum $ map bdCrates digests}
-            <td>_{MsgBuyValue}
-            <td>#{formatIntCurrency $ sum $ map bdTotal digests} #{appCurrency $ appSettings master}
+                <td>#{fromMaybe "" $ beverageArtNr $ bdBev dig}
+                <td>#{beverageIdent $ bdBev dig}
+                <td>#{formatIntVolume $ beverageMl $ bdBev dig}
+                <td>#{T.pack $ show $ bdCrates dig}
+                <td>#{formatIntCurrency $ fromMaybe 0 $ beveragePricePerCrate $ bdBev dig} #{appCurrency $ appSettings master}
+                <td>#{formatIntCurrency $ bdTotal dig} #{appCurrency $ appSettings master}
+          <td colspan="3">_{MsgTotalCrates}
+          <td>#{T.pack $ show $ sum $ map bdCrates digests}
+          <td>_{MsgBuyValue}
+          <td>#{formatIntCurrency $ sum $ map bdTotal digests} #{appCurrency $ appSettings master}
         |]
       tableLayout w
     Nothing -> do

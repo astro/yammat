@@ -55,13 +55,13 @@ getSupplierDigestR sId = do
                 <td>#{beverageIdent $ bdBev dig}
                 <td>#{formatIntVolume $ beverageMl $ bdBev dig}
                 <td>#{T.pack $ show $ bdCrates dig}
-                <td>#{formatIntCurrency $ fromMaybe 0 $ beveragePricePerCrate $ bdBev dig} #{appCurrency $ appSettings master}
-                <td>#{formatIntCurrency $ bdTotal dig} #{appCurrency $ appSettings master}
+                <td style="text-align: right;">#{formatIntCurrency $ fromMaybe 0 $ beveragePricePerCrate $ bdBev dig} #{appCurrency $ appSettings master}
+                <td style="text-align: right;">#{formatIntCurrency $ bdTotal dig} #{appCurrency $ appSettings master}
           <tr>
             <td colspan="3">_{MsgTotalCrates}
             <td>#{T.pack $ show $ sum $ map bdCrates digests}
             <td>_{MsgBuyValue}
-            <td>#{formatIntCurrency $ sum $ map bdTotal digests} #{appCurrency $ appSettings master}
+            <td style="text-align: right;">#{formatIntCurrency $ sum $ map bdTotal digests} #{appCurrency $ appSettings master}
         |]
       tableLayout w
     Nothing -> do

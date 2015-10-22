@@ -30,7 +30,8 @@ getUpstockR bId = do
   mBev <- runDB $ get bId
   case mBev of
     Just bev -> do
-      (upstockWidget, enctype) <- generateFormPost upstockForm
+      (upstockWidget, enctype) <- generateFormPost
+        $ renderBootstrap3 BootstrapBasicForm upstockForm
       defaultLayout $
         $(widgetFile "upstock")
     Nothing -> do
@@ -42,7 +43,8 @@ postUpstockR bId = do
   mBev <- runDB $ get bId
   case mBev of
     Just _ -> do
-      ((res, _), _) <- runFormPost upstockForm
+      ((res, _), _) <- runFormPost
+        $ renderBootstrap3 BootstrapBasicForm upstockForm
       case res of
         FormSuccess c ->
           if c > 0
@@ -53,6 +55,7 @@ postUpstockR bId = do
             else do
               setMessageI MsgNotStockedUp
               redirect $ UpstockR bId
+        
         _ -> do
           setMessageI MsgStockupError
           redirect $ UpstockR bId
@@ -60,19 +63,21 @@ postUpstockR bId = do
       setMessageI MsgItemUnknown
       redirect HomeR
 
-upstockForm :: Form Int
-upstockForm = renderDivs
-  $ areq amountField (fieldSettingsLabel MsgAmountAdded) (Just 1)
+upstockForm :: AForm Handler Int
+upstockForm = areq amountField (bfs MsgAmountAdded) (Just 1)
+  <* bootstrapSubmit (msgToBSSubmit MsgFillup)
 
 getNewArticleR :: Handler Html
 getNewArticleR = do
-  (newArticleWidget, enctype) <- generateFormPost newArticleForm
+  (newArticleWidget, enctype) <- generateFormPost
+    $ renderBootstrap3 BootstrapBasicForm newArticleForm
   defaultLayout $
     $(widgetFile "newArticle")
 
 postNewArticleR :: Handler Html
 postNewArticleR = do
-  ((result, _), _) <- runFormPost newArticleForm
+  ((result, _), _) <- runFormPost
+    $ renderBootstrap3 BootstrapBasicForm newArticleForm
   case result of
     FormSuccess bev -> do
       runDB $ insert_ bev
@@ -82,20 +87,21 @@ postNewArticleR = do
       setMessageI MsgItemNotAdded
       redirect HomeR
 
-newArticleForm :: Form Beverage
-newArticleForm = renderDivs $ (\a b c d e f g h i j k l -> Beverage a b c d e i j k f g l h)
-  <$> areq textField (fieldSettingsLabel MsgName) Nothing
-  <*> areq currencyField (fieldSettingsLabel MsgPrice) (Just 100)
-  <*> areq amountField (fieldSettingsLabel MsgAmount) (Just 0)
-  <*> areq amountField (fieldSettingsLabel MsgAmountWarning) (Just 0)
+newArticleForm :: AForm Handler Beverage
+newArticleForm = (\a b c d e f g h i j k l -> Beverage a b c d e i j k f g l h)
+  <$> areq textField (bfs MsgName) Nothing
+  <*> areq currencyField (bfs MsgPrice) (Just 100)
+  <*> areq amountField (bfs MsgAmount) (Just 0)
+  <*> areq amountField (bfs MsgAmountWarning) (Just 0)
   <*> pure 0
-  <*> areq amountField (fieldSettingsLabel MsgMaxAmount) (Just 200)
-  <*> aopt amountField (fieldSettingsLabel MsgAmountPerCrate) (Just $ Just 20)
-  <*> aopt currencyField (fieldSettingsLabel MsgPricePerCrate) Nothing
-  <*> areq volumeField (fieldSettingsLabel MsgVolume) (Just 500)
-  <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) Nothing
-  <*> aopt (selectField sups) (fieldSettingsLabel MsgSelectSupplier) Nothing
-  <*> aopt textField (fieldSettingsLabel MsgArtNr) Nothing
+  <*> areq amountField (bfs MsgMaxAmount) (Just 200)
+  <*> aopt amountField (bfs MsgAmountPerCrate) (Just $ Just 20)
+  <*> aopt currencyField (bfs MsgPricePerCrate) Nothing
+  <*> areq volumeField (bfs MsgVolume) (Just 500)
+  <*> aopt (selectField avatars) (bfs MsgSelectAvatar) Nothing
+  <*> aopt (selectField sups) (bfs MsgSelectSupplier) Nothing
+  <*> aopt textField (bfs MsgArtNr) Nothing
+  <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
   where
     avatars = optionsPersistKey [] [Asc AvatarIdent] avatarIdent
     sups = optionsPersistKey [] [Asc SupplierIdent] supplierIdent

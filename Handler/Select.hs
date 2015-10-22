@@ -45,7 +45,8 @@ getRechargeR uId = do
   mUser <- runDB $ get uId
   case mUser of
     Just user -> do
-      (rechargeWidget, enctype) <- generateFormPost rechargeForm
+      (rechargeWidget, enctype) <- generateFormPost
+        $ renderBootstrap3 BootstrapBasicForm rechargeForm
       currency <- appCurrency <$> appSettings <$> getYesod
       defaultLayout $
         $(widgetFile "recharge")
@@ -58,7 +59,8 @@ postRechargeR uId = do
   mUser <- runDB $ get uId
   case mUser of
     Just user -> do
-      ((res, _), _) <- runFormPost rechargeForm
+      ((res, _), _) <- runFormPost
+        $ renderBootstrap3 BootstrapBasicForm rechargeForm
       case res of
         FormSuccess amount ->
           if amount < 0
@@ -79,6 +81,6 @@ postRechargeR uId = do
       setMessageI MsgUserUnknown
       redirect HomeR
 
-rechargeForm :: Form Int
-rechargeForm = renderDivs
-  $ areq currencyField (fieldSettingsLabel MsgValue) (Just 0)
+rechargeForm :: AForm Handler Int
+rechargeForm = areq currencyField (bfs MsgValue) (Just 0)
+  <* bootstrapSubmit (msgToBSSubmit MsgRecharge)

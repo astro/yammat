@@ -26,13 +26,15 @@ data Payment = Payment
 
 getPayoutR :: Handler Html
 getPayoutR = do
-  (payoutWidget, enctype) <- generateFormPost payoutForm
+  (payoutWidget, enctype) <- generateFormPost
+    $ renderBootstrap3 BootstrapBasicForm payoutForm
   defaultLayout $
     $(widgetFile "payout")
 
 postPayoutR :: Handler Html
 postPayoutR = do
-  ((res, _), _) <- runFormPost payoutForm
+  ((res, _), _) <- runFormPost
+    $ renderBootstrap3 BootstrapBasicForm payoutForm
   case res of
     FormSuccess payment -> do
       msg <- renderMessage' $ MsgPayout $ paymentDesc payment
@@ -43,7 +45,8 @@ postPayoutR = do
       setMessageI MsgNotPaidOut
       redirect JournalR
 
-payoutForm :: Form Payment
-payoutForm = renderDivs $ Payment
-  <$> areq currencyField (fieldSettingsLabel MsgValue) Nothing
-  <*> areq textField (fieldSettingsLabel MsgDescription) Nothing
+payoutForm :: AForm Handler Payment
+payoutForm = Payment
+  <$> areq currencyField (bfs MsgValue) Nothing
+  <*> areq textField (bfs MsgDescription) Nothing
+  <*  bootstrapSubmit (msgToBSSubmit MsgDoPayout)

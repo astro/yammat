@@ -102,13 +102,15 @@ getInventoryJsonR = do
 
 getUploadInventoryJsonR :: Handler Html
 getUploadInventoryJsonR = do
-  (uploadJsonWidget, enctype) <- generateFormPost uploadJsonForm
+  (uploadJsonWidget, enctype) <- generateFormPost
+    $ renderBootstrap3 BootstrapBasicForm uploadJsonForm
   defaultLayout $
     $(widgetFile "uploadJson")
 
 postUploadInventoryJsonR :: Handler Html
 postUploadInventoryJsonR = do
-  ((res, _), _) <- runFormPost uploadJsonForm
+  ((res, _), _) <- runFormPost
+    $ renderBootstrap3 BootstrapBasicForm uploadJsonForm
   case res of
     FormSuccess file ->
       if fileContentType file == "application/json"
@@ -125,9 +127,9 @@ postUploadInventoryJsonR = do
       setMessageI MsgErrorOccured
       redirect UploadInventoryJsonR
 
-uploadJsonForm :: Form FileInfo
-uploadJsonForm = renderDivs
-  $ areq fileField (fieldSettingsLabel MsgSelectFile) Nothing
+uploadJsonForm :: AForm Handler FileInfo
+uploadJsonForm = areq fileField (bfs MsgSelectFile) Nothing
+  <* bootstrapSubmit (msgToBSSubmit MsgSubmit)
 
 insOrUpd :: BevStore -> Handler (Entity Beverage)
 insOrUpd bev = do

@@ -4,8 +4,6 @@ $doctype 5
 
 <form method=post enctype=#{enctype}>
   ^{modifyUserWidget}
-  <div>
-    <input type=submit value="_{MsgSubmit}">
 
 <form action=@{ModifyUserR uId} method=GET>
   <input type=hidden #barcodeInput name=barcode>

@@ -4,5 +4,3 @@ $doctype 5
 
 <form method=post enctype=#{enctype}>
   ^{modifySupplierWidget}
-  <div>
-    <input type=submit value="_{MsgSubmit}">

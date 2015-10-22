@@ -40,7 +40,8 @@ getTransferR from to = do
       mRecpt <- runDB $ get to
       case mRecpt of
         Just recpt -> do
-          (transferWidget, enctype) <- generateFormPost transferForm
+          (transferWidget, enctype) <- generateFormPost
+            $ renderBootstrap3 BootstrapBasicForm transferForm
           currency <- appCurrency <$> appSettings <$> getYesod
           defaultLayout $ do
             $(widgetFile "transfer")
@@ -59,7 +60,8 @@ postTransferR from to = do
       mRecpt <- runDB $ get to
       case mRecpt of
         Just recpt -> do
-          ((res, _), _) <- runFormPost transferForm
+          ((res, _), _) <- runFormPost
+            $ renderBootstrap3 BootstrapBasicForm transferForm
           case res of
             FormSuccess amount -> do
               if amount < 0
@@ -83,9 +85,9 @@ postTransferR from to = do
       setMessageI MsgUserUnknown
       redirect HomeR
 
-transferForm :: Form Int
-transferForm = renderDivs
-  $ areq currencyField (fieldSettingsLabel MsgValue) (Just 0)
+transferForm :: AForm Handler Int
+transferForm = areq currencyField (bfs MsgValue) (Just 0)
+  <* bootstrapSubmit (msgToBSSubmit MsgTransfer)
 
 notify :: User -> User -> Int -> App -> IO ()
 notify sender rcpt amount master = do

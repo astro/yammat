@@ -8,7 +8,6 @@ $doctype 5
 
 <form method=post enctype=#{enctype}>
   ^{rechargeWidget}
-  <div>
-    <input type=submit value="_{MsgRecharge}">
-    <input onclick="crmnt( document.getElementById('hident2'), 5 )" value="_{MsgPlus5}" type="button">
-    <input onclick="crmnt( document.getElementById('hident2'), -5 )" value="_{MsgMinus5}" type="button">
+<div .plusbtn>
+  <input onclick="crmnt( document.getElementById('hident2'), 5 )" value="_{MsgPlus5}" type="button">
+  <input onclick="crmnt( document.getElementById('hident2'), -5 )" value="_{MsgMinus5}" type="button">

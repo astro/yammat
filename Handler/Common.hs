@@ -17,6 +17,7 @@
 module Handler.Common where
 
 import Data.FileEmbed (embedFile)
+import Yesod.Form.Bootstrap3
 import qualified Data.Text as T
 import qualified Data.List as L
 import qualified Data.Text.Lazy.Encoding as E
@@ -38,6 +39,13 @@ getFaviconR = return $ TypedContent "image/x-icon"
 getRobotsR :: Handler TypedContent
 getRobotsR = return $ TypedContent typePlain
   $ toContent $(embedFile "config/robots.txt")
+
+-- msgToBSSubmit :: T.Text -> BootstrapSubmit T.Text
+msgToBSSubmit t = BootstrapSubmit
+  { bsValue = t
+  , bsClasses = "btn-default"
+  , bsAttrs = []
+  }
 
 removeItem :: Eq a => a -> [a] -> [a]
 removeItem _ [] = []
@@ -163,7 +171,7 @@ amountField = Field
       Right (a, "") -> Right a
       _ -> Left $ MsgInvalidInteger s
   , fieldView = \theId name attr val req -> toWidget [hamlet|$newline never
-    <input id="crement" id=#{theId} name=#{name} *{attr} type="number" step=1 min=0 :req:required="required" value="#{showVal val}">
+    <input #crement id=#{theId} name=#{name} *{attr} type="number" step=1 min=0 :req:required="required" value="#{showVal val}">
     |]
   , fieldEnctype = UrlEncoded
   }

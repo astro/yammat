@@ -126,7 +126,7 @@ instance Yesod App where
             $(widgetFile "copyright")
         pc <- widgetToPageContent $ do
             $(combineStylesheets 'StaticR
-                [ css_bootstrap_css
+                [ css_bootstrap_min_css
                 , css_main_css
                 ])
             $(combineScripts 'StaticR

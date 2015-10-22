@@ -8,5 +8,3 @@ $doctype 5
 
 <form method=post enctype=#{enctype}>
   ^{cashCheckWidget}
-  <div>
-    <input type=submit value="_{MsgSubmit}">

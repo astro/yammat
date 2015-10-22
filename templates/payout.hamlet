@@ -6,5 +6,3 @@ $doctype 5
 
 <form method=post enctype=#{enctype}>
   ^{payoutWidget}
-  <div>
-    <input type=submit value="_{MsgDoPayout}">

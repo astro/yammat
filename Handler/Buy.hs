@@ -17,7 +17,6 @@ module Handler.Buy where
 
 import Import
 import Handler.Common
-import qualified Data.Text as T
 import Text.Blaze.Internal
 import Text.Shakespeare.Text
 
@@ -27,7 +26,9 @@ getBuyR uId bId = do
   case mTup of
     Just (user, bev) -> do
       master <- getYesod
-      (buyWidget, enctype) <- generateFormPost buyForm
+      (buyWidget, enctype) <- generateFormPost
+        $ renderBootstrap3 BootstrapBasicForm
+        $ buyForm
       defaultLayout $
         $(widgetFile "buy")
     Nothing -> do
@@ -39,7 +40,9 @@ postBuyR uId bId = do
   mTup <- checkData uId bId
   case mTup of
     Just (user, bev) -> do
-      ((res, _), _) <- runFormPost buyForm
+      ((res, _), _) <- runFormPost
+        $ renderBootstrap3 BootstrapBasicForm
+        $ buyForm
       case res of
         FormSuccess quant -> do
           if quant > beverageAmount bev
@@ -91,7 +94,9 @@ getBuyCashR bId = do
   case mBev of
     Just bev -> do
       master <- getYesod
-      (buyCashWidget, enctype) <- generateFormPost buyForm
+      (buyCashWidget, enctype) <- generateFormPost
+        $ renderBootstrap3 BootstrapBasicForm
+        $ buyForm
       defaultLayout $
         $(widgetFile "buyCash")
     Nothing -> do
@@ -103,7 +108,9 @@ postBuyCashR bId = do
   mBev <- runDB $ get bId
   case mBev of
     Just bev -> do
-      ((res, _), _) <- runFormPost buyForm
+      ((res, _), _) <- runFormPost
+        $ renderBootstrap3 BootstrapBasicForm
+        $ buyForm
       case res of
         FormSuccess quant -> do
           if quant > beverageAmount bev
@@ -137,6 +144,6 @@ checkData uId bId = do
         Nothing -> return Nothing
     Nothing -> return Nothing
 
-buyForm :: Form Int
-buyForm = renderDivs
-  $ areq amountField (fieldSettingsLabel MsgAmount) (Just 1)
+buyForm :: AForm Handler Int
+buyForm = areq amountField (bfs MsgAmount) (Just 1)
+  <* bootstrapSubmit (msgToBSSubmit MsgPurchase)

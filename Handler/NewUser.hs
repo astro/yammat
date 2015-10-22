@@ -24,7 +24,9 @@ getNewUserR :: Handler Html
 getNewUserR = do
   time <- liftIO getCurrentTime
   let secs = read $ formatTime defaultTimeLocale "%s" time
-  (newUserWidget, enctype) <- generateFormPost $ newUserForm secs
+  (newUserWidget, enctype) <- generateFormPost
+    $ renderBootstrap3 BootstrapBasicForm
+    $ newUserForm secs
   defaultLayout $
     $(widgetFile "newUser")
 
@@ -32,7 +34,9 @@ postNewUserR :: Handler Html
 postNewUserR = do
   time <- liftIO getCurrentTime
   let secs = read $ formatTime defaultTimeLocale "%s" time
-  ((res, _), _) <- runFormPost $ newUserForm secs
+  ((res, _), _) <- runFormPost
+    $ renderBootstrap3 BootstrapBasicForm
+    $ newUserForm secs
   case res of
     FormSuccess user -> do
       runDB $ insert_ user
@@ -42,13 +46,14 @@ postNewUserR = do
       setMessageI MsgUserNotCreated
       redirect NewUserR
 
-newUserForm :: Int -> Form User
-newUserForm secs = renderDivs $ User
-  <$> areq textField (fieldSettingsLabel MsgName) Nothing
+newUserForm :: Int -> AForm Handler User
+newUserForm secs = User
+  <$> areq textField (bfs MsgName) Nothing
   <*> pure 0
   <*> pure secs
-  <*> aopt emailField (fieldSettingsLabel MsgEmailNotify) Nothing
-  <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) Nothing
+  <*> aopt emailField (bfs MsgEmailNotify) Nothing
+  <*> aopt (selectField avatars) (bfs MsgSelectAvatar) Nothing
+  <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
   where
     avatars = do
       ents <- runDB $ selectList [] [Asc AvatarIdent]
@@ -69,7 +74,9 @@ getModifyUserR uId = do
       _ <- handleGetParam p (Left uId)
       rawbs <- runDB $ selectList [BarcodeUser ==. Just uId] []
       let bs = map (barcodeCode . entityVal) rawbs
-      (modifyUserWidget, enctype) <- generateFormPost $ modifyUserForm user bs
+      (modifyUserWidget, enctype) <- generateFormPost
+        $ renderBootstrap3 BootstrapBasicForm
+        $ modifyUserForm user bs
       defaultLayout $
         $(widgetFile "modifyUser")
     Nothing -> do
@@ -83,7 +90,9 @@ postModifyUserR uId = do
     Just user -> do
       rawbs <- runDB $ selectList [BarcodeUser ==. Just uId] []
       let bs = map (barcodeCode . entityVal) rawbs
-      ((res, _), _) <- runFormPost $ modifyUserForm user bs
+      ((res, _), _) <- runFormPost
+        $ renderBootstrap3 BootstrapBasicForm
+        $ modifyUserForm user bs
       case res of
         FormSuccess uc -> do
           runDB $ update uId
@@ -101,11 +110,12 @@ postModifyUserR uId = do
       setMessageI MsgUserUnknown
       redirect HomeR
 
-modifyUserForm :: User -> [Text] -> Form UserConf
-modifyUserForm user bs = renderDivs $ UserConf
-  <$> aopt emailField (fieldSettingsLabel MsgEmailNotify) (Just $ userEmail user)
-  <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) (Just $ userAvatar user)
-  <*> aopt barcodeField (fieldSettingsLabel MsgBarcodeField) (Just $ Just bs)
+modifyUserForm :: User -> [Text] -> AForm Handler UserConf
+modifyUserForm user bs = UserConf
+  <$> aopt emailField (bfs MsgEmailNotify) (Just $ userEmail user)
+  <*> aopt (selectField avatars) (bfs MsgSelectAvatar) (Just $ userAvatar user)
+  <*> aopt barcodeField (bfs MsgBarcodeField) (Just $ Just bs)
+  <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
   where
     avatars = do
       ents <- runDB $ selectList [] [Asc AvatarIdent]

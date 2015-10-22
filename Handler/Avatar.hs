@@ -16,6 +16,7 @@
 module Handler.Avatar where
 
 import Import
+import Handler.Common
 import Data.Conduit.Binary
 import qualified Data.Text as T
 import qualified Data.ByteString as B
@@ -32,13 +33,15 @@ getAvatarR = do
 
 getNewAvatarR :: Handler Html
 getNewAvatarR = do
-  (newAvatarWidget, enctype) <- generateFormPost avatarNewForm
+  (newAvatarWidget, enctype) <- generateFormPost
+    $ renderBootstrap3 BootstrapBasicForm $ avatarNewForm
   defaultLayout $
     $(widgetFile "newAvatar")
 
 postNewAvatarR :: Handler Html
 postNewAvatarR = do
-  ((res, _), _) <- runFormPost avatarNewForm
+  ((res, _), _) <- runFormPost
+    $ renderBootstrap3 BootstrapBasicForm avatarNewForm
   case res of
     FormSuccess na -> do
       raw <- runResourceT $ fileSource (avatarNewFile na) $$ sinkLbs
@@ -50,10 +53,11 @@ postNewAvatarR = do
       setMessageI MsgErrorOccured
       redirect NewAvatarR
 
-avatarNewForm :: Form AvatarNew
-avatarNewForm = renderDivs $ AvatarNew
-  <$> areq textField (fieldSettingsLabel MsgAvatarIdent) Nothing
-  <*> areq fileField (fieldSettingsLabel MsgAvatarFile) Nothing
+avatarNewForm :: AForm Handler AvatarNew
+avatarNewForm = AvatarNew
+  <$> areq textField (bfs MsgAvatarIdent) Nothing
+  <*> areq fileField (bfs MsgAvatarFile) Nothing
+  <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
 
 data AvatarNew = AvatarNew
   { avatarNewIdent :: Text
@@ -65,7 +69,9 @@ getModifyAvatarR aId = do
   ma <- runDB $ get aId
   case ma of
     Just avatar -> do
-      (avatarModifyWidget, enctype) <- generateFormPost $ avatarModForm avatar
+      (avatarModifyWidget, enctype) <- generateFormPost
+        $ renderBootstrap3 BootstrapBasicForm
+        $ avatarModForm avatar
       defaultLayout $
         $(widgetFile "modifyAvatar")
     Nothing -> do
@@ -77,7 +83,9 @@ postModifyAvatarR aId = do
   ma <- runDB $ get aId
   case ma of
     Just avatar -> do
-      ((res, _), _) <- runFormPost $ avatarModForm avatar
+      ((res, _), _) <- runFormPost
+        $ renderBootstrap3 BootstrapBasicForm
+        $ avatarModForm avatar
       case res of
         FormSuccess md -> do
           updateAvatar aId md
@@ -90,10 +98,11 @@ postModifyAvatarR aId = do
       setMessageI MsgAvatarUnknown
       redirect HomeR
 
-avatarModForm :: Avatar -> Form AvatarMod
-avatarModForm a = renderDivs $ AvatarMod
-  <$> areq textField (fieldSettingsLabel MsgAvatarIdent) (Just $ avatarIdent a)
-  <*> aopt fileField (fieldSettingsLabel MsgAvatarFileChange) Nothing
+avatarModForm :: Avatar -> AForm Handler AvatarMod
+avatarModForm a = AvatarMod
+  <$> areq textField (bfs MsgAvatarIdent) (Just $ avatarIdent a)
+  <*> aopt fileField (bfs MsgAvatarFileChange) Nothing
+  <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
 
 data AvatarMod = AvatarMod
   { avatarModIdent :: Text

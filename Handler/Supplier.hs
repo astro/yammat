@@ -1,7 +1,9 @@
 module Handler.Supplier where
 
 import Import
+import Handler.Common
 import Data.Maybe
+import qualified Data.Text as T
 
 getSupplierR :: Handler Html
 getSupplierR = do
@@ -11,13 +13,15 @@ getSupplierR = do
 
 getNewSupplierR :: Handler Html
 getNewSupplierR = do
-  (newSupplierWidget, enctype) <- generateFormPost newSupplierForm
+  (newSupplierWidget, enctype) <- generateFormPost
+    $ renderBootstrap3 BootstrapBasicForm newSupplierForm
   defaultLayout $
     $(widgetFile "newSupplier")
 
 postNewSupplierR :: Handler Html
 postNewSupplierR = do
-  ((res, _), _) <- runFormPost newSupplierForm
+  ((res, _), _) <- runFormPost
+    $ renderBootstrap3 BootstrapBasicForm newSupplierForm
   case res of
     FormSuccess sup -> do
       runDB $ insert_ sup
@@ -27,14 +31,15 @@ postNewSupplierR = do
       setMessageI MsgSupplierNotCreated
       redirect SupplierR
 
-newSupplierForm :: Form Supplier
-newSupplierForm = renderDivs $ Supplier
-  <$> areq textField (fieldSettingsLabel MsgName) Nothing
-  <*> areq textareaField (fieldSettingsLabel MsgAddress) Nothing
-  <*> areq textField (fieldSettingsLabel MsgTelNr) Nothing
-  <*> areq emailField (fieldSettingsLabel MsgEmail) Nothing
-  <*> areq textField (fieldSettingsLabel MsgCustomerId) Nothing
-  <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) Nothing
+newSupplierForm :: AForm Handler Supplier
+newSupplierForm = Supplier
+  <$> areq textField (bfs MsgName) Nothing
+  <*> areq textareaField (bfs MsgAddress) Nothing
+  <*> areq textField (bfs MsgTelNr) Nothing
+  <*> areq emailField (bfs MsgEmail) Nothing
+  <*> areq textField (bfs MsgCustomerId) Nothing
+  <*> aopt (selectField avatars) (bfs MsgSelectAvatar) Nothing
+  <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
   where
     avatars = do
       ents <- runDB $ selectList [] [Asc AvatarIdent]
@@ -54,7 +59,9 @@ getModifySupplierR sId = do
   mSup <- runDB $ get sId
   case mSup of
     Just sup -> do
-      (modifySupplierWidget, enctype) <- generateFormPost $ modifySupplierForm sup
+      (modifySupplierWidget, enctype) <- generateFormPost
+        $ renderBootstrap3 BootstrapBasicForm
+        $ modifySupplierForm sup
       defaultLayout $
         $(widgetFile "modifySupplier")
     Nothing -> do
@@ -66,7 +73,9 @@ postModifySupplierR sId = do
   mSup <- runDB $ get sId
   case mSup of
     Just sup -> do
-      ((res, _), _) <- runFormPost $ modifySupplierForm sup
+      ((res, _), _) <- runFormPost
+        $ renderBootstrap3 BootstrapBasicForm
+        $ modifySupplierForm sup
       case res of
         FormSuccess msup -> do
           runDB $ update sId
@@ -85,15 +94,17 @@ postModifySupplierR sId = do
       setMessageI MsgSupplierUnknown
       redirect SupplierR
 
-modifySupplierForm :: Supplier -> Form SupConf
-modifySupplierForm sup = renderDivs $ SupConf
-  <$> areq textField (fieldSettingsLabel MsgName) (Just $ supplierIdent sup)
-  <*> areq textareaField (fieldSettingsLabel MsgAddress) (Just $ supplierAddress sup)
-  <*> areq textField (fieldSettingsLabel MsgTelNr) (Just $ supplierTel sup)
-  <*> areq textField (fieldSettingsLabel MsgEmail) (Just $ supplierEmail sup)
-  <*> areq textField (fieldSettingsLabel MsgCustomerId) (Just $ supplierCustomerId sup)
-  <*> aopt (selectField avatars) (fieldSettingsLabel MsgSelectAvatar) (Just $ supplierAvatar sup)
+modifySupplierForm :: Supplier -> AForm Handler SupConf
+modifySupplierForm sup = SupConf
+  <$> areq textField (bfs MsgName) (Just $ supplierIdent sup)
+  <*> areq textareaField (bfs MsgAddress) (Just $ supplierAddress sup)
+  <*> areq textField (bfs MsgTelNr) (Just $ supplierTel sup)
+  <*> areq textField (bfs MsgEmail) (Just $ supplierEmail sup)
+  <*> areq textField (bfs MsgCustomerId) (Just $ supplierCustomerId sup)
+  <*> aopt (selectField avatars) (bfs MsgSelectAvatar) (Just $ supplierAvatar sup)
+  <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
   where
+    master = getYesod
     avatars = do
       ents <- runDB $ selectList [] [Asc AvatarIdent]
       optionsPairs $ map (\ent -> ((avatarIdent $ entityVal ent), entityKey ent)) ents

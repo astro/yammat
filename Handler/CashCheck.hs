@@ -20,13 +20,15 @@ import Handler.Common
 
 getCashCheckR :: Handler Html
 getCashCheckR = do
-  (cashCheckWidget, enctype) <- generateFormPost createCashCheckForm
+  (cashCheckWidget, enctype) <- generateFormPost
+    $ renderBootstrap3 BootstrapBasicForm createCashCheckForm
   defaultLayout $
     $(widgetFile "cashCheck")
 
 postCashCheckR :: Handler Html
 postCashCheckR = do
-  ((res, _), _) <- runFormPost createCashCheckForm
+  ((res, _), _) <- runFormPost
+    $ renderBootstrap3 BootstrapBasicForm createCashCheckForm
   case res of
     FormSuccess c -> do
       currentTime <- liftIO getCurrentTime
@@ -38,7 +40,8 @@ postCashCheckR = do
       setMessageI MsgCashCheckError
       redirect CashCheckR
 
-createCashCheckForm :: Form CashCheck
-createCashCheckForm = renderDivs $ CashCheck
-  <$> areq currencyField (fieldSettingsLabel MsgCountedValue) Nothing
+createCashCheckForm :: AForm Handler CashCheck
+createCashCheckForm = CashCheck
+  <$> areq currencyField (bfs MsgCountedValue) Nothing
   <*> lift (liftIO getCurrentTime)
+  <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)

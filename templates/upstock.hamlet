@@ -7,5 +7,6 @@ $doctype 5
 
 <form method=post enctype=#{enctype}>
   ^{upstockWidget}
-    <input onclick="crmnt( document.getElementById('crement'), 1 )" value="_{MsgIncrement}" type="button">
-    <input onclick="crmnt( document.getElementById('crement'), -1 )" value="_{MsgDecrement}" type="button">
+<div .plusbtn>
+  <button .btn .btn-default onclick="crmnt( document.getElementById('crement'), 1 )">_{MsgIncrement}
+  <button .btn .btn-default onclick="crmnt( document.getElementById('crement'), -1 )">_{MsgDecrement}

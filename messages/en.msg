@@ -141,3 +141,4 @@ BuyValue: Payment amount
 CustomerId: Customer id
 TotalCrates: Total crates
 Modify: modify
+UserIdentNotUnique: Username is not unique

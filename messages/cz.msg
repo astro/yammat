@@ -141,3 +141,4 @@ BuyValue: K placení
 CustomerId: Kód zákazníka
 TotalCrates: Celkový počet přepravek
 Modify: upravit
+UserIdentNotUnique: Uživatelské jméno není jedinečný

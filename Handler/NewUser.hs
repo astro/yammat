@@ -39,9 +39,15 @@ postNewUserR = do
     $ newUserForm secs
   case res of
     FormSuccess user -> do
-      runDB $ insert_ user
-      setMessageI MsgUserCreated
-      redirect HomeR
+      namesakes <- runDB $ selectList [UserIdent ==. userIdent user] []
+      if null namesakes
+        then do
+          runDB $ insert_ user
+          setMessageI MsgUserCreated
+          redirect HomeR
+        else do
+          setMessageI MsgUserIdentNotUnique
+          redirect NewUserR
     _ -> do
       setMessageI MsgUserNotCreated
       redirect NewUserR
@@ -60,7 +66,8 @@ newUserForm secs = User
       optionsPairs $ map (\ent -> ((avatarIdent $ entityVal ent), entityKey ent)) ents
 
 data UserConf = UserConf
-  { userConfEmail :: Maybe Text
+  { userConfIdent :: Text
+  , userConfEmail :: Maybe Text
   , userConfAvatar :: Maybe AvatarId
   , userConfBarcode :: Maybe [Text]
   }
@@ -95,14 +102,21 @@ postModifyUserR uId = do
         $ modifyUserForm user bs
       case res of
         FormSuccess uc -> do
-          runDB $ update uId
-            [ UserEmail =. userConfEmail uc
-            , UserAvatar =. userConfAvatar uc
-            ]
-          liftIO $ notify user (userConfEmail uc)
-          handleBarcodes (Left uId) (fromMaybe [] $ userConfBarcode uc)
-          setMessageI MsgUserEdited
-          redirect $ SelectR uId
+          namesakes <- runDB $ selectList [UserIdent ==. userConfIdent uc] []
+          if null namesakes
+            then do
+              runDB $ update uId
+                [ UserIdent =. userConfIdent uc
+                , UserEmail =. userConfEmail uc
+                , UserAvatar =. userConfAvatar uc
+                ]
+              liftIO $ notify user (userConfEmail uc)
+              handleBarcodes (Left uId) (fromMaybe [] $ userConfBarcode uc)
+              setMessageI MsgUserEdited
+              redirect $ SelectR uId
+            else do
+              setMessageI MsgUserIdentNotUnique
+              redirect $ ModifyUserR uId
         _ -> do
           setMessageI MsgUserNotEdited
           redirect $ SelectR uId
@@ -112,7 +126,8 @@ postModifyUserR uId = do
 
 modifyUserForm :: User -> [Text] -> AForm Handler UserConf
 modifyUserForm user bs = UserConf
-  <$> aopt emailField (bfs MsgEmailNotify) (Just $ userEmail user)
+  <$> areq textField (bfs MsgName) (Just $ userIdent user)
+  <*> aopt emailField (bfs MsgEmailNotify) (Just $ userEmail user)
   <*> aopt (selectField avatars) (bfs MsgSelectAvatar) (Just $ userAvatar user)
   <*> aopt barcodeField (bfs MsgBarcodeField) (Just $ Just bs)
   <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)

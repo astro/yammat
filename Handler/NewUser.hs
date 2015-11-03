@@ -102,7 +102,7 @@ postModifyUserR uId = do
         $ modifyUserForm user bs
       case res of
         FormSuccess uc -> do
-          namesakes <- runDB $ selectList [UserIdent ==. userConfIdent uc] []
+          namesakes <- runDB $ selectList [UserIdent ==. userConfIdent uc, UserId !=. uId] []
           if null namesakes
             then do
               runDB $ update uId

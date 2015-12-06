@@ -47,7 +47,7 @@ getUserReactivateR :: UserId -> Handler Html
 getUserReactivateR uId = do
   mUser <- runDB $ get uId
   case mUser of
-    Just user -> do
+    Just _ -> do
       time <- liftIO getCurrentTime
       let secs = R.read $ formatTime defaultTimeLocale "%s" time
       runDB $ update uId [UserTimestamp =. secs]

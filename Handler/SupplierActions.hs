@@ -102,7 +102,7 @@ getDeleteSupplierR :: SupplierId -> Handler Html
 getDeleteSupplierR sId = do
   mSup <- runDB $ get sId
   case mSup of
-    Just sup -> do
+    Just _ -> do
       a <- runDB $ selectList [BeverageSupplier ==. (Just sId)] []
       if null a
         then do

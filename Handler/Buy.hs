@@ -23,7 +23,7 @@ getBuyR :: UserId -> BeverageId -> Handler Html
 getBuyR uId bId = do
   mTup <- checkData uId bId
   case mTup of
-    Just (user, bev) -> do
+    Just (_, bev) -> do
       master <- getYesod
       (buyWidget, enctype) <- generateFormPost
         $ renderBootstrap3 BootstrapBasicForm

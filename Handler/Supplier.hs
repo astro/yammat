@@ -3,7 +3,6 @@ module Handler.Supplier where
 import Import
 import Handler.Common
 import Data.Maybe
-import qualified Data.Text as T
 
 getSupplierR :: Handler Html
 getSupplierR = do

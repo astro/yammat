@@ -17,7 +17,6 @@ module Handler.Buy where
 
 import Import
 import Handler.Common
-import Text.Blaze.Internal
 import Text.Shakespeare.Text
 
 getBuyR :: UserId -> BeverageId -> Handler Html

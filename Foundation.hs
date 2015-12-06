@@ -19,10 +19,8 @@ import Import.NoFoundation
 import Database.Persist.Sql (ConnectionPool, runSqlPool)
 import Text.Hamlet          (hamletFile)
 import Text.Jasmine         (minifym)
-import Yesod.Auth.BrowserId (authBrowserId)
 import Yesod.Default.Util   (addStaticContentExternal)
 import Yesod.Core.Types     (Logger)
-import Settings.StaticFiles
 --snip
 import qualified Data.Text as T
 import Network.Wai as Wai

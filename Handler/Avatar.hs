@@ -18,7 +18,6 @@ module Handler.Avatar where
 import Import
 import Handler.Common
 import Data.Conduit.Binary
-import qualified Data.Text as T
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as L
 import Data.ByteString.Base64

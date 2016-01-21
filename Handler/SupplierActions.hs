@@ -3,6 +3,7 @@ module Handler.SupplierActions where
 import Import
 import Handler.Common
 import qualified Data.Text as T
+import Text.Blaze
 
 getSupplierActionsR :: SupplierId -> Handler Html
 getSupplierActionsR sId = do
@@ -69,6 +70,7 @@ getSupplierDigestR sId = do
       redirect SupplierR
 
 -- tableLayout :: Widget -> WidgetT site0 IO ()
+tableLayout :: WidgetT App IO () -> HandlerT App IO Markup
 tableLayout widget = do
   cont <- widgetToPageContent $ do
     $(combineStylesheets 'StaticR

@@ -69,6 +69,7 @@ instance HasHttpManager App where
 
 mkMessage "App" "messages" "de"
 
+renderMessage' :: (RenderMessage (HandlerSite m) message, MonadHandler m) => message -> m Text
 renderMessage' e = do
   m <- getYesod
   l <- languages

@@ -202,9 +202,9 @@ der Matemat
     else
       return () -- do nothing
 
-sendMail :: Text -> Text -> TL.Text -> IO ()
+sendMail :: MonadIO m => Text -> Text -> TL.Text -> m ()
 sendMail to subject body =
-  renderSendMail
+  liftIO $ renderSendMail
     Mail
       { mailFrom = Address Nothing "noreply"
       , mailTo = [Address Nothing to]

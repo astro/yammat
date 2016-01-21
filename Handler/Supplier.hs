@@ -103,7 +103,6 @@ modifySupplierForm sup = SupConf
   <*> aopt (selectField avatars) (bfs MsgSelectAvatar) (Just $ supplierAvatar sup)
   <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
   where
-    master = getYesod
     avatars = do
       ents <- runDB $ selectList [] [Asc AvatarIdent]
       optionsPairs $ map (\ent -> ((avatarIdent $ entityVal ent), entityKey ent)) ents

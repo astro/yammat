@@ -19,6 +19,7 @@ module Handler.Common where
 import Data.FileEmbed (embedFile)
 import Yesod.Form.Bootstrap3
 import qualified Data.Text as T
+import qualified Data.Text.Lazy as TL
 import qualified Data.List as L
 import qualified Data.Text.Lazy.Encoding as E
 import qualified Data.Text.Read as R
@@ -40,7 +41,7 @@ getRobotsR :: Handler TypedContent
 getRobotsR = return $ TypedContent typePlain
   $ toContent $(embedFile "config/robots.txt")
 
--- msgToBSSubmit :: T.Text -> BootstrapSubmit T.Text
+msgToBSSubmit :: AppMessage -> BootstrapSubmit AppMessage
 msgToBSSubmit t = BootstrapSubmit
   { bsValue = t
   , bsClasses = "btn-default"
@@ -105,6 +106,7 @@ volumeField = Field
     showVal = either id (pack . showA)
     showA x = show ((fromIntegral x :: Double) / 1000)
 
+barcodeField :: (RenderMessage (HandlerSite m) FormMessage, Monad m) => Field m [Text]
 barcodeField = Field
   { fieldParse = parseHelper $ Right . removeItem "" . L.nub . T.splitOn ", "
   , fieldView = \theId name attrs val isReq -> toWidget [hamlet|$newline never
@@ -185,7 +187,7 @@ checkAlert bId = do
   if beverageAmount bev < beverageAlertAmount bev
     then do
       master <- getYesod
-      let to = appEmail $ appSettings master 
+      let to = appEmail $ appSettings master
       liftIO $ sendMail to "Niedriger Bestand"
         [stext|
 Hallo,
@@ -200,9 +202,9 @@ der Matemat
     else
       return () -- do nothing
 
---sendMail :: MonadIO m => Text -> Text -> Text -> m ()
+sendMail :: MonadIO m => Text -> Text -> TL.Text -> m ()
 sendMail to subject body =
-  renderSendMail
+  liftIO $ renderSendMail
     Mail
       { mailFrom = Address Nothing "noreply"
       , mailTo = [Address Nothing to]

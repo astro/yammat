@@ -3,6 +3,7 @@ module Handler.SupplierActions where
 import Import
 import Handler.Common
 import qualified Data.Text as T
+import Text.Blaze
 
 getSupplierActionsR :: SupplierId -> Handler Html
 getSupplierActionsR sId = do
@@ -69,6 +70,7 @@ getSupplierDigestR sId = do
       redirect SupplierR
 
 -- tableLayout :: Widget -> WidgetT site0 IO ()
+tableLayout :: WidgetT App IO () -> HandlerT App IO Markup
 tableLayout widget = do
   cont <- widgetToPageContent $ do
     $(combineStylesheets 'StaticR
@@ -102,7 +104,7 @@ getDeleteSupplierR :: SupplierId -> Handler Html
 getDeleteSupplierR sId = do
   mSup <- runDB $ get sId
   case mSup of
-    Just sup -> do
+    Just _ -> do
       a <- runDB $ selectList [BeverageSupplier ==. (Just sId)] []
       if null a
         then do

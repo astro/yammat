@@ -110,7 +110,7 @@ getDeleteBeverageR :: BeverageId -> Handler Html
 getDeleteBeverageR bId = do
   mBev <- runDB $ get bId
   case mBev of
-    Just bev -> do
+    Just _ -> do
       runDB $ delete bId
       setMessageI MsgItemDeleted
       redirect HomeR

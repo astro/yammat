@@ -41,7 +41,7 @@ merge [] (c:cs) = (Right $ entityVal c) : merge [] cs
 merge (t:ts) [] = (Left $ entityVal t) : merge ts []
 merge (t:ts) (c:cs)
   | transactionTime (entityVal t) < cashCheckTime (entityVal c) = (Left $ entityVal t)  : merge ts (c:cs)
-  | transactionTime (entityVal t) > cashCheckTime (entityVal c) = (Right $ entityVal c) : merge (t:ts) cs
+  | otherwise                                                   = (Right $ entityVal c) : merge (t:ts) cs
 
 getJournalPageR :: Int -> Handler Html
 getJournalPageR p = do

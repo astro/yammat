@@ -3,7 +3,6 @@ module Handler.Supplier where
 import Import
 import Handler.Common
 import Data.Maybe
-import qualified Data.Text as T
 
 getSupplierR :: Handler Html
 getSupplierR = do
@@ -104,7 +103,6 @@ modifySupplierForm sup = SupConf
   <*> aopt (selectField avatars) (bfs MsgSelectAvatar) (Just $ supplierAvatar sup)
   <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
   where
-    master = getYesod
     avatars = do
       ents <- runDB $ selectList [] [Asc AvatarIdent]
       optionsPairs $ map (\ent -> ((avatarIdent $ entityVal ent), entityKey ent)) ents

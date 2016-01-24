@@ -275,3 +275,9 @@ input[type], button {
 #barcodeContent {
     text-align: center;
 }
+
+#demand-warning {
+    color: red;
+    font-weight: bold;
+    font-size: 150%;
+}

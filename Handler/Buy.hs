@@ -61,8 +61,12 @@ postBuyR uId bId = do
                   setMessageI MsgPurchaseSuccess
                   redirect HomeR
                 True -> do
-                  setMessageI MsgPurchaseDebtful
-                  redirect HomeR
+                  let level = case userBalance user - price of
+                        balance
+                          | balance <= -5000 -> 3
+                          | balance <= -1000 -> 2
+                          | otherwise -> 1
+                  redirect $ DemandR level
         _ -> do
           setMessageI MsgErrorOccured
           redirect HomeR

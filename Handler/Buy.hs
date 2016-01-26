@@ -51,8 +51,9 @@ postBuyR uId bId = do
             else do
               let price = quant * (beveragePrice bev)
               let sw = price > (userBalance user)
-              runDB $ update uId [UserBalance -=. price]
-              runDB $ update bId [BeverageAmount -=. quant]
+              runDB $ do
+                update uId [UserBalance -=. price]
+                update bId [BeverageAmount -=. quant]
               checkAlert bId
               master <- getYesod
               liftIO $ notifyUser user bev price master

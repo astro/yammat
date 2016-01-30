@@ -42,14 +42,15 @@ postUpstockR :: BeverageId -> Handler Html
 postUpstockR bId = do
   mBev <- runDB $ get bId
   case mBev of
-    Just _ -> do
+    Just bev -> do
       ((res, _), _) <- runFormPost
         $ renderBootstrap3 BootstrapBasicForm upstockForm
       case res of
         FormSuccess c ->
-          if c > 0
+          if upstockSingles c > 0 && upstockCrates c > 0
             then do
-              runDB $ update bId [BeverageAmount +=. c]
+              let total = upstockSingles c + (upstockCrates c * fromMaybe 0 $ perCrate bev)
+              runDB $ update bId [BeverageAmount +=. total]
               setMessageI MsgStockedUp
               redirect RestockR
             else do
@@ -63,9 +64,16 @@ postUpstockR bId = do
       setMessageI MsgItemUnknown
       redirect RestockR
 
-upstockForm :: AForm Handler Int
-upstockForm = areq amountField (bfs MsgAmountAdded) (Just 1)
-  <* bootstrapSubmit (msgToBSSubmit MsgFillup)
+data UpstockAmount = UpstockAmount
+  { upstockSingles :: Int
+  , upstockCrates  :: Int
+  }
+
+upstockForm :: AForm Handler UpstockAmount
+upstockForm = UpstockAmount
+  <$> areq amountField (bfs MsgAmountAdded) (Just 1)
+  <*> areq amountField (bfs MsgCrateAmountAdded) (Just 0)
+  <*  bootstrapSubmit (msgToBSSubmit MsgFillup)
 
 getNewArticleR :: Handler Html
 getNewArticleR = do

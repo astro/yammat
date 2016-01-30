@@ -49,7 +49,7 @@ postUpstockR bId = do
         FormSuccess c ->
           if upstockSingles c > 0 && upstockCrates c > 0
             then do
-              let total = upstockSingles c + (upstockCrates c * fromMaybe 0 $ perCrate bev)
+              let total = upstockSingles c + (upstockCrates c * (fromMaybe 0 $ beveragePerCrate bev))
               runDB $ update bId [BeverageAmount +=. total]
               setMessageI MsgStockedUp
               redirect RestockR

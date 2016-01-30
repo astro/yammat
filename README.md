@@ -1,51 +1,102 @@
-#yammat
+# yammat
 
 Yet Another MateMAT
 
-##Introduction
+## Introduction
 
 This project aims to be an implementation for a trust based POS for hackerspaces.
 
-##Dependencies
+## Installation
 
-###External dependencies
+### Dependencies
 
-In order to build yammat you need the packages `cabal-install`, `ghc`, `libmagick++-dev` and `postgresql`. Furthermore you need the Haskell packages `alex` and `happy`. To install these enter `cabal install alex happy` into your command line.
+#### Environment dependencies
 
-###Internal dependencies
+A working Haskell capable environment. For that you will need `haskell-stack`, which can be installed
+with:
 
-Before installing the internal dependencies it is best practice to put the project into a sandbox with `cabal sandbox init`.
+```bash
+sudo apt-get install haskell-stack
+```
 
-All internal dependencies are in the file `yammat.cabal` and will be installed automagically with the command `cabal install --only-dependencies`.
+In case you can't find this package in your repositories, get `stack` from [stackage][stackage].
 
-##Building
+After you installed `stack`, let it make itself comfortable in your system with
 
-To build this project enter `cabal configure && cabal build exe:yammat` into your command line
+```bash
+stack setup
+```
 
-##Deployment
+This might, depending on your system setup, take some time. Brew yourself some tea.
 
-Copy or link the executable `dist/build/yammat/yammat` to your desired run location alongside with the folders `static` and `config`. The Folders should be copied, or you will get problems with your git pulls.
+#### Build dependencies
 
-##Configuration
+Now that your Haskell environment is set up, you need to install the dependencies for building and running yammat, which are:
 
-Check the configuration File `config/settings.yml`. Create Postgresql Databases according to these settings.
+* alex
+* happy
+* libpq-dev
+* postgresql
 
-##Lift-Off
+Install all of them through your package management system.
 
-Run `./yammat config/settings.yml` in your desired run location. Finally point a reverse-proxy (something like nginx) at `http://localhost:3000` or any other port you configured in `config/settings.yml`.
+### Building
 
-For better control You can wrap an init script around this. How to do this is described [in my blog][blog].
+To build this project enter `stack build` into your command line.
+Everything else should be done automagically.
 
-[blog]: http://nek0.eu/posts/2014-10-23-Daemonize-a-yesod-app.html
+This will take a long time, so go on a quest to find some cookies to go with the tea.
 
-##Migrations
+## Deployment
 
-###0.0.0-0.0.1
+Create a directory outside of the project directory, where you want to actually run the application.
+Copy or link the executable `yammat` from `.stack-work/dist/<arch>/Cabal-<version>/build/eidolon/`,
+where `<arch>` is your systems architecture and `<version>` the version of your `cabal` library,
+to your desired run location alongside with the folders `static` and `config` and their contenst.
+The Folders should be copied, or you will get problems with your git pulls.
 
-* Delete column `alt_time` from table `avatar` in your Database with `alter table "avatar" drop column "alt_time";`
+## Configuration
+
+Let's leave the project directory and enter your desired run location.
+Check the configuration File `config/settings.yml` and alter its content to your liking.
+Most of these settings normally don't need to be altered much, except for `approot`.
+Change this setting to the root address with which you want to connect to the application,
+including the scheme (http or https).
+Additionally edit the settings `email`, `currency` and `cash_charge`.
+
+* `email` is the email address, which will receive notifications from yammat, should the stock run low.  
+* `currency` is your currency sign or shorthand, which will be used when displaying prices.
+* `cash_charge` is the extra you want to charge your users, who pay cash.
+	* *Note:* The value of this setting is in hundredths of your currency denomination.
+
+`cash_charge` is effectively a "guest tax". Setting it to `0` is perfectly fine, if you don't want that.
+
+Create a Postgresql User and Database according to the settings in the settings file
+and grant the user all privileges on the database.
+
+## Lift-Off
+
+Run `./yammat config/settings.yml` in your desired run location. Finally point a reverse-proxy
+(something like nginx) at `http://localhost:3000` or any other port you configured in
+`config/settings.yml`.
+
+For better control You can wrap an systemd unit file around this.
+How to do this is described [in my blog][blog].
+
+## Migrations
+
+### 0.0.0-0.0.1
+
+* Delete column `alt_time` from table `avatar` in your Database with
+  `alter table "avatar" drop column "alt_time";`
 * Start yammat normally to fill database with dummy data and stop it again
 * Run migration script
-	* if you have built yammat with a sandbox, run `runghc -package-db/full/path/to/sandbox(XXX-ghc-version-packages.conf.d /path/to/yammat/Migration/0.0.0-0.0.1/Migration.hs`
+	* if you have built yammat with a sandbox, run
+`runghc -package-db/full/path/to/sandbox(XXX-ghc-version-packages.conf.d
+/path/to/yammat/Migration/0.0.0-0.0.1/Migration.hs`
 		* Note: No space between the option `-package-db` and its argument
 	* without sandbox: `runghc /path/to/yammat/Migration/0.0.0-0.0.1/Migration.hs`
 * Enjoy your freshly migrated Matemat
+
+[stackage]: http://www.stackage.org/
+[blog]: https://nek0.eu/posts/2015-08-28-Daemonize-a-Yesod-application-systemd-style.html

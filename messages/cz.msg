@@ -31,7 +31,8 @@ Description: Popis
 StockedUp: Nabral jsem zásoby
 NotStockedUp: Nemohl jsem nabrat zásoby
 StockupError: Chyba při nabírání zásob
-AmountAdded: Množství přidáno
+AmountAdded: Množství jednotlivích přidáno
+CrateAmountAdded: Množství přepravek přidáno
 ItemAdded: Nový zboží přidáno
 ItemNotAdded: Chyba při přidávání
 AmountWarning: Výstraha počtu

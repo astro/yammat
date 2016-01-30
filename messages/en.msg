@@ -31,7 +31,8 @@ Description: Description
 StockedUp: Stocked up
 NotStockedUp: Could not stock up
 StockupError: Error stocking up
-AmountAdded: Amount added
+AmountAdded: Amount of single items added
+CrateAmountAdded: Amount of crates added
 ItemAdded: New item added
 ItemNotAdded: Error when adding
 AmountWarning: Amount warning

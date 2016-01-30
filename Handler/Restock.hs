@@ -36,7 +36,7 @@ getUpstockR bId = do
         $(widgetFile "upstock")
     Nothing -> do
       setMessageI MsgItemUnknown
-      redirect HomeR
+      redirect RestockR
 
 postUpstockR :: BeverageId -> Handler Html
 postUpstockR bId = do
@@ -51,7 +51,7 @@ postUpstockR bId = do
             then do
               runDB $ update bId [BeverageAmount +=. c]
               setMessageI MsgStockedUp
-              redirect HomeR
+              redirect RestockR
             else do
               setMessageI MsgNotStockedUp
               redirect $ UpstockR bId
@@ -61,7 +61,7 @@ postUpstockR bId = do
           redirect $ UpstockR bId
     Nothing -> do
       setMessageI MsgItemUnknown
-      redirect HomeR
+      redirect RestockR
 
 upstockForm :: AForm Handler Int
 upstockForm = areq amountField (bfs MsgAmountAdded) (Just 1)
@@ -82,10 +82,10 @@ postNewArticleR = do
     FormSuccess bev -> do
       runDB $ insert_ bev
       setMessageI MsgItemAdded
-      redirect HomeR
+      redirect RestockR
     _ -> do
       setMessageI MsgItemNotAdded
-      redirect HomeR
+      redirect RestockR
 
 newArticleForm :: AForm Handler Beverage
 newArticleForm = (\a b c d e f g h i j k l -> Beverage a b c d e i j k f g l h)

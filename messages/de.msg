@@ -31,7 +31,8 @@ Description: Beschreibung
 StockedUp: Bestand aufgefüllt
 NotStockedUp: Bestand kann nicht negativ aufgefüllt werden
 StockupError: Fehler beim Auffüllen
-AmountAdded: Anzahl hinzugefügt
+AmountAdded: Anzahl Einzelteile hinzugefügt
+CrateAmountAdded: Anzahl Kästen hinzugefügt
 ItemAdded: Neuer Artikel hinzugefügt
 ItemNotAdded: Fehler beim Hinzufügen
 AmountWarning: Warnung bei Anzahl

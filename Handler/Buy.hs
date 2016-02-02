@@ -83,7 +83,7 @@ Du hast gerade beim Matematen für #{formatIntCurrency price}#{appCurrency $ app
 
 Viele Grüsse,
 
-Der Matemat
+Dein Matemat
         |]
     Nothing ->
       return ()

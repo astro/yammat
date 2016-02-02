@@ -101,7 +101,7 @@ Du hast gerade #{formatIntCurrency amount}#{appCurrency $ appSettings master} an
 
 Viele Grüße,
 
-Der Matemat
+Dein Matemat
         |]
     Nothing ->
       return ()
@@ -115,7 +115,7 @@ Du hast gerade #{formatIntCurrency amount}#{appCurrency $ appSettings master} vo
 
 Viele Grüße,
 
-Der Matemat
+Dein Matemat
         |]
     Nothing ->
       return ()

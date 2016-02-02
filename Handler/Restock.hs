@@ -47,7 +47,7 @@ postUpstockR bId = do
         $ renderBootstrap3 BootstrapBasicForm upstockForm
       case res of
         FormSuccess c ->
-          if upstockSingles c > 0 && upstockCrates c > 0
+          if upstockSingles c > 0 && upstockCrates c >= 0
             then do
               let total = upstockSingles c + (upstockCrates c * (fromMaybe 0 $ beveragePerCrate bev))
               runDB $ update bId [BeverageAmount +=. total]

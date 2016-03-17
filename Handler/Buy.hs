@@ -51,7 +51,7 @@ postBuyR uId bId = do
             else do
               let price = quant * (beveragePrice bev)
               let sw = price > (userBalance user)
-              today <- liftIO $ return utctDay =<< getCurrentTime
+              today <- liftIO $ return . utctDay =<< getCurrentTime
               runDB $ do
                 update uId [UserTimestamp =. today]
                 update uId [UserBalance -=. price]

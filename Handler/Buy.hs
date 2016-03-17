@@ -58,7 +58,7 @@ postBuyR uId bId = do
                 update bId [BeverageAmount -=. quant]
               checkAlert bId
               master <- getYesod
-              liftIO $ notifyUser user bev price master
+              liftIO $ notifyUser user bev quant price master
               case sw of
                 False -> do
                   setMessageI MsgPurchaseSuccess
@@ -73,15 +73,26 @@ postBuyR uId bId = do
       setMessageI MsgUserUnknown
       redirect HomeR
 
-notifyUser :: User -> Beverage -> Int -> App -> IO ()
-notifyUser user bev price master = do
+notifyUser :: User -> Beverage -> Int -> Int -> App -> IO ()
+notifyUser user bev quant price master = do
   case userEmail user of
-    Just email ->
+    Just email -> do
+      addendum <- if userBalance user < 0
+        then
+          return $
+            "\n\nDein Guthaben Beträgt im Moment " ++
+            formatIntCurrency (userBalance user) ++
+            appCurrency (appSettings master) ++
+            ".\n" ++
+            "LADE DEIN GUTHABEN AUF!\n" ++
+            "VERDAMMT NOCHMAL!!!"
+        else
+          return ""
       liftIO $ sendMail email "Einkauf beim Matematen"
-        [stext|
+        [lt|
 Hallo #{userIdent user},
 
-Du hast gerade beim Matematen für #{formatIntCurrency price}#{appCurrency $ appSettings master} #{beverageIdent bev} eingekauft.
+Du hast gerade beim Matematen für #{formatIntCurrency price}#{appCurrency $ appSettings master} #{quant} Stück #{beverageIdent bev} eingekauft.#{addendum}
 
 Viele Grüsse,
 

@@ -16,8 +16,8 @@
 module Handler.Home where
 
 import Import
-import qualified Text.Read as R
 import Data.Maybe
+import Data.Time.Calendar (addDays)
 
 -- This is a handler function for the GET request method on the HomeR
 -- resource pattern. All of your resource patterns are defined in
@@ -29,17 +29,15 @@ import Data.Maybe
 getHomeR :: Handler Html
 getHomeR = do
   beverages <- runDB $ selectList [BeverageAmount !=. 0] [Desc BeverageIdent]
-  time <- liftIO getCurrentTime
-  let secs = R.read (formatTime defaultTimeLocale "%s" time) - 2592000
-  users <- runDB $ selectList [UserTimestamp >=. secs] [Asc UserIdent]
+  today <- liftIO $ return . utctDay =<< getCurrentTime
+  users <- runDB $ selectList [UserTimestamp >=. addDays (-30) today] [Asc UserIdent]
   defaultLayout $
     $(widgetFile "home")
 
 getReactivateR :: Handler Html
 getReactivateR = do
-  time <- liftIO getCurrentTime
-  let secs = R.read (formatTime defaultTimeLocale "%s" time) - 2592000
-  users <- runDB $ selectList [UserTimestamp <. secs] [Asc UserIdent]
+  today <- liftIO $ return . utctDay =<< getCurrentTime
+  users <- runDB $ selectList [UserTimestamp <. addDays (-30) today] [Asc UserIdent]
   defaultLayout $
     $(widgetFile "reactivate")
 
@@ -48,9 +46,8 @@ getUserReactivateR uId = do
   mUser <- runDB $ get uId
   case mUser of
     Just _ -> do
-      time <- liftIO getCurrentTime
-      let secs = R.read $ formatTime defaultTimeLocale "%s" time
-      runDB $ update uId [UserTimestamp =. secs]
+      today <- liftIO $ return . utctDay =<< getCurrentTime
+      runDB $ update uId [UserTimestamp =. today]
       setMessageI MsgUserReactivated
       redirect HomeR
     Nothing -> do

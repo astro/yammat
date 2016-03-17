@@ -17,26 +17,23 @@ module Handler.NewUser where
 
 import Import as I
 import Handler.Common
-import Text.Read
 import Text.Shakespeare.Text
 
 getNewUserR :: Handler Html
 getNewUserR = do
-  time <- liftIO getCurrentTime
-  let secs = read $ formatTime defaultTimeLocale "%s" time
+  today <- liftIO $ return . utctDay =<< getCurrentTime
   (newUserWidget, enctype) <- generateFormPost
     $ renderBootstrap3 BootstrapBasicForm
-    $ newUserForm secs
+    $ newUserForm today
   defaultLayout $
     $(widgetFile "newUser")
 
 postNewUserR :: Handler Html
 postNewUserR = do
-  time <- liftIO getCurrentTime
-  let secs = read $ formatTime defaultTimeLocale "%s" time
+  today <- liftIO $ return . utctDay =<< getCurrentTime
   ((res, _), _) <- runFormPost
     $ renderBootstrap3 BootstrapBasicForm
-    $ newUserForm secs
+    $ newUserForm today
   case res of
     FormSuccess user -> do
       namesakes <- runDB $ selectList [UserIdent ==. userIdent user] []
@@ -52,11 +49,11 @@ postNewUserR = do
       setMessageI MsgUserNotCreated
       redirect NewUserR
 
-newUserForm :: Int -> AForm Handler User
-newUserForm secs = User
+newUserForm :: Day -> AForm Handler User
+newUserForm today = User
   <$> areq textField (bfs MsgName) Nothing
   <*> pure 0
-  <*> pure secs
+  <*> pure today
   <*> aopt emailField (bfs MsgEmailNotify) Nothing
   <*> aopt (selectField avatars) (bfs MsgSelectAvatar) Nothing
   <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)

@@ -1,7 +1,7 @@
 User
     ident Text
     balance Int
-    timestamp Int
+    timestamp Day
     email Text Maybe
     avatar AvatarId Maybe
     UniqueUser ident

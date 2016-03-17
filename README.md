@@ -98,5 +98,21 @@ How to do this is described [in my blog][blog].
 	* without sandbox: `runghc /path/to/yammat/Migration/0.0.0-0.0.1/Migration.hs`
 * Enjoy your freshly migrated Matemat
 
+### 0.0.2-0.0.3
+
+* stop old matemat
+* create a view with new and old timestamps and user ids with
+  `create or replace view "user_new" as select "user".id, "user".timestamp, date 'epoch' + "user".timestamp * interval '1 second' as timestamp_new from "user";
+* create temporary timestamp column in user table with
+  `alter table "user" create column "timestamp_temp";`
+* fill temporary timestamp column with new timestamps with
+  `update "user" set timestamp_temp = (select timestamp_new from from user_new where user_new.id = "user".id)`
+* check if new timestamps look sane
+* drop old timestamp column
+  `alter table "user" drop column timestamp cascade;`
+* rename temporary column
+  `alter table "user" rename column timestamp_temp to "timestamp";`
+* start new matemat
+
 [stackage]: http://www.stackage.org/
 [blog]: https://nek0.eu/posts/2015-08-28-Daemonize-a-Yesod-application-systemd-style.html

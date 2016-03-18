@@ -281,3 +281,8 @@ input[type], button {
     font-weight: bold;
     font-size: 150%;
 }
+
+.negative {
+	color: red;
+	font-weight: bold;
+}

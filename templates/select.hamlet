@@ -2,7 +2,7 @@ $doctype 5
 
 <div .header>
   <ul>
-    <li>
+    <li :userBalance user < 0:.negative>
       _{MsgCurrentCharge (userBalance user) (appCurrency $ appSettings master)}
     <li>
       <a href=@{RechargeR uId}>

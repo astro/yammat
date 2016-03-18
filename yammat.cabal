@@ -39,6 +39,7 @@ library
                      Handler.Transfer
                      Handler.Supplier
                      Handler.SupplierActions
+                     Handler.Demand
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT -DHTTP_CLIENT

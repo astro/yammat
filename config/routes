@@ -43,3 +43,4 @@
 /supply/#SupplierId/modify	ModifySupplierR		GET POST
 /supply/#SupplierId/digest	SupplierDigestR		GET
 /supply/#SupplierId/delete	DeleteSupplierR		GET
+/demand/#Int                    DemandR                 GET

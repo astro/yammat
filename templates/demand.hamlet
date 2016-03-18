@@ -1,0 +1,4 @@
+$doctype 5
+
+<p #demand-warning>
+  _{MsgPurchaseDebtful}

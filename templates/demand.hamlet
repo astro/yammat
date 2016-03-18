@@ -2,6 +2,3 @@ $doctype 5
 
 <p #demand-warning>
   _{MsgPurchaseDebtful}
-
-$maybe src <- audio
-  <audio src=@{src} autoplay style="display:hidden">

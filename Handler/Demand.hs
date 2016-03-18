@@ -19,8 +19,4 @@ import Import
 
 getDemandR :: Int -> Handler Html
 getDemandR level = defaultLayout $ do
-  let audio = lookup level $ [1..] `zip` map StaticR
-              [audio_air_alarm_mp3,
-               audio_nuclear_alarm_mp3,
-               audio_alarm_loud_pulsating_mp3]
   $(widgetFile "demand")

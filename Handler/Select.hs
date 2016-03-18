@@ -17,7 +17,6 @@ module Handler.Select where
 
 import Import
 import Handler.Common
-import qualified Text.Read as R
 import qualified Data.Text as T
 import Data.Maybe
 
@@ -69,9 +68,8 @@ postRechargeR uId = do
               redirect $ RechargeR uId
             else do
               updateCashier amount ("Guthaben: " `T.append` userIdent user)
-              time <- liftIO getCurrentTime
-              let secs = R.read $ formatTime defaultTimeLocale "%s" time
-              runDB $ update uId [UserBalance +=. amount, UserTimestamp =. secs]
+              today <- liftIO $ return . utctDay =<< getCurrentTime
+              runDB $ update uId [UserBalance +=. amount, UserTimestamp =. today]
               setMessageI MsgRecharged
               redirect HomeR
         _ -> do

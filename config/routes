@@ -44,3 +44,5 @@
 /supply/#SupplierId/digest	SupplierDigestR		GET
 /supply/#SupplierId/delete	DeleteSupplierR		GET
 /demand/#Int                    DemandR                 GET
+
+/statistics.json		StatisticsR		GET

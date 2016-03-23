@@ -85,7 +85,7 @@ notifyUser user bev quant price master = do
         then
           return $
             "\n\nDein Guthaben Beträgt im Moment " ++
-            formatIntCurrency (userBalance user) ++
+            formatIntCurrency (userBalance user - price) ++
             appCurrency (appSettings master) ++
             ".\n" ++
             "LADE DEIN GUTHABEN AUF!\n" ++

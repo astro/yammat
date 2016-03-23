@@ -37,7 +37,7 @@ getStatisticsR = do
   archdevils <- runDB $ selectList [UserBalance <. -5000] []
   bevs <- runDB $ selectList [] [Asc BeverageId]
   totalLossPrime <- return $ foldl (\acc (Entity _ bev) ->
-    let primePrice = if not (isNothing (beveragePricePerCrate bev) && isNothing (beveragePerCrate bev)) then (fromIntegral $ fromJust (beveragePricePerCrate bev)) / (fromIntegral $ fromJust (beveragePerCrate bev)) else 0
+    let primePrice = if not (isNothing (beveragePricePerCrate bev) || isNothing (beveragePerCrate bev)) then (fromIntegral $ fromJust (beveragePricePerCrate bev)) / (fromIntegral $ fromJust (beveragePerCrate bev)) else 0
     in acc + (((fromIntegral $ beverageCorrectedAmount bev) * primePrice) / 100)
     ) 0 bevs
   totalLossRetail <- return $ foldl (\acc (Entity _ bev) ->

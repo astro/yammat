@@ -81,7 +81,7 @@ notifyUser :: User -> Beverage -> Int -> Int -> App -> IO ()
 notifyUser user bev quant price master = do
   case userEmail user of
     Just email -> do
-      addendum <- if userBalance user < 0
+      addendum <- if (userBalance user - price) < 0
         then
           return $
             "\n\nDein Guthaben Beträgt im Moment " ++

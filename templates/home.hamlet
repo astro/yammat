@@ -7,10 +7,6 @@ $if null beverages
   <a href=@{SelectCashR}>
     <p>_{MsgPayCash}
 
-<article .article #func>
-  <a href=@{NewUserR}>
-    <p>_{MsgCreateUser}
-
 $forall (Entity uId user) <- users
   <article .article>
     $if userAvatar user /= Nothing
@@ -19,6 +15,10 @@ $forall (Entity uId user) <- users
     $else
       <a href=@{SelectR uId}>
         <p>#{userIdent user}
+
+<article .article #func>
+  <a href=@{NewUserR}>
+    <p>_{MsgCreateUser}
 
 <article .article #func>
   <a href=@{ReactivateR}>

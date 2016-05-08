@@ -21,8 +21,11 @@ import Data.Conduit.Binary
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as L
 import Data.ByteString.Base64
-import Graphics.ImageMagick.MagickWand
+import Data.Maybe (fromJust)
 import qualified Crypto.Hash.SHA3 as SHA3
+import Codec.Picture
+import Codec.Picture.Metadata as PM hiding (delete)
+import Codec.Picture.ScaleDCT
 
 getAvatarR :: Handler Html
 getAvatarR = do
@@ -44,8 +47,11 @@ postNewAvatarR = do
   case res of
     FormSuccess na -> do
       raw <- runResourceT $ fileSource (avatarNewFile na) $$ sinkLbs
-      (thumb, hash') <- generateThumb $ B.concat $ L.toChunks raw
-      runDB $ insert_ $ Avatar (avatarNewIdent na) thumb hash'
+      tdata <- generateThumb $ B.concat $ L.toChunks raw
+      runDB $ insert_ $ Avatar
+        (avatarNewIdent na)
+        (thumbContent tdata)
+        (thumbHash tdata)
       setMessageI MsgAvatarUploadSuccessfull
       redirect HomeR
     _ -> do
@@ -113,28 +119,36 @@ updateAvatar aId (AvatarMod ident Nothing) =
   runDB $ update aId [AvatarIdent =. ident]
 updateAvatar aId (AvatarMod ident (Just fi)) = do
   raw <- runResourceT $ fileSource fi $$ sinkLbs
-  (thumb, hash') <- generateThumb $ B.concat $ L.toChunks raw
+  tdata <- generateThumb $ B.concat $ L.toChunks raw
   runDB $ update aId
     [ AvatarIdent =. ident
-    , AvatarData =. thumb
-    , AvatarHash =. hash'
+    , AvatarData =. thumbContent tdata
+    , AvatarHash =. thumbHash tdata
     ]
 
-generateThumb :: ByteString -> Handler (ByteString, ByteString)
+data ThumbData = ThumbData
+  { thumbContent :: ByteString
+  , thumbHash    :: ByteString
+  }
+
+generateThumb :: ByteString -> Handler ThumbData
 generateThumb raw = do
-  thumb <- liftIO $ withMagickWandGenesis $ do
-    (_, w) <- magickWand
-    readImageBlob w raw
-    w1 <- getImageWidth w
-    h1 <- getImageHeight w
-    let h2 = 140 :: Int
-    let w2 = floor (fromIntegral w1 / fromIntegral h1 * fromIntegral h2 :: Double) :: Int
-    resizeImage w w2 h2 lanczosFilter 1
-    setImageCompressionQuality w 95
-    setImageFormat w "png"
-    getImageBlob w
-  let h = encode (SHA3.hash 32 thumb)
-  return (thumb, h)
+  let eimg = decodeImageWithMetadata raw
+  case eimg of
+    Left e -> error e
+    Right (img, meta) ->
+      return $ ThumbData
+        { thumbContent = ava
+        , thumbHash    = h
+        }
+      where
+        w1 = fromIntegral $ fromJust $ PM.lookup Width meta :: Int
+        h1 = fromIntegral $ fromJust $ PM.lookup Height meta :: Int
+        h2 = 140 :: Int
+        w2 = floor ((fromIntegral w1 :: Double) / (fromIntegral h1 :: Double) * (fromIntegral h2 :: Double)) :: Int
+        scimg = scale (w2, h2) $ convertRGBA8 img
+        ava = (B.concat . L.toChunks) $ encodePng scimg
+        h   = encode (SHA3.hash 32 ava)
 
 getGetAvatarR :: AvatarId -> Handler TypedContent
 getGetAvatarR aId = do

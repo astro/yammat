@@ -1,5 +1,5 @@
 name:              yammat
-version:           0.0.3
+version:           0.0.4
 cabal-version:     >= 1.8
 build-type:        Simple
 license:           AGPL-3
@@ -107,7 +107,8 @@ library
                  , blaze-builder
                  , split
                  , conduit-extra
-                 , imagemagick
+                 , JuicyPixels                   >= 3.2.7
+                 , JuicyPixels-scale-dct
                  , cryptohash
                  , base64-bytestring
                  -- for Migrations

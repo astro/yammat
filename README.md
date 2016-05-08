@@ -37,6 +37,7 @@ Now that your Haskell environment is set up, you need to install the dependencie
 * happy
 * libpq-dev
 * postgresql
+* libfftw3-dev
 
 Install all of them through your package management system.
 

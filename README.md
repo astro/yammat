@@ -103,7 +103,7 @@ How to do this is described [in my blog][blog].
 
 * stop old matemat
 * create a view with new and old timestamps and user ids with
-  `create or replace view "user_new" as select "user".id, "user".timestamp, date 'epoch' + "user".timestamp * interval '1 second' as timestamp_new from "user";
+  `create or replace view "user_new" as select "user".id, "user".timestamp, date 'epoch' + "user".timestamp * interval '1 second' as timestamp_new from "user";`
 * create temporary timestamp column in user table with
   `alter table "user" add column "timestamp_temp" date;`
 * fill temporary timestamp column with new timestamps with

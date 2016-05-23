@@ -21,69 +21,49 @@ import Data.Maybe
 import Text.Shakespeare.Text (stext)
 
 getTransferSelectR :: UserId -> Handler Html
-getTransferSelectR from = do
-  mUser <- runDB $ get from
-  case mUser of
-    Just _ -> do
-      users <- runDB $ selectList [UserId !=. from] [Asc UserIdent]
-      defaultLayout $
-        $(widgetFile "transferSelect")
-    Nothing -> do
-      setMessageI MsgUserUnknown
-      redirect HomeR
+getTransferSelectR from =
+  isUser from HomeR >>= (\_ -> do
+    users <- runDB $ selectList [UserId !=. from] [Asc UserIdent]
+    defaultLayout $
+      $(widgetFile "transferSelect")
+  )
 
 getTransferR :: UserId -> UserId -> Handler Html
-getTransferR from to = do
-  mSender <- runDB $ get from
-  case mSender of
-    Just sender -> do
-      mRecpt <- runDB $ get to
-      case mRecpt of
-        Just recpt -> do
-          (transferWidget, enctype) <- generateFormPost
-            $ renderBootstrap3 BootstrapBasicForm transferForm
-          currency <- appCurrency <$> appSettings <$> getYesod
-          defaultLayout $ do
-            $(widgetFile "transfer")
-        Nothing -> do
-          setMessageI MsgUserUnknown
-          redirect $ TransferSelectR from
-    Nothing -> do
-      setMessageI MsgUserUnknown
-      redirect HomeR
+getTransferR from to =
+  isUser from HomeR >>= (\sender ->
+    isUser to (TransferSelectR from) >>= (\recpt -> do
+      (transferWidget, enctype) <- generateFormPost
+        $ renderBootstrap3 BootstrapBasicForm transferForm
+      currency <- appCurrency <$> appSettings <$> getYesod
+      defaultLayout $ do
+        $(widgetFile "transfer")
+      )
+  )
 
 postTransferR :: UserId -> UserId -> Handler Html
-postTransferR from to = do
-  mSender <- runDB $ get from
-  case mSender of
-    Just sender -> do
-      mRecpt <- runDB $ get to
-      case mRecpt of
-        Just recpt -> do
-          ((res, _), _) <- runFormPost
-            $ renderBootstrap3 BootstrapBasicForm transferForm
-          case res of
-            FormSuccess amount -> do
-              if amount < 0
-                then do
-                  setMessageI MsgNegativeTransfer
-                  redirect $ TransferR from to
-                else do
-                  runDB $ update from [UserBalance -=. amount]
-                  runDB $ update to [UserBalance +=. amount]
-                  master <- getYesod
-                  liftIO $ notify sender recpt amount master
-                  setMessageI MsgTransferComplete
-                  redirect HomeR
-            _ -> do
-              setMessageI MsgTransferError
+postTransferR from to =
+  isUser from HomeR >>= (\sender ->
+    isUser to (TransferSelectR from) >>= (\recpt -> do
+      ((res, _), _) <- runFormPost
+        $ renderBootstrap3 BootstrapBasicForm transferForm
+      case res of
+        FormSuccess amount -> do
+          if amount < 0
+            then do
+              setMessageI MsgNegativeTransfer
+              redirect $ TransferR from to
+            else do
+              runDB $ update from [UserBalance -=. amount]
+              runDB $ update to [UserBalance +=. amount]
+              master <- getYesod
+              liftIO $ notify sender recpt amount master
+              setMessageI MsgTransferComplete
               redirect HomeR
-        Nothing -> do
-          setMessageI MsgUserUnknown
-          redirect $ TransferSelectR from
-    Nothing -> do
-      setMessageI MsgUserUnknown
-      redirect HomeR
+        _ -> do
+          setMessageI MsgTransferError
+          redirect HomeR
+      )
+  )
 
 transferForm :: AForm Handler Int
 transferForm = areq currencyField (bfs MsgValue) (Just 0)

@@ -223,3 +223,27 @@ sendMail to subject body =
 
 formatIntVolume :: Int -> Text
 formatIntVolume x = formatFloat (fromIntegral x / 1000)
+
+--------------------------------------------------------------------------------
+-- common case patterns
+--------------------------------------------------------------------------------
+
+isUser :: UserId -> Route App -> Handler User
+isUser uId route = do
+  mUser <- runDB $ get uId
+  case mUser of
+    Nothing -> do
+      setMessageI MsgUserUnknown
+      redirect route
+    Just user ->
+      return user
+
+isBeverage :: BeverageId -> Route App -> Handler Beverage
+isBeverage bId route = do
+  mBev <- runDB $ get bId
+  case mBev of
+    Nothing -> do
+      setMessageI MsgItemUnknown
+      redirect route
+    Just bev ->
+      return bev

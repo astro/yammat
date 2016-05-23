@@ -26,43 +26,35 @@ getRestockR = do
     $(widgetFile "restock")
 
 getUpstockR :: BeverageId -> Handler Html
-getUpstockR bId = do
-  mBev <- runDB $ get bId
-  case mBev of
-    Just bev -> do
-      (upstockWidget, enctype) <- generateFormPost
-        $ renderBootstrap3 BootstrapBasicForm upstockForm
-      defaultLayout $
-        $(widgetFile "upstock")
-    Nothing -> do
-      setMessageI MsgItemUnknown
-      redirect RestockR
+getUpstockR bId =
+  isBeverage bId RestockR >>= (\bev -> do
+    (upstockWidget, enctype) <- generateFormPost
+      $ renderBootstrap3 BootstrapBasicForm upstockForm
+    defaultLayout $
+      $(widgetFile "upstock")
+  )
 
 postUpstockR :: BeverageId -> Handler Html
-postUpstockR bId = do
-  mBev <- runDB $ get bId
-  case mBev of
-    Just bev -> do
-      ((res, _), _) <- runFormPost
-        $ renderBootstrap3 BootstrapBasicForm upstockForm
-      case res of
-        FormSuccess c ->
-          if upstockSingles c >= 0 && upstockCrates c >= 0
-            then do
-              let total = upstockSingles c + (upstockCrates c * (fromMaybe 0 $ beveragePerCrate bev))
-              runDB $ update bId [BeverageAmount +=. total]
-              setMessageI MsgStockedUp
-              redirect RestockR
-            else do
-              setMessageI MsgNotStockedUp
-              redirect $ UpstockR bId
-        
-        _ -> do
-          setMessageI MsgStockupError
-          redirect $ UpstockR bId
-    Nothing -> do
-      setMessageI MsgItemUnknown
-      redirect RestockR
+postUpstockR bId =
+  isBeverage bId RestockR >>= (\bev -> do
+    ((res, _), _) <- runFormPost
+      $ renderBootstrap3 BootstrapBasicForm upstockForm
+    case res of
+      FormSuccess c ->
+        if upstockSingles c >= 0 && upstockCrates c >= 0
+          then do
+            let total = upstockSingles c + (upstockCrates c * (fromMaybe 0 $ beveragePerCrate bev))
+            runDB $ update bId [BeverageAmount +=. total]
+            setMessageI MsgStockedUp
+            redirect RestockR
+          else do
+            setMessageI MsgNotStockedUp
+            redirect $ UpstockR bId
+      
+      _ -> do
+        setMessageI MsgStockupError
+        redirect $ UpstockR bId
+  )
 
 data UpstockAmount = UpstockAmount
   { upstockSingles :: Int

@@ -21,17 +21,13 @@ import qualified Data.Text as T
 import Data.Maybe
 
 getSelectR :: UserId -> Handler Html
-getSelectR uId = do
-  mUser <- runDB $ get uId
-  case mUser of
-    Just user -> do
-      master <- getYesod
-      beverages <- runDB $ selectList [BeverageAmount >. 0] [Asc BeverageIdent]
-      defaultLayout $
-        $(widgetFile "select")
-    Nothing -> do
-      setMessageI MsgUserUnknown
-      redirect HomeR
+getSelectR uId =
+  isUser uId HomeR >>= (\user -> do
+    master <- getYesod
+    beverages <- runDB $ selectList [BeverageAmount >. 0] [Asc BeverageIdent]
+    defaultLayout $
+      $(widgetFile "select")
+  )
 
 getSelectCashR :: Handler Html
 getSelectCashR = do
@@ -40,44 +36,36 @@ getSelectCashR = do
     $(widgetFile "selectCash")
 
 getRechargeR :: UserId -> Handler Html
-getRechargeR uId = do
-  mUser <- runDB $ get uId
-  case mUser of
-    Just user -> do
-      (rechargeWidget, enctype) <- generateFormPost
-        $ renderBootstrap3 BootstrapBasicForm rechargeForm
-      currency <- appCurrency <$> appSettings <$> getYesod
-      defaultLayout $
-        $(widgetFile "recharge")
-    Nothing -> do
-      setMessageI MsgUserUnknown
-      redirect HomeR
+getRechargeR uId =
+  isUser uId HomeR >>= (\user -> do
+    (rechargeWidget, enctype) <- generateFormPost
+      $ renderBootstrap3 BootstrapBasicForm rechargeForm
+    currency <- appCurrency <$> appSettings <$> getYesod
+    defaultLayout $
+      $(widgetFile "recharge")
+  )
 
 postRechargeR :: UserId -> Handler Html
-postRechargeR uId = do
-  mUser <- runDB $ get uId
-  case mUser of
-    Just user -> do
-      ((res, _), _) <- runFormPost
-        $ renderBootstrap3 BootstrapBasicForm rechargeForm
-      case res of
-        FormSuccess amount ->
-          if amount < 0
-            then do
-              setMessageI MsgNegativeRecharge
-              redirect $ RechargeR uId
-            else do
-              updateCashier amount ("Guthaben: " `T.append` userIdent user)
-              today <- liftIO $ return . utctDay =<< getCurrentTime
-              runDB $ update uId [UserBalance +=. amount, UserTimestamp =. today]
-              setMessageI MsgRecharged
-              redirect HomeR
-        _ -> do
-          setMessageI MsgRechargeError
-          redirect HomeR
-    Nothing -> do
-      setMessageI MsgUserUnknown
-      redirect HomeR
+postRechargeR uId =
+  isUser uId HomeR >>= (\user -> do
+    ((res, _), _) <- runFormPost
+      $ renderBootstrap3 BootstrapBasicForm rechargeForm
+    case res of
+      FormSuccess amount ->
+        if amount < 0
+          then do
+            setMessageI MsgNegativeRecharge
+            redirect $ RechargeR uId
+          else do
+            updateCashier amount ("Guthaben: " `T.append` userIdent user)
+            today <- liftIO $ return . utctDay =<< getCurrentTime
+            runDB $ update uId [UserBalance +=. amount, UserTimestamp =. today]
+            setMessageI MsgRecharged
+            redirect HomeR
+      _ -> do
+        setMessageI MsgRechargeError
+        redirect HomeR
+  )
 
 rechargeForm :: AForm Handler Int
 rechargeForm = areq currencyField (bfs MsgValue) (Just 0)

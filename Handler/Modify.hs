@@ -19,58 +19,50 @@ import Import
 import Handler.Common
 
 getModifyR :: BeverageId -> Handler Html
-getModifyR bId = do
-  mBev <- runDB $ get bId
-  case mBev of
-    Just bev -> do
-      p <- lookupGetParam "barcode"
-      _ <- handleGetParam p (Right bId)
-      rawbs <- runDB $ selectList [BarcodeBev ==. Just bId] []
-      let bs = map (barcodeCode . entityVal) rawbs
-      (modifyWidget, enctype) <- generateFormPost
-        $ renderBootstrap3 BootstrapBasicForm
-        $ modifyForm bev bs
-      defaultLayout $
-        $(widgetFile "modify")
-    Nothing -> do
-      setMessageI MsgItemUnknown
-      redirect SummaryR
+getModifyR bId =
+  isBeverage bId SummaryR >>= (\bev -> do
+    p <- lookupGetParam "barcode"
+    _ <- handleGetParam p (Right bId)
+    rawbs <- runDB $ selectList [BarcodeBev ==. Just bId] []
+    let bs = map (barcodeCode . entityVal) rawbs
+    (modifyWidget, enctype) <- generateFormPost
+      $ renderBootstrap3 BootstrapBasicForm
+      $ modifyForm bev bs
+    defaultLayout $
+      $(widgetFile "modify")
+  )
 
 postModifyR :: BeverageId -> Handler Html
-postModifyR bId = do
-  mBev <- runDB $ get bId
-  case mBev of
-    Just bev -> do
-      rawbs <- runDB $ selectList [BarcodeBev ==. Just bId] []
-      let bs = map (barcodeCode . entityVal) rawbs
-      ((res, _), _) <- runFormPost
-        $ renderBootstrap3 BootstrapBasicForm
-        $ modifyForm bev bs
-      case res of
-        FormSuccess nBev -> do
-          runDB $ update bId
-            [ BeverageIdent =. modBevIdent nBev
-            , BeveragePrice =. modBevPrice nBev
-            , BeverageAmount =. modBevAmount nBev
-            , BeverageAlertAmount =. modBevAlertAmount nBev
-            , BeverageCorrectedAmount +=. (modBevAmount nBev - beverageAmount bev)
-            , BeverageMl =. modBevMl nBev
-            , BeverageAvatar =. modBevAvatar nBev
-            , BeverageSupplier =. modBevSupp nBev
-            , BeverageMaxAmount =. modBevMaxAmount nBev
-            , BeveragePerCrate =. modBevPC nBev
-            , BeverageArtNr =. modBevArtNr nBev
-            , BeveragePricePerCrate =. modBevPricePC nBev
-            ]
-          handleBarcodes (Right bId) (fromMaybe [] $ modBevBarcodes nBev)
-          setMessageI MsgEditSuccess
-          redirect SummaryR
-        _ -> do
-          setMessageI MsgEditFail
-          redirect SummaryR
-    Nothing -> do
-      setMessageI MsgItemUnknown
-      redirect SummaryR
+postModifyR bId =
+  isBeverage bId SummaryR >>= (\bev -> do
+    rawbs <- runDB $ selectList [BarcodeBev ==. Just bId] []
+    let bs = map (barcodeCode . entityVal) rawbs
+    ((res, _), _) <- runFormPost
+      $ renderBootstrap3 BootstrapBasicForm
+      $ modifyForm bev bs
+    case res of
+      FormSuccess nBev -> do
+        runDB $ update bId
+          [ BeverageIdent =. modBevIdent nBev
+          , BeveragePrice =. modBevPrice nBev
+          , BeverageAmount =. modBevAmount nBev
+          , BeverageAlertAmount =. modBevAlertAmount nBev
+          , BeverageCorrectedAmount +=. (modBevAmount nBev - beverageAmount bev)
+          , BeverageMl =. modBevMl nBev
+          , BeverageAvatar =. modBevAvatar nBev
+          , BeverageSupplier =. modBevSupp nBev
+          , BeverageMaxAmount =. modBevMaxAmount nBev
+          , BeveragePerCrate =. modBevPC nBev
+          , BeverageArtNr =. modBevArtNr nBev
+          , BeveragePricePerCrate =. modBevPricePC nBev
+          ]
+        handleBarcodes (Right bId) (fromMaybe [] $ modBevBarcodes nBev)
+        setMessageI MsgEditSuccess
+        redirect SummaryR
+      _ -> do
+        setMessageI MsgEditFail
+        redirect SummaryR
+  )
 
 data ModBev = ModBev
   { modBevIdent :: Text
@@ -107,13 +99,9 @@ modifyForm bev bs = ModBev
     sups = optionsPersistKey [] [Asc SupplierIdent] supplierIdent
 
 getDeleteBeverageR :: BeverageId -> Handler Html
-getDeleteBeverageR bId = do
-  mBev <- runDB $ get bId
-  case mBev of
-    Just _ -> do
-      runDB $ delete bId
-      setMessageI MsgItemDeleted
-      redirect HomeR
-    Nothing -> do
-      setMessageI MsgItemUnknown
-      redirect HomeR
+getDeleteBeverageR bId =
+  isBeverage bId HomeR >>= (\_ -> do
+    runDB $ delete bId
+    setMessageI MsgItemDeleted
+    redirect HomeR
+  )

@@ -70,56 +70,48 @@ data UserConf = UserConf
   }
 
 getModifyUserR :: UserId -> Handler Html
-getModifyUserR uId = do
-  mUser <- runDB $ I.get uId
-  case mUser of
-    Just user -> do
-      p <- lookupGetParam "barcode"
-      _ <- handleGetParam p (Left uId)
-      rawbs <- runDB $ selectList [BarcodeUser ==. Just uId] []
-      let bs = map (barcodeCode . entityVal) rawbs
-      (modifyUserWidget, enctype) <- generateFormPost
-        $ renderBootstrap3 BootstrapBasicForm
-        $ modifyUserForm user bs
-      defaultLayout $
-        $(widgetFile "modifyUser")
-    Nothing -> do
-      setMessageI MsgUserUnknown
-      redirect HomeR
+getModifyUserR uId =
+  isUser uId HomeR >>= (\user -> do
+    p <- lookupGetParam "barcode"
+    _ <- handleGetParam p (Left uId)
+    rawbs <- runDB $ selectList [BarcodeUser ==. Just uId] []
+    let bs = map (barcodeCode . entityVal) rawbs
+    (modifyUserWidget, enctype) <- generateFormPost
+      $ renderBootstrap3 BootstrapBasicForm
+      $ modifyUserForm user bs
+    defaultLayout $
+      $(widgetFile "modifyUser")
+  )
 
 postModifyUserR :: UserId -> Handler Html
-postModifyUserR uId = do
-  mUser <- runDB $ I.get uId
-  case mUser of
-    Just user -> do
-      rawbs <- runDB $ selectList [BarcodeUser ==. Just uId] []
-      let bs = map (barcodeCode . entityVal) rawbs
-      ((res, _), _) <- runFormPost
-        $ renderBootstrap3 BootstrapBasicForm
-        $ modifyUserForm user bs
-      case res of
-        FormSuccess uc -> do
-          namesakes <- runDB $ selectList [UserIdent ==. userConfIdent uc, UserId !=. uId] []
-          if null namesakes
-            then do
-              runDB $ update uId
-                [ UserIdent =. userConfIdent uc
-                , UserEmail =. userConfEmail uc
-                , UserAvatar =. userConfAvatar uc
-                ]
-              liftIO $ notify user (userConfEmail uc)
-              handleBarcodes (Left uId) (fromMaybe [] $ userConfBarcode uc)
-              setMessageI MsgUserEdited
-              redirect $ SelectR uId
-            else do
-              setMessageI MsgUserIdentNotUnique
-              redirect $ ModifyUserR uId
-        _ -> do
-          setMessageI MsgUserNotEdited
-          redirect $ SelectR uId
-    Nothing -> do
-      setMessageI MsgUserUnknown
-      redirect HomeR
+postModifyUserR uId =
+  isUser uId HomeR >>= (\user -> do
+    rawbs <- runDB $ selectList [BarcodeUser ==. Just uId] []
+    let bs = map (barcodeCode . entityVal) rawbs
+    ((res, _), _) <- runFormPost
+      $ renderBootstrap3 BootstrapBasicForm
+      $ modifyUserForm user bs
+    case res of
+      FormSuccess uc -> do
+        namesakes <- runDB $ selectList [UserIdent ==. userConfIdent uc, UserId !=. uId] []
+        if null namesakes
+          then do
+            runDB $ update uId
+              [ UserIdent =. userConfIdent uc
+              , UserEmail =. userConfEmail uc
+              , UserAvatar =. userConfAvatar uc
+              ]
+            liftIO $ notify user (userConfEmail uc)
+            handleBarcodes (Left uId) (fromMaybe [] $ userConfBarcode uc)
+            setMessageI MsgUserEdited
+            redirect $ SelectR uId
+          else do
+            setMessageI MsgUserIdentNotUnique
+            redirect $ ModifyUserR uId
+      _ -> do
+        setMessageI MsgUserNotEdited
+        redirect $ SelectR uId
+  )
 
 modifyUserForm :: User -> [Text] -> AForm Handler UserConf
 modifyUserForm user bs = UserConf

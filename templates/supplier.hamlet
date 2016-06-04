@@ -1,9 +1,5 @@
 $doctype 5
 
-<article .article #func>
-  <a href=@{NewSupplierR}>
-    <p>_{MsgCreateSupplier}
-
 $forall (Entity sId sup) <- sups
   <article .article>
     $if supplierAvatar sup /= Nothing
@@ -12,3 +8,7 @@ $forall (Entity sId sup) <- sups
     $else
       <a href=@{SupplierActionsR sId}>
         <p>#{supplierIdent sup}
+
+<article .article #func>
+  <a href=@{NewSupplierR}>
+    <p>_{MsgCreateSupplier}

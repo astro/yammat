@@ -7,16 +7,12 @@ $if null avatars
   <h3>
     <p>
       _{MsgNoAvatars}
-
-  <article .article #func>
-    <a href=@{NewAvatarR}>
-      <p>_{MsgNewAvatar}
 $else
-  <article .article #func>
-    <a href=@{NewAvatarR}>
-      <p>_{MsgNewAvatar}
-
   $forall (Entity aId avatar) <- avatars
     <article .article>
       <a href=@{ModifyAvatarR aId} style="background-image: url(@{GetAvatarR aId})" .avatar>
         <p>#{avatarIdent avatar}
+
+<article .article #func>
+  <a href=@{NewAvatarR}>
+    <p>_{MsgNewAvatar}

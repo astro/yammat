@@ -86,9 +86,9 @@ notifyUser user bev quant price master = do
         [lt|
 Hallo #{userIdent user},
 
-Du hast gerade beim Matematen für #{formatIntCurrency price}#{appCurrency $ appSettings master} #{quant} Stück #{beverageIdent bev} eingekauft.#{addendum}
+Du hast gerade beim Matematen #{quant} x #{beverageIdent bev} für #{formatIntCurrency price}#{appCurrency $ appSettings master} eingekauft.#{addendum}
 
-Viele Grüsse,
+Viele Grüße,
 
 Dein Matemat
         |]

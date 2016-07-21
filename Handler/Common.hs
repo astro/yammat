@@ -234,7 +234,7 @@ isUser uId route = do
   case mUser of
     Nothing -> do
       setMessageI MsgUserUnknown
-      redirect route
+      redirectWith status404 route
     Just user ->
       return user
 
@@ -244,6 +244,6 @@ isBeverage bId route = do
   case mBev of
     Nothing -> do
       setMessageI MsgItemUnknown
-      redirect route
+      redirectWith status404 route
     Just bev ->
       return bev

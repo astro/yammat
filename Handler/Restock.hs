@@ -17,6 +17,7 @@ module Handler.Restock where
 
 import Import
 import Handler.Common
+import Handler.Modify
 import Data.Maybe (fromJust)
 
 getRestockR :: Handler Html
@@ -70,38 +71,32 @@ upstockForm = UpstockAmount
 getNewArticleR :: Handler Html
 getNewArticleR = do
   (newArticleWidget, enctype) <- generateFormPost
-    $ renderBootstrap3 BootstrapBasicForm newArticleForm
+    $ renderBootstrap3 BootstrapBasicForm $ modifyForm Nothing []
   defaultLayout $
     $(widgetFile "newArticle")
 
 postNewArticleR :: Handler Html
 postNewArticleR = do
   ((result, _), _) <- runFormPost
-    $ renderBootstrap3 BootstrapBasicForm newArticleForm
+    $ renderBootstrap3 BootstrapBasicForm $ modifyForm Nothing []
   case result of
-    FormSuccess bev -> do
-      runDB $ insert_ bev
+    FormSuccess nBev -> do
+      bId <- runDB $ insert $ Beverage
+        (modBevIdent nBev)
+        (modBevPrice nBev)
+        (modBevAmount nBev)
+        (modBevAlertAmount nBev)
+        0
+        (modBevMl nBev)
+        (modBevAvatar nBev)
+        (modBevSupp nBev)
+        (modBevMaxAmount nBev)
+        (modBevPC nBev)
+        (modBevArtNr nBev)
+        (modBevPricePC nBev)
+      handleBarcodes (Right bId) (fromMaybe [] $ modBevBarcodes nBev)
       setMessageI MsgItemAdded
       redirect RestockR
     _ -> do
       setMessageI MsgItemNotAdded
       redirect RestockR
-
-newArticleForm :: AForm Handler Beverage
-newArticleForm = (\a b c d e f g h i j k l -> Beverage a b c d e i j k f g l h)
-  <$> areq textField (bfs MsgName) Nothing
-  <*> areq currencyField (bfs MsgPrice) (Just 100)
-  <*> areq amountField (bfs MsgAmount) (Just 0)
-  <*> areq amountField (bfs MsgAmountWarning) (Just 0)
-  <*> pure 0
-  <*> areq amountField (bfs MsgMaxAmount) (Just 200)
-  <*> aopt amountField (bfs MsgAmountPerCrate) (Just $ Just 20)
-  <*> aopt currencyField (bfs MsgPricePerCrate) Nothing
-  <*> areq volumeField (bfs MsgVolume) (Just 500)
-  <*> aopt (selectField avatars) (bfs MsgSelectAvatar) Nothing
-  <*> aopt (selectField sups) (bfs MsgSelectSupplier) Nothing
-  <*> aopt textField (bfs MsgArtNr) Nothing
-  <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
-  where
-    avatars = optionsPersistKey [] [Asc AvatarIdent] avatarIdent
-    sups = optionsPersistKey [] [Asc SupplierIdent] supplierIdent

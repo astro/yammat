@@ -27,7 +27,7 @@ getModifyR bId =
     let bs = map (barcodeCode . entityVal) rawbs
     (modifyWidget, enctype) <- generateFormPost
       $ renderBootstrap3 BootstrapBasicForm
-      $ modifyForm bev bs
+      $ modifyForm (Just bev) bs
     defaultLayout $
       $(widgetFile "modify")
   )
@@ -39,7 +39,7 @@ postModifyR bId =
     let bs = map (barcodeCode . entityVal) rawbs
     ((res, _), _) <- runFormPost
       $ renderBootstrap3 BootstrapBasicForm
-      $ modifyForm bev bs
+      $ modifyForm (Just bev) bs
     case res of
       FormSuccess nBev -> do
         runDB $ update bId
@@ -79,20 +79,37 @@ data ModBev = ModBev
   , modBevArtNr :: Maybe Text
   }
 
-modifyForm :: Beverage -> [Text] -> AForm Handler ModBev
-modifyForm bev bs = ModBev
-  <$> areq textField (bfs MsgName) (Just $ beverageIdent bev)
-  <*> areq currencyField (bfs MsgPrice) (Just $ beveragePrice bev)
-  <*> areq amountField (bfs MsgCurrentStock) (Just $ beverageAmount bev)
-  <*> areq amountField (bfs MsgAnnouncedStock) (Just $ beverageAlertAmount bev)
-  <*> areq amountField (bfs MsgMaxAmount) (Just $ beverageMaxAmount bev)
-  <*> areq volumeField (bfs MsgVolume) (Just $ beverageMl bev)
-  <*> aopt amountField (bfs MsgAmountPerCrate) (Just $ beveragePerCrate bev)
-  <*> aopt currencyField (bfs MsgPricePerCrate) (Just $ beveragePricePerCrate bev)
+modifyForm :: Maybe Beverage -> [Text] -> AForm Handler ModBev
+modifyForm (Just bev) bs = ModBev
+  <$> areq textField (bfs MsgName)                     (Just $ beverageIdent bev)
+  <*> areq currencyField (bfs MsgPrice)                (Just $ beveragePrice bev)
+  <*> areq amountField (bfs MsgCurrentStock)           (Just $ beverageAmount bev)
+  <*> areq amountField (bfs MsgAnnouncedStock)         (Just $ beverageAlertAmount bev)
+  <*> areq amountField (bfs MsgMaxAmount)              (Just $ beverageMaxAmount bev)
+  <*> areq volumeField (bfs MsgVolume)                 (Just $ beverageMl bev)
+  <*> aopt amountField (bfs MsgAmountPerCrate)         (Just $ beveragePerCrate bev)
+  <*> aopt currencyField (bfs MsgPricePerCrate)        (Just $ beveragePricePerCrate bev)
   <*> aopt (selectField avatars) (bfs MsgSelectAvatar) (Just $ beverageAvatar bev)
-  <*> aopt barcodeField (bfs MsgBarcodeField) (Just $ Just bs)
-  <*> aopt (selectField sups) (bfs MsgSelectSupplier) (Just $ beverageSupplier bev)
-  <*> aopt textField (bfs MsgArtNr) (Just $ beverageArtNr bev)
+  <*> aopt barcodeField (bfs MsgBarcodeField)          (Just $ Just bs)
+  <*> aopt (selectField sups) (bfs MsgSelectSupplier)  (Just $ beverageSupplier bev)
+  <*> aopt textField (bfs MsgArtNr)                    (Just $ beverageArtNr bev)
+  <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
+  where
+    avatars = optionsPersistKey [] [Asc AvatarIdent] avatarIdent
+    sups = optionsPersistKey [] [Asc SupplierIdent] supplierIdent
+modifyForm Nothing _ = ModBev
+  <$> areq textField (bfs MsgName)                     Nothing
+  <*> areq currencyField (bfs MsgPrice)                Nothing
+  <*> areq amountField (bfs MsgCurrentStock)           Nothing
+  <*> areq amountField (bfs MsgAnnouncedStock)         Nothing
+  <*> areq amountField (bfs MsgMaxAmount)              Nothing
+  <*> areq volumeField (bfs MsgVolume)                 Nothing
+  <*> aopt amountField (bfs MsgAmountPerCrate)         Nothing
+  <*> aopt currencyField (bfs MsgPricePerCrate)        Nothing
+  <*> aopt (selectField avatars) (bfs MsgSelectAvatar) Nothing
+  <*> aopt barcodeField (bfs MsgBarcodeField)          Nothing
+  <*> aopt (selectField sups) (bfs MsgSelectSupplier)  Nothing
+  <*> aopt textField (bfs MsgArtNr)                    Nothing
   <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
   where
     avatars = optionsPersistKey [] [Asc AvatarIdent] avatarIdent

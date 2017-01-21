@@ -29,7 +29,7 @@ import Data.Time.Calendar (addDays)
 getHomeR :: Handler Html
 getHomeR = do
   beverages <- runDB $ selectList [BeverageAmount !=. 0] [Desc BeverageIdent]
-  today <- liftIO $ return . utctDay =<< getCurrentTime
+  today <- liftIO $ utctDay <$> getCurrentTime
   users <- runDB $ selectList [UserTimestamp >=. addDays (-30) today] [Asc UserIdent]
   defaultLayout $
     $(widgetFile "home")

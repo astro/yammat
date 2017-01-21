@@ -12,26 +12,25 @@ This project aims to be an implementation for a trust based POS for hackerspaces
 
 #### Environment dependencies
 
-A working Haskell capable environment. For that you will need `haskell-stack`, which can be installed
-with:
+A working Haskell capable environment. For that you will need `ghc` and
+`cabal-install`, which can be installed with:
 
 ```bash
-sudo apt-get install haskell-stack
+sudo apt-get install ghc cabal-install
 ```
 
-In case you can't find this package in your repositories, get `stack` from [stackage][stackage].
-
-After you installed `stack`, let it make itself comfortable in your system with
+After you installed `cabal-install`, let it make itself comfortable in your system with
 
 ```bash
-stack setup
+cabal update && cabal install cabal-install
 ```
 
 This might, depending on your system setup, take some time. Brew yourself some tea.
 
 #### Build dependencies
 
-Now that your Haskell environment is set up, you need to install the dependencies for building and running yammat, which are:
+Now that your Haskell environment is set up, you need to install the 
+dependencies for building and running yammat, which are:
 
 * alex
 * happy
@@ -43,37 +42,49 @@ Install all of them through your package management system.
 
 ### Building
 
-To build this project enter `stack build` into your command line.
-Everything else should be done automagically.
+First create a sandbox in the project directory with:
 
-This will take a long time, so go on a quest to find some cookies to go with the tea.
+```bash
+cabal sandbox init && cabal install --only-dependencies
+```
+
+This will take a long time, so go on a quest to find some cookies to go with
+the tea.
+
+To build this project enter `cabal build` into your command line.
+
+Enjoy your cookies and tea while you watch your yammat being built.
 
 ## Deployment
 
-Create a directory outside of the project directory, where you want to actually run the application.
-Copy or link the executable `yammat` from `.stack-work/dist/<arch>/Cabal-<version>/build/eidolon/`,
-where `<arch>` is your systems architecture and `<version>` the version of your `cabal` library,
-to your desired run location alongside with the folders `static` and `config` and their contenst.
-The Folders should be copied, or you will get problems with your git pulls.
+Create a directory outside of the project directory, where you want to actually
+run the application. Copy or link the executable `yammat` from
+`dist/build/yammat/` to your desired run location alongside with the folders
+`static` and `config` and their contenst. The Folders should be copied, or you
+may get problems with your git pulls.
 
 ## Configuration
 
 Let's leave the project directory and enter your desired run location.
-Check the configuration File `config/settings.yml` and alter its content to your liking.
-Most of these settings normally don't need to be altered much, except for `approot`.
-Change this setting to the root address with which you want to connect to the application,
-including the scheme (http or https).
+Check the configuration File `config/settings.yml` and alter its content to your
+liking. Most of these settings normally don't need to be altered much, except
+for `approot`. Change this setting to the root address with which you want to
+connect to the application, including the scheme (http or https).
 Additionally edit the settings `email`, `currency` and `cash_charge`.
 
-* `email` is the email address, which will receive notifications from yammat, should the stock run low.  
-* `currency` is your currency sign or shorthand, which will be used when displaying prices.
+* `email` is the email address, which will receive notifications from yammat,
+should the stock run low.  
+* `currency` is your currency sign or shorthand, which will be used when
+displaying prices.
 * `cash_charge` is the extra you want to charge your users, who pay cash.
-	* *Note:* The value of this setting is in hundredths of your currency denomination.
+	* *Note:* The value of this setting is in hundredths of your currency
+	denomination.
 
-`cash_charge` is effectively a "guest tax". Setting it to `0` is perfectly fine, if you don't want that.
+`cash_charge` is effectively a "guest tax". Setting it to `0` is perfectly fine,
+if you don't want that.
 
-Create a Postgresql User and Database according to the settings in the settings file
-and grant the user all privileges on the database.
+Create a Postgresql User and Database according to the settings in the settings
+file and grant the user all privileges on the database.
 
 ## Lift-Off
 

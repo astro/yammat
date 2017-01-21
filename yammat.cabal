@@ -1,5 +1,5 @@
 name:              yammat
-version:           0.0.4
+version:           0.0.5
 cabal-version:     >= 1.8
 build-type:        Simple
 license:           AGPL-3
@@ -76,20 +76,20 @@ library
                  , classy-prelude-yesod          >= 0.10.2
                  , bytestring                    >= 0.9        && < 0.11
                  , text                          >= 0.11       && < 2.0
-                 , persistent                    >= 2.0        && < 2.2
-                 , persistent-postgresql         >= 2.1.2      && < 2.2
-                 , persistent-template           >= 2.0        && < 2.2
+                 , persistent                    >= 2.0
+                 , persistent-postgresql         >= 2.1.2
+                 , persistent-template           >= 2.0
                  , template-haskell
                  , shakespeare                   >= 2.0        && < 2.1
                  , hjsmin                        >= 0.1        && < 0.2
                  , monad-control                 >= 0.3        && < 1.1
                  , wai-extra                     >= 3.0        && < 3.1
                  , yaml                          >= 0.8        && < 0.9
-                 , http-conduit                  >= 2.1        && < 2.2
+                 , http-conduit                  >= 2.1
                  , directory                     >= 1.1        && < 1.3
                  , warp                          >= 3.0        && < 4
                  , data-default
-                 , aeson                         >= 0.6        && < 0.11
+                 , aeson                         >= 0.6
                  , conduit                       >= 1.0        && < 2.0
                  , monad-logger                  >= 0.3        && < 0.4
                  , fast-logger                   >= 2.2        && < 2.5

@@ -18,7 +18,7 @@ module Handler.Statistics where
 import Import
 import Handler.Common
 import Data.List hiding (length)
-import Data.Maybe (fromJust)
+import Data.Maybe (fromMaybe)
 import Data.Time.Calendar (addDays)
 
 getStatisticsR :: Handler RepJson
@@ -59,7 +59,7 @@ getStatisticsR = do
   archdevils <- runDB $ selectList [UserBalance <. -5000] []
   bevs <- runDB $ selectList [] [Asc BeverageId]
   totalLossPrime <- return $ foldl (\acc (Entity _ bev) ->
-    let primePrice = if not (isNothing (beveragePricePerCrate bev) && not (isNothing (beveragePerCrate bev))) then (fromIntegral $ fromJust (beveragePricePerCrate bev)) / (fromIntegral $ fromJust (beveragePerCrate bev)) else 0.0
+    let primePrice = if not (isNothing (beveragePricePerCrate bev) && not (isNothing (beveragePerCrate bev))) then (fromIntegral $ fromMaybe 0 (beveragePricePerCrate bev)) / (fromIntegral $ fromMaybe 0 (beveragePerCrate bev)) else 0.0
     in acc + (((fromIntegral $ beverageCorrectedAmount bev) * primePrice) / 100)
     ) 0 bevs
   totalLossRetail <- return $ foldl (\acc (Entity _ bev) ->

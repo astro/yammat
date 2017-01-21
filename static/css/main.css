@@ -11,7 +11,9 @@
 	text-align: center;
 	border-radius: 6px;
 }
-
+.transp  {
+	color: transparent !important;
+}
 .text {
 	text-align: left;
 }

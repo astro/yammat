@@ -40,29 +40,74 @@ getSupplierDigestR sId = do
         <p>
           <b>
             _{MsgCustomerId}: #{supplierCustomerId sup}
+        <p>&nbsp;
         <table>
           <thead>
             <tr>
-              <th>_{MsgArtNr}
-              <th>_{MsgName}
-              <th>_{MsgVolume}
-              <th>_{MsgCrateCount}
-              <th>_{MsgPricePerCrate}
-              <th>_{MsgTotalValue}
+              <th>
+                <span .transp>|
+                _{MsgArtNr}
+                <span .transp>|
+              <th>
+                _{MsgName}
+                <span .transp>|
+              <th>
+                _{MsgVolume}
+                <span .transp>|
+              <th>
+                _{MsgCrateCount}
+                <span .transp>|
+              <th>
+                _{MsgPricePerCrate}
+                <span .transp>|
+              <th>
+                _{MsgTotalValue}
+                <span .transp>|
+            <tr>
+                <span .transp>---:
+              <th>
+                <span .transp>---:
+              <th>
+                <span .transp>---:
+              <th>
+                <span .transp>---:
+              <th>
+                <span .transp>---:
+              <th>
+                <span .transp>---:
+            
           $forall dig <- digests
             $if bdCrates dig /= 0
               <tr>
-                <td>#{fromMaybe "" $ beverageArtNr $ bdBev dig}
+                <td>
+                  <span .transp>|
+                  #{fromMaybe "" $ beverageArtNr $ bdBev dig}
+                  <span .transp>|
                 <td>#{beverageIdent $ bdBev dig}
+                  <span .transp>|
                 <td>#{formatIntVolume $ beverageMl $ bdBev dig}
+                  <span .transp>|
                 <td>#{T.pack $ show $ bdCrates dig}
+                  <span .transp>|
                 <td style="text-align: right;">#{formatIntCurrency $ fromMaybe 0 $ beveragePricePerCrate $ bdBev dig} #{appCurrency $ appSettings master}
+                  <span .transp>|
                 <td style="text-align: right;">#{formatIntCurrency $ bdTotal dig} #{appCurrency $ appSettings master}
+                  <span .transp>|
           <tr>
-            <td colspan="3">_{MsgTotalCrates}
+            <td colspan="3">
+              <span .transp>
+                |&nbsp;
+                |_
+              {MsgTotalCrates}
+              <span .transp>
+                |&nbsp;
+              <span .transp>|
             <td>#{T.pack $ show $ sum $ map bdCrates digests}
+              <span .transp>|
             <td>_{MsgBuyValue}
+              <span .transp>|
             <td style="text-align: right;">#{formatIntCurrency $ sum $ map bdTotal digests} #{appCurrency $ appSettings master}
+              <span .transp>|
         |]
       tableLayout w
     Nothing -> do

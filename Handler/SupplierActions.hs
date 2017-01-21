@@ -40,6 +40,7 @@ getSupplierDigestR sId = do
         <p>
           <b>
             _{MsgCustomerId}: #{supplierCustomerId sup}
+        <p>&nbsp;
         <table>
           <thead>
             <tr>
@@ -94,8 +95,12 @@ getSupplierDigestR sId = do
                   <span .transp>|
           <tr>
             <td colspan="3">
-              <span .transp>|
-              _{MsgTotalCrates}
+              <span .transp>
+                |&nbsp;
+                |_
+              {MsgTotalCrates}
+              <span .transp>
+                |&nbsp;
               <span .transp>|
             <td>#{T.pack $ show $ sum $ map bdCrates digests}
               <span .transp>|

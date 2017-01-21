@@ -58,12 +58,9 @@ getStatisticsR = do
   archangels <- runDB $ selectList [UserBalance >. 5000] []
   archdevils <- runDB $ selectList [UserBalance <. -5000] []
   bevs <- runDB $ selectList [] [Asc BeverageId]
-  totalLossPrime <- return $ foldl (\acc (Entity _ bev) ->
-    let primePrice = (fromIntegral $ fromMaybe 0 (beveragePricePerCrate bev)) / (fromIntegral $ fromMaybe 1 (beveragePerCrate bev))
-    in acc + (((fromIntegral $ beverageCorrectedAmount bev) * primePrice) / 100)
-    ) 0 bevs
+  -- let totalLossPrime = foldl (\acc (Entity _ bev) -> let primePrice = (fromIntegral $ fromMaybe 0 (beveragePricePerCrate bev)) / (fromIntegral $ fromMaybe 1 (beveragePerCrate bev)) in acc + (((fromIntegral $ abs $ beverageCorrectedAmount bev) * primePrice) / 100)) 0 bevs
   totalLossRetail <- return $ foldl (\acc (Entity _ bev) ->
-    acc + ((fromIntegral $ beverageCorrectedAmount bev) * (fromIntegral $ beveragePrice bev) / 100)
+    acc + ((fromIntegral $ abs $ beverageCorrectedAmount bev) * (fromIntegral $ beveragePrice bev) / 100)
     ) 0 bevs
   return $ repJson $ toJSON $ Statistics
     (length users)
@@ -82,7 +79,7 @@ getStatisticsR = do
     aNegativeBalance
     dPositiveBalance
     dNegativeBalance
-    totalLossPrime
+    -- totalLossPrime
     totalLossRetail
 
 data Statistics = Statistics
@@ -102,12 +99,12 @@ data Statistics = Statistics
   , activeUsersNegativeBalance :: Double
   , deadUsersPositiveBalance :: Double
   , deadUsersNegativeBalance :: Double
-  , totalLossPrime :: Double
+  -- , totalLossPrime :: Double
   , totalLossRetail :: Double
   }
 
 instance ToJSON Statistics where
-  toJSON (Statistics tu au du pb nb tb gu eu na nd aa ad aupb aunb dupb dunb tlp tlr) =
+  toJSON (Statistics tu au du pb nb tb gu eu na nd aa ad aupb aunb dupb dunb tlr) =
     object
       [ "total_users" .= tu
       , "active_users" .= au
@@ -125,6 +122,6 @@ instance ToJSON Statistics where
       , "active_users_negative_balance" .= aunb
       , "inactive_users_positive_balance" .= dupb
       , "inactive_users_negative_balance" .= dunb
-      , "total_loss_prime_price" .= tlp
+      -- , "total_loss_prime_price" .= tlp
       , "total_loss_retail_price" .= tlr
       ]

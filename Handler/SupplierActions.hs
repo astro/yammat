@@ -64,17 +64,8 @@ getSupplierDigestR sId = do
                 _{MsgTotalValue}
                 <span .transp>|
             <tr>
-                <span .transp>---:
-              <th>
-                <span .transp>---:
-              <th>
-                <span .transp>---:
-              <th>
-                <span .transp>---:
-              <th>
-                <span .transp>---:
-              <th>
-                <span .transp>---:
+              <th colspan="6" .transp>
+                |---:|---:|---:|---:|---:|---:|
             
           $forall dig <- digests
             $if bdCrates dig /= 0
@@ -97,8 +88,7 @@ getSupplierDigestR sId = do
             <td colspan="3">
               <span .transp>
                 |&nbsp;
-                |_
-              {MsgTotalCrates}
+                |_{MsgTotalCrates}
               <span .transp>
                 |&nbsp;
               <span .transp>|

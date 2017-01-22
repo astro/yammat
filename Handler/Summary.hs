@@ -47,6 +47,7 @@ data BevStore = BevStore
   { bevStoreIdent :: Text
   , bevStorePrice :: Int
   , bevStoreAmount :: Int
+  , bevStoreLostAmount :: Int
   , bevStoreMaxAmount :: Int
   , bevStorePerCrate :: Maybe Int
   , bevStoreAlertAmount :: Int
@@ -56,11 +57,12 @@ data BevStore = BevStore
   }
 
 instance ToJSON BevStore where
-  toJSON (BevStore ident price amount maxAmount perCrate alertAmount ml artNr ppc) =
+  toJSON (BevStore ident price amount loss maxAmount perCrate alertAmount ml artNr ppc) =
     object
       [ "name" .= ident
       , "price" .= price
       , "amount" .= amount
+      , "lost_amount" .= loss
       , "alertAt" .= alertAmount
       , "max" .= maxAmount
       , "perCrate" .= perCrate
@@ -74,6 +76,7 @@ instance FromJSON BevStore where
     <$> o .: "name"
     <*> o .: "price"
     <*> o .: "amount"
+    <*> o .: "lost_amount"
     <*> o .: "max"
     <*> o .:? "perCrate"
     <*> o .: "alertAt"
@@ -92,6 +95,7 @@ getInventoryJsonR = do
         (beverageIdent bev)
         (beveragePrice bev)
         (beverageAmount bev)
+        (beverageCorrectedAmount bev)
         (beverageMaxAmount bev)
         (beveragePerCrate bev)
         (beverageAlertAmount bev)
@@ -138,6 +142,7 @@ insOrUpd bev = do
     (bevStorePrice bev)
     (bevStoreAmount bev)
     (bevStoreAlertAmount bev)
+    (bevStoreLostAmount bev)
     0
     (bevStoreMl bev)
     Nothing
@@ -150,6 +155,7 @@ insOrUpd bev = do
     [ BeverageIdent =. bevStoreIdent bev
     , BeveragePrice =. bevStorePrice bev
     , BeverageAmount =. bevStoreAmount bev
+    , BeverageCorrectedAmount =. bevStoreLostAmount bev
     , BeverageAlertAmount =. bevStoreAlertAmount bev
     , BeverageMl =. bevStoreMl bev
     , BeverageMaxAmount =. bevStoreMaxAmount bev

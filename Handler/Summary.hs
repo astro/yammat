@@ -143,7 +143,6 @@ insOrUpd bev = do
     (bevStoreAmount bev)
     (bevStoreAlertAmount bev)
     (bevStoreLostAmount bev)
-    0
     (bevStoreMl bev)
     Nothing
     Nothing

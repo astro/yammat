@@ -127,11 +127,11 @@ instance Yesod App where
             mapM_ addStylesheet $ map StaticR
                 [ css_bootstrap_min_css
                 , css_main_css
-                ])
+                ]
             mapM_ addScript $ map StaticR
                 [ js_crementing_js
                 , js_barcode_js
-                ])
+                ]
             $(widgetFile "default-layout")
         withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 

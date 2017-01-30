@@ -124,11 +124,11 @@ instance Yesod App where
         copyrightWidget <- widgetToPageContent $
             $(widgetFile "copyright")
         pc <- widgetToPageContent $ do
-            $(combineStylesheets 'StaticR
+            mapM_ addStylesheet $ map StaticR
                 [ css_bootstrap_min_css
                 , css_main_css
                 ])
-            $(combineScripts 'StaticR
+            mapM_ addScript $ map StaticR
                 [ js_crementing_js
                 , js_barcode_js
                 ])

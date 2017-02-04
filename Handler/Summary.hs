@@ -66,7 +66,7 @@ instance ToJSON BevStore where
       , "lost_amount" .= loss
       , "alertAt" .= alertAmount
       , "max" .= maxAmount
-      , "totalBought" .= totalBought
+      , "total_bought" .= totalBought
       , "perCrate" .= perCrate
       , "ml" .= ml
       , "artNr" .= artNr

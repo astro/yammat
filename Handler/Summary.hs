@@ -80,7 +80,7 @@ instance FromJSON BevStore where
     <*> o .: "amount"
     <*> o .: "lost_amount"
     <*> o .: "max"
-    <*> o .: "totalBought"
+    <*> o .: "total_bought"
     <*> o .:? "perCrate"
     <*> o .: "alertAt"
     <*> o .: "ml"

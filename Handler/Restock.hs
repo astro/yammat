@@ -91,6 +91,7 @@ postNewArticleR = do
         (modBevAvatar nBev)
         (modBevSupp nBev)
         (modBevMaxAmount nBev)
+        0
         (modBevPC nBev)
         (modBevArtNr nBev)
         (modBevPricePC nBev)

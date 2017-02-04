@@ -17,6 +17,7 @@ Beverage
     avatar AvatarId Maybe
     supplier SupplierId Maybe
     maxAmount Int default=0
+    totalBought Int default=0
     perCrate Int Maybe
     artNr Text Maybe
     pricePerCrate Int Maybe

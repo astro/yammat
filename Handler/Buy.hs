@@ -49,6 +49,7 @@ postBuyR uId bId = do
             update uId [UserTimestamp =. today]
             update uId [UserBalance -=. price]
             update bId [BeverageAmount -=. quant]
+            update bId [BeverageTotalBought +=. 1]
           checkAlert bId
           master <- getYesod
           liftIO $ notifyUser user bev quant price master

@@ -134,7 +134,7 @@ warpSettings foundation =
 -- | For yesod devel, return the Warp settings and WAI Application.
 getApplicationDev :: IO (Settings, Application)
 getApplicationDev = do
-    settings <- loadAppSettings [configSettingsYml] [] useEnv
+    settings <- loadYamlSettings [configSettingsYml] [] useEnv
     foundation <- makeFoundation settings
     app <- makeApplication foundation
     wsettings <- getDevSettings $ warpSettings foundation
@@ -148,7 +148,7 @@ develMain = develMainHelper getApplicationDev
 appMain :: IO ()
 appMain = do
     -- Get the settings from all relevant sources
-    settings <- loadAppSettingsArgs
+    settings <- loadYamlSettingsArgs
         -- fall back to compile-time values, set to [] to require values at runtime
         [configSettingsYmlValue]
 

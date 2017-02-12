@@ -25,14 +25,16 @@ getSelectR uId =
   isUser uId HomeR >>= (\user -> do
     master <- getYesod
     beverages <- runDB $ selectList [BeverageAmount >. 0] [Asc BeverageIdent]
-    defaultLayout $
+    defaultLayout $ do
+      addScript $ StaticR js_barcode_js
       $(widgetFile "select")
   )
 
 getSelectCashR :: Handler Html
 getSelectCashR = do
   beverages <- runDB $ selectList [BeverageAmount >. 0] [Asc BeverageIdent]
-  defaultLayout $
+  defaultLayout $ do
+    addScript $ StaticR js_barcode_js
     $(widgetFile "selectCash")
 
 getRechargeR :: UserId -> Handler Html

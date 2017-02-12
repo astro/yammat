@@ -31,14 +31,16 @@ getHomeR = do
   beverages <- runDB $ selectList [BeverageAmount !=. 0] [Desc BeverageIdent]
   today <- liftIO $ utctDay <$> getCurrentTime
   users <- runDB $ selectList [UserTimestamp >=. addDays (-30) today] [Asc UserIdent]
-  defaultLayout $
+  defaultLayout $ do
+    addScript $ StaticR js_barcode_js
     $(widgetFile "home")
 
 getReactivateR :: Handler Html
 getReactivateR = do
   today <- liftIO $ return . utctDay =<< getCurrentTime
   users <- runDB $ selectList [UserTimestamp <. addDays (-30) today] [Asc UserIdent]
-  defaultLayout $
+  defaultLayout $ do
+    addScript $ StaticR js_barcode_js
     $(widgetFile "reactivate")
 
 getUserReactivateR :: UserId -> Handler Html

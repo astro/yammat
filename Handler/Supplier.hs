@@ -78,7 +78,8 @@ postModifySupplierR sId = do
       case res of
         FormSuccess msup -> do
           runDB $ update sId
-            [ SupplierAddress =. supConfAddr msup
+            [ SupplierIdent =. supConfIdent msup
+            , SupplierAddress =. supConfAddr msup
             , SupplierTel =. supConfTel msup
             , SupplierEmail =. supConfEmail msup
             , SupplierCustomerId =. supConfCustomerId msup

@@ -124,7 +124,7 @@ SupplierCreated: Supplier created
 SupplierNotCreated: Supplier not created!
 Suppliers: Suppliers
 NewSupplier: new Supplier
-Address: Adress
+Address: Address
 TelNr: Telephone number
 Email: Email
 EditSupplier: Edit Supplier

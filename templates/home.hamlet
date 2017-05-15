@@ -20,9 +20,10 @@ $forall (Entity uId user) <- users
   <a href=@{NewUserR}>
     <p>_{MsgCreateUser}
 
-<article .article #func>
-  <a href=@{ReactivateR}>
-    <p>_{MsgReactivateOldUser}
+$if not (null ousers)
+  <article .article #func>
+    <a href=@{ReactivateR}>
+      <p>_{MsgReactivateOldUser}
 
 <form action=@{HomeBarcodeR} method=GET>
   <input type=hidden #barcodeInput name=barcode>

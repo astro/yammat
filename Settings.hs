@@ -76,6 +76,8 @@ data AppSettings = AppSettings
     , appCopyright              :: Text
     , appCopyrightLink          :: Text
     -- ^ Text and link to source
+    , appUserCreationBlocked    :: Bool
+    -- ^ Block user creation
     , appAdminCreds             :: Maybe Login
     -- ^ optional admin credentials
     }
@@ -118,6 +120,8 @@ instance FromJSON AppSettings where
         appCashCharge             <- o .: "cash_charge"
         appCopyright              <- o .: "copyright"
         appCopyrightLink          <- o .: "copyright_link"
+
+        appUserCreationBlocked    <- o .: "block_users"
 
         appAdminCreds             <- o .:? "credentials"
 

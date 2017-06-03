@@ -16,9 +16,10 @@ $forall (Entity uId user) <- users
       <a href=@{SelectR uId}>
         <p>#{userIdent user}
 
-<article .article #func>
-  <a href=@{NewUserR}>
-    <p>_{MsgCreateUser}
+$if not (appUserCreationBlocked settings)
+  <article .article #func>
+    <a href=@{NewUserR}>
+      <p>_{MsgCreateUser}
 
 $if not (null ousers)
   <article .article #func>

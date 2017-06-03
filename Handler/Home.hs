@@ -28,6 +28,7 @@ import Data.Time.Calendar (addDays)
 -- inclined, or create a single monolithic file.
 getHomeR :: Handler Html
 getHomeR = do
+  settings <- getsYesod appSettings
   beverages <- runDB $ selectList [BeverageAmount !=. 0] [Desc BeverageIdent]
   today <- liftIO $ utctDay <$> getCurrentTime
   users <- runDB $ selectList [UserTimestamp >=. addDays (-30) today] [Asc UserIdent]

@@ -145,3 +145,4 @@ Modify: upravit
 UserIdentNotUnique: Uživatelské jméno není jedinečný
 Login: Přihlásit
 Logout: Odhlásit
+CreationBlocked: Nelze vytvořit nové uživatele.

@@ -145,3 +145,4 @@ Modify: bearbeiten
 UserIdentNotUnique: Benutzername ist nicht einzigartig
 Login: Login
 Logout: Logout
+CreationBlocked: Es können keine neuen Nutzer angelegt werden.

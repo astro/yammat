@@ -13,6 +13,7 @@
 --
 --  You should have received a copy of the GNU Affero General Public License
 --  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+{-# LANGUAGE DoAndIfThenElse #-}
 module Handler.NewUser where
 
 import Import as I
@@ -21,33 +22,45 @@ import Text.Shakespeare.Text
 
 getNewUserR :: Handler Html
 getNewUserR = do
-  today <- liftIO $ return . utctDay =<< getCurrentTime
-  (newUserWidget, enctype) <- generateFormPost
-    $ renderBootstrap3 BootstrapBasicForm
-    $ newUserForm today
-  defaultLayout $
-    $(widgetFile "newUser")
+  settings <- getsYesod appSettings
+  if appUserCreationBlocked settings
+  then do
+    setMessageI MsgCreationBlocked
+    redirect HomeR
+  else do
+    today <- liftIO $ return . utctDay =<< getCurrentTime
+    (newUserWidget, enctype) <- generateFormPost
+      $ renderBootstrap3 BootstrapBasicForm
+      $ newUserForm today
+    defaultLayout $
+      $(widgetFile "newUser")
 
 postNewUserR :: Handler Html
 postNewUserR = do
-  today <- liftIO $ return . utctDay =<< getCurrentTime
-  ((res, _), _) <- runFormPost
-    $ renderBootstrap3 BootstrapBasicForm
-    $ newUserForm today
-  case res of
-    FormSuccess user -> do
-      namesakes <- runDB $ selectList [UserIdent ==. userIdent user] []
-      if null namesakes
-        then do
-          runDB $ insert_ user
-          setMessageI MsgUserCreated
-          redirect HomeR
-        else do
-          setMessageI MsgUserIdentNotUnique
-          redirect NewUserR
-    _ -> do
-      setMessageI MsgUserNotCreated
-      redirect NewUserR
+  settings <- getsYesod appSettings
+  if appUserCreationBlocked settings
+  then do
+    setMessageI MsgCreationBlocked
+    redirect HomeR
+  else do
+    today <- liftIO $ return . utctDay =<< getCurrentTime
+    ((res, _), _) <- runFormPost
+      $ renderBootstrap3 BootstrapBasicForm
+      $ newUserForm today
+    case res of
+      FormSuccess user -> do
+        namesakes <- runDB $ selectList [UserIdent ==. userIdent user] []
+        if null namesakes
+          then do
+            runDB $ insert_ user
+            setMessageI MsgUserCreated
+            redirect HomeR
+          else do
+            setMessageI MsgUserIdentNotUnique
+            redirect NewUserR
+      _ -> do
+        setMessageI MsgUserNotCreated
+        redirect NewUserR
 
 newUserForm :: Day -> AForm Handler User
 newUserForm today = User

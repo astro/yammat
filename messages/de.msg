@@ -143,3 +143,5 @@ CustomerId: Kundennummer
 TotalCrates: Gesamtanzahl Kästen
 Modify: bearbeiten
 UserIdentNotUnique: Benutzername ist nicht einzigartig
+Login: Login
+Logout: Logout

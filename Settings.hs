@@ -76,7 +76,19 @@ data AppSettings = AppSettings
     , appCopyright              :: Text
     , appCopyrightLink          :: Text
     -- ^ Text and link to source
+    , appAdminCreds             :: Maybe Login
     }
+
+data Login = Login
+  { loginName :: Text
+  , loginPass :: Text
+  }
+
+instance FromJSON Login where
+  parseJSON = withObject "Login" $ \o -> do
+    loginName <- o .: "login"
+    loginPass <- o .: "password"
+    return Login{..}
 
 instance FromJSON AppSettings where
     parseJSON = withObject "AppSettings" $ \o -> do
@@ -105,6 +117,8 @@ instance FromJSON AppSettings where
         appCashCharge             <- o .: "cash_charge"
         appCopyright              <- o .: "copyright"
         appCopyrightLink          <- o .: "copyright_link"
+
+        appAdminCreds             <- o .:? "credentials"
 
         return AppSettings {..}
 

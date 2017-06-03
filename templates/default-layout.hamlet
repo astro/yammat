@@ -26,15 +26,22 @@
   <hr>
 
   <footer>
-    <span>
-      <a href=@{RestockR}>_{MsgRestock}
-    <span>
-      <a href=@{JournalR}>_{MsgJournal}
-    <span>
-      <a href=@{SummaryR}>_{MsgSummary}
-    <span>
-      <a href=@{AvatarR}>_{MsgAvatars}
-    <span>
-      <a href=@{SupplierR}>_{MsgSuppliers}
+    $maybe username <- musername
+      <span>
+        <a href=@{RestockR}>_{MsgRestock}
+      <span>
+        <a href=@{JournalR}>_{MsgJournal}
+      <span>
+        <a href=@{SummaryR}>_{MsgSummary}
+      <span>
+        <a href=@{AvatarR}>_{MsgAvatars}
+      <span>
+        <a href=@{SupplierR}>_{MsgSuppliers}
+      $if username /= "nobody"
+        <span>
+          <a href=@{AuthR LogoutR}>_{MsgLogout}
+    $nothing
+      <span>
+        <a href=@{AuthR LoginR}>_{MsgLogin}
     <div .right>
       ^{pageBody copyrightWidget}

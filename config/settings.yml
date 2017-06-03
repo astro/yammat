@@ -32,3 +32,7 @@ cash_charge: 50
 
 copyright: "Powered by YAMMAT"
 copyright_link: "https://github.com/nek0/yammat"
+
+# credentials:
+#   login: "admin"
+#   password: "password"

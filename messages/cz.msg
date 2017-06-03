@@ -143,3 +143,5 @@ CustomerId: Kód zákazníka
 TotalCrates: Celkový počet přepravek
 Modify: upravit
 UserIdentNotUnique: Uživatelské jméno není jedinečný
+Login: Přihlásit
+Logout: Odhlásit

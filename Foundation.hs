@@ -22,6 +22,8 @@ import Text.Jasmine         (minifym)
 import Yesod.Default.Util   (addStaticContentExternal)
 import Yesod.Core.Types     (Logger)
 --snip
+import Yesod.Auth.Hardcoded
+import Yesod.Auth.Message
 import qualified Data.Text as T
 import Network.Wai as Wai
 import Data.List (tail)
@@ -115,6 +117,7 @@ instance Yesod App where
     defaultLayout widget = do
         master <- getYesod
         mmsg <- getMessage
+        musername <- maybeAuthId
 
         -- We break up the default layout into two components:
         -- default-layout is the contents of the body tag, and
@@ -140,9 +143,32 @@ instance Yesod App where
     -- authRoute _ = Just $ AuthR LoginR
 
     -- Routes not requiring authentication.
-    -- isAuthorized (AuthR _) _ = return Authorized
+    isAuthorized (AuthR _) _ = return Authorized
     isAuthorized FaviconR _ = return Authorized
     isAuthorized RobotsR _ = return Authorized
+    -- Routes requiring authentication
+    isAuthorized RestockR _ = isAdmin
+    isAuthorized (UpstockR _) _ = isAdmin
+    isAuthorized NewArticleR _ = isAdmin
+    isAuthorized JournalR _ = isAdmin
+    isAuthorized (JournalPageR _) _ = isAdmin
+    isAuthorized PayoutR _ = isAdmin
+    isAuthorized SummaryR _ = isAdmin
+    isAuthorized SummaryJsonR _ = isAdmin
+    isAuthorized (ModifyR _) _ = isAdmin
+    isAuthorized (DeleteBeverageR _) _ = isAdmin
+    isAuthorized CashCheckR _ = isAdmin
+    isAuthorized UploadInventoryJsonR _ = isAdmin
+    isAuthorized InventoryJsonR _ = isAdmin
+    isAuthorized AvatarR _ = isAdmin
+    isAuthorized (ModifyAvatarR _) _ = isAdmin
+    isAuthorized (AvatarDeleteR _) _ = isAdmin
+    isAuthorized SupplierR _ = isAdmin
+    isAuthorized NewSupplierR _ = isAdmin
+    isAuthorized (SupplierActionsR _) _ = isAdmin
+    isAuthorized (ModifySupplierR _) _ = isAdmin
+    isAuthorized (SupplierDigestR _) _ = isAdmin
+    isAuthorized (DeleteSupplierR _) _ = isAdmin
     -- Default to Authorized for now.
     isAuthorized _ _ = return Authorized
 
@@ -174,6 +200,13 @@ instance Yesod App where
 
     makeLogger = return . appLogger
 
+isAdmin :: YesodAuth master => HandlerT master IO AuthResult
+isAdmin = do
+  mu <- maybeAuthId
+  return $ case mu of
+    Nothing -> AuthenticationRequired
+    Just _  -> Authorized
+
 -- How to run database actions.
 instance YesodPersist App where
     type YesodPersistBackend App = SqlBackend
@@ -183,30 +216,58 @@ instance YesodPersist App where
 instance YesodPersistRunner App where
     getDBRunner = defaultGetDBRunner appConnPool
 
--- instance YesodAuth App where
---     type AuthId App = UserId
+instance YesodAuth App where
+    type AuthId App = Text
 
---     -- Where to send a user after successful login
---     loginDest _ = HomeR
---     -- Where to send a user after logout
---     logoutDest _ = HomeR
---     -- Override the above two destinations when a Referer: header is present
---     redirectToReferer _ = True
+    -- Where to send a user after successful login
+    loginDest _ = HomeR
+    -- Where to send a user after logout
+    logoutDest _ = HomeR
+    -- Override the above two destinations when a Referer: header is present
+    redirectToReferer _ = True
 
---     getAuthId creds = runDB $ do
---         x <- getBy $ UniqueUser $ credsIdent creds
---         case x of
---             Just (Entity uid _) -> return $ Just uid
---             Nothing -> do
---                 fmap Just $ insert User
---                     { userIdent = credsIdent creds
---                     , userPassword = Nothing
---                     }
+    -- getAuthId = return . Just . credsIdent
 
---     -- You can add other plugins like BrowserID, email or OAuth here
---     authPlugins _ = [authBrowserId def]
+    -- getAuthId creds = runDB $ do
+    --     x <- getBy $ UniqueUser $ credsIdent creds
+    --     case x of
+    --         Just (Entity uid _) -> return $ Just uid
+    --         Nothing -> do
+    --             fmap Just $ insert User
+    --                 { userIdent = credsIdent creds
+    --                 , userPassword = Nothing
+    --                 }
 
---     authHttpManager = getHttpManager
+    authenticate Creds{..} = do
+        settings <- getsYesod appSettings
+        maybe (return $ Authenticated "nobody") (\login ->
+            if loginName login == credsIdent
+            then return (Authenticated credsIdent)
+            else return (UserError InvalidLogin)
+            ) (appAdminCreds settings)
+
+    -- You can add other plugins like BrowserID, email or OAuth here
+    authPlugins _ = [authHardcoded]
+
+    authHttpManager = getHttpManager
+
+    maybeAuthId = do
+      settings <- getsYesod appSettings
+      maybe (return $ Just "nobody")
+        (const $ lookupSession credsKey)
+        (appAdminCreds settings)
+
+instance YesodAuthHardcoded App where
+    validatePassword u p = do
+        settings <- getsYesod appSettings
+        maybe (return True) (\login ->
+            return (u == loginName login && p == loginPass login)
+            ) (appAdminCreds settings)
+
+    doesUserNameExist u = do
+        settings <- getsYesod appSettings
+        let name = fromMaybe "nobody" $ loginName <$> appAdminCreds settings
+        return (u == name)
 
 -- instance YesodAuthPersist App
 

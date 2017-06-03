@@ -77,6 +77,7 @@ data AppSettings = AppSettings
     , appCopyrightLink          :: Text
     -- ^ Text and link to source
     , appAdminCreds             :: Maybe Login
+    -- ^ optional admin credentials
     }
 
 data Login = Login

@@ -32,11 +32,13 @@ This might, depending on your system setup, take some time. Brew yourself some t
 Now that your Haskell environment is set up, you need to install the 
 dependencies for building and running yammat, which are:
 
+* build-essential
 * alex
 * happy
 * libpq-dev
 * postgresql
 * libfftw3-dev
+* zlib-dev
 
 Install all of them through your package management system.
 

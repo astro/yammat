@@ -67,6 +67,24 @@ may get problems with your git pulls.
 
 ## Configuration
 
+### Database
+
+To set up your database, Enter the postgresql root console (change to user
+`postgres` and invoke `psql` on a debian system). then create a user with
+
+```SQL
+CREATE USER <username> WITH PASSWORD '<password>':
+```
+
+and then create the database and grant all privileges to the user with
+
+```SQL
+CREATE DATABASE <databasename>;
+GRANT ALL PRIVILEGES ON <databasename> to <username>;
+```
+
+### Webapp
+
 Let's leave the project directory and enter your desired run location.
 Check the configuration File `config/settings.yml` and alter its content to your
 liking. Most of these settings normally don't need to be altered much, except

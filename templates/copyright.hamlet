@@ -1,1 +1,1 @@
-<a href=#{appCopyrightLink $ appSettings master} target=_blank>#{appCopyright $ appSettings master}
+<a href=#{appCopyrightLink $ appSettings master}>#{appCopyright $ appSettings master}

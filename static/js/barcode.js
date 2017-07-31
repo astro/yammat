@@ -55,7 +55,7 @@ function barcodeKeyPress( event ) { // takes input from either keyboard or barco
                 barcodeBuf = hideBarcode()
             }
             event.preventDefault()
-        } else if ( event.keyCode == 0 ) { // e.g. F-Keys are 112 to 123, A-Za-z0-9 all are 0.
+        } else if ( event.keyCode == 0 && key != " " ) { // e.g. F-Keys are 112 to 123, A-Za-z0-9 all are 0.
             console.log( "some input: " + barcodeBuf + "[" + key + "] <= {" + event.keyCode + "}" )
             barcodeBuf += key
             showBarcode( barcodeBuf )

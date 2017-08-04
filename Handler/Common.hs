@@ -183,13 +183,14 @@ amountField = Field
     showVal = either id (pack . showI)
     showI x = show (fromIntegral x :: Integer)
 
-checkAlert :: BeverageId -> Handler ()
-checkAlert bId = do
+checkAlert :: BeverageId -> Int -> Handler ()
+checkAlert bId oldamount = do
   bev <- runDB $ getJust bId
-  if beverageAmount bev < beverageAlertAmount bev
-    then do
-      master <- getYesod
-      let to = appEmail $ appSettings master
+  let alert = beverageAlertAmount bev
+  when (beverageAmount bev < alert && oldamount > alert) $ do
+    master <- getYesod
+    let tos = appEmail $ appSettings master
+    mapM_ (\to ->
       liftIO $ sendMail to "Niedriger Bestand"
         [stext|
 Hallo,
@@ -199,10 +200,9 @@ Der momentane Bestand ist bei #{beverageAmount bev} Artikeln.
 
 Viele Grüße,
 
-der Matemat
+Dein Matemat
         |]
-    else
-      return () -- do nothing
+      ) tos
 
 sendMail :: MonadIO m => Text -> Text -> TL.Text -> m ()
 sendMail to subject body =

@@ -26,7 +26,8 @@ database:
   poolsize: "_env:PGPOOLSIZE:10"
 
 #analytics: UA-YOURCODE
-email: "nek0@momen"
+email:
+- "nek0@momen"
 currency: "€"
 cash_charge: 50
 

@@ -67,7 +67,7 @@ data AppSettings = AppSettings
     -- ^ Copyright text to appear in the footer of the page
     , appAnalytics              :: Maybe Text
     -- ^ Google Analytics code
-    , appEmail                  :: Text
+    , appEmail                  :: [Text]
     -- ^ notification address
     , appCurrency               :: Text
     -- ^ Currency character

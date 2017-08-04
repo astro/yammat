@@ -50,7 +50,7 @@ postBuyR uId bId = do
             update uId [UserBalance -=. price]
             update bId [BeverageAmount -=. quant]
             update bId [BeverageTotalBought +=. 1]
-          checkAlert bId
+          checkAlert bId (beverageAmount bev)
           master <- getYesod
           liftIO $ notifyUser user bev quant price master
           case sw of
@@ -128,7 +128,7 @@ postBuyCashR bId =
             let price = quant * (beveragePrice bev + appCashCharge (appSettings master))
             runDB $ update bId [BeverageAmount -=. quant]
             updateCashier price "Barzahlung"
-            checkAlert bId
+            checkAlert bId (beverageAmount bev)
             let currency = appCurrency $ appSettings master
             setMessageI $ MsgPurchaseSuccessCash price currency
             redirect HomeR

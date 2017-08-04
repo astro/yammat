@@ -47,12 +47,14 @@ postTransferR from to =
       ((res, _), _) <- runFormPost
         $ renderBootstrap3 BootstrapBasicForm transferForm
       case res of
-        FormSuccess amount -> do
-          if amount < 0
-            then do
+        FormSuccess amount
+          | amount < 0 -> do
               setMessageI MsgNegativeTransfer
               redirect $ TransferR from to
-            else do
+          | userBalance sender < amount -> do
+              setMessageI MsgNotEnoughFunds
+              redirect HomeR
+          | otherwise -> do
               runDB $ update from [UserBalance -=. amount]
               runDB $ update to [UserBalance +=. amount]
               master <- getYesod

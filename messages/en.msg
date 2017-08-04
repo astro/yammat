@@ -146,3 +146,4 @@ UserIdentNotUnique: Username is not unique
 Login: Login
 Logout: Logout
 CreationBlocked: New users can not be created.
+NotEnoughFunds: Not enough funds!

@@ -73,10 +73,9 @@ transferForm = areq currencyField (bfs MsgValue) (Just 0)
 
 notify :: User -> User -> Int -> App -> IO ()
 notify sender rcpt amount master = do
-  case userEmail sender of
-    Just email ->
-      liftIO $ sendMail email "Guthabentransfer beim Matematen"
-        [stext|
+  when (isJust $ userEmail sender) $
+    liftIO $ sendMail (fromJust $ userEmail sender) "Guthabentransfer beim Matematen"
+      [stext|
 Hallo #{userIdent sender}
 
 Du hast gerade #{formatIntCurrency amount}#{appCurrency $ appSettings master} an #{userIdent rcpt} transferiert.
@@ -84,13 +83,10 @@ Du hast gerade #{formatIntCurrency amount}#{appCurrency $ appSettings master} an
 Viele Grüße,
 
 Dein Matemat
-        |]
-    Nothing ->
-      return ()
-  case userEmail rcpt of
-    Just email ->
-      liftIO $ sendMail email "Guthabentransfer eingetroffen"
-        [stext|
+      |]
+  when (isJust $ userEmail rcpt) $
+    liftIO $ sendMail (fromJust $ userEmail rcpt) "Guthabentransfer eingetroffen"
+      [stext|
 Hallo #{userIdent rcpt}
 
 Du hast gerade #{formatIntCurrency amount}#{appCurrency $ appSettings master} von #{userIdent sender} erhalten.
@@ -98,6 +94,4 @@ Du hast gerade #{formatIntCurrency amount}#{appCurrency $ appSettings master} vo
 Viele Grüße,
 
 Dein Matemat
-        |]
-    Nothing ->
-      return ()
+      |]

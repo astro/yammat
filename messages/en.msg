@@ -14,7 +14,7 @@ EditFail: Editing failed
 Name: Name
 Price: Price
 CurrentStock: Current stock
-AnnouncedStock: Announced stock
+AnnouncedStock: Warning limit
 DeleteItem: Delete Item
 ItemDeleted: Item deleted
 UserCreated: User created
@@ -111,7 +111,7 @@ BarcodeAdded: barcode succesfully added
 BarcodeDuplicate: This barcode is already in use
 Transfer: Credit transfer
 TransferTo: Transfer credit to
-NegativeTransfer: Please do not transfer negative amounts
+NegativeTransfer: You can not transfer negative amounts
 TransferComplete: Transfer complete
 TransferError: Transfer error
 PreviousPage: previous page
@@ -146,3 +146,4 @@ UserIdentNotUnique: Username is not unique
 Login: Login
 Logout: Logout
 CreationBlocked: New users can not be created.
+NotEnoughFunds: Not enough funds!

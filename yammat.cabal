@@ -94,7 +94,7 @@ library
                  , monad-logger                  >= 0.3        && < 0.4
                  , fast-logger                   >= 2.2        && < 2.5
                  , wai-logger                    >= 2.2        && < 2.4
-                 , safe-exceptions               < 0.1.4.0
+                 , safe-exceptions
                  , file-embed
                  , safe
                  , unordered-containers

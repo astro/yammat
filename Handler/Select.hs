@@ -54,7 +54,7 @@ postRechargeR uId =
       $ renderBootstrap3 BootstrapBasicForm rechargeForm
     case res of
       FormSuccess amount ->
-        if amount < 0
+        if amount <= 0
           then do
             setMessageI MsgNegativeRecharge
             redirect $ RechargeR uId

@@ -38,15 +38,15 @@ postPayoutR = do
   case res of
     FormSuccess payment -> do
       balance <- getCashierBalance
-      if balance >= payment
-      then do
-        msg <- renderMessage' $ MsgPayout $ paymentDesc payment
-        updateCashier (- (paymentAmount payment)) msg
-        setMessageI MsgPaidOut
-        redirect HomeR
-      else do
-        setMessageI MsgNotEnoughFunds
-        redirect HomeR
+      if balance >= paymentAmount payment
+        then do
+          msg <- renderMessage' $ MsgPayout $ paymentDesc payment
+          updateCashier (- (paymentAmount payment)) msg
+          setMessageI MsgPaidOut
+          redirect HomeR
+        else do
+          setMessageI MsgNotEnoughFunds
+          redirect HomeR
     _ -> do
       setMessageI MsgNotPaidOut
       redirect JournalR

@@ -37,10 +37,16 @@ postPayoutR = do
     $ renderBootstrap3 BootstrapBasicForm payoutForm
   case res of
     FormSuccess payment -> do
-      msg <- renderMessage' $ MsgPayout $ paymentDesc payment
-      updateCashier (- (paymentAmount payment)) msg
-      setMessageI MsgPaidOut
-      redirect HomeR
+      balance <- getCashierBalance
+      if balance >= payment
+      then
+        msg <- renderMessage' $ MsgPayout $ paymentDesc payment
+        updateCashier (- (paymentAmount payment)) msg
+        setMessageI MsgPaidOut
+        redirect HomeR
+      else
+        setMessageI MsgNotEnoughFunds
+        redirect HomeR
     _ -> do
       setMessageI MsgNotPaidOut
       redirect JournalR

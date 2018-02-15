@@ -38,7 +38,7 @@ dependencies for building and running yammat, which are:
 * libpq-dev
 * postgresql
 * libfftw3-dev
-* zlib-dev
+* zlib1g-dev
 
 Install all of them through your package management system.
 

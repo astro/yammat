@@ -54,7 +54,7 @@ PayCash: Maksa sularaha
 CreateUser: Loo kasutaja
 ReactivateOldUser: reaktiveeri vana kasutaja
 Time: Aeg
-ValueIn currency@Text: Hind #{valuuta}
+ValueIn currency@Text: Hind #{currency}
 TotalValue: Koguhind
 CashStock: sularaha varu
 PayoutFromCash: Maksa välja sularaha
@@ -67,13 +67,13 @@ Recharge: Recharge
 CurrentCharge charge@Int currency@Text: Current charge: #{currency} #{formatIntCurrency charge} #{currency}
 AddItem: Lisa uus toode
 EditUser: Muuda kasutajat
-ChoosePrompt text@Text: Vali toode, #{tekst}
+ChoosePrompt text@Text: Vali toode, #{text}
 SelectItem: Valit toode
 CurrentAmount: Hetke kogus
 NoItems: Ei oole ühtegi toodet
 StockUp name@Text: Lisa varusid #{name}
 Fillup: Fill up
-CashCheckOf date@String: Sula kontrollimine #{kuupäev}
+CashCheckOf date@String: Sula kontrollimine #{date}
 NotJson: Andmed ei ole JSON formaadis
 Upload: Lae üles varundusfail
 SelectFile: Vali fail

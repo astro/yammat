@@ -46,7 +46,7 @@ PricePerUnit price@Int currency@Text: Hind ühiku kohta: #{currency} #{formatInt
 Purchase: Osta
 PleaseCountAndCheck: Palun kontrollige üle sularahavarud allpool.
 Submit: Lisa
-Home: Home
+Home: Pealeht
 Restock: Lae inventar
 Journal: Arveraamat
 Summary: Inventar
@@ -137,7 +137,7 @@ PricePerCrate: Hind ühe taarakasti kohta
 CrateCount: taarakastide kogus
 BuyValue: Makse summa
 CustomerId: Kliendi ID
-TotalCrates: ostukorvide koguhulk
+TotalCrates: taarakastide koguhulk
 Modify: muuda
 UserIdentNotUnique: Kasutajanimi ei ole unikaalne
 Login: Logi sisse

@@ -17,6 +17,8 @@
             <img .flag src=@{StaticR images_pl_svg}>
           <a onclick="document.cookie = '_LANG=hr'; location.reload()">
             <img .flag src=@{StaticR images_hr_svg}>
+          <a onclick="document.cookie = '_LANG=ee'; location.reload()">
+            <img .flag src=@{StaticR images_ee_svg}>
 
   <hr>
 

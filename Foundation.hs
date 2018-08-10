@@ -193,10 +193,10 @@ instance Yesod App where
 
     -- What messages should be logged. The following includes all messages when
     -- in development, and warnings and errors in production.
-    shouldLog app _source level =
-        appShouldLogAll (appSettings app)
-            || level == LevelWarn
-            || level == LevelError
+    -- shouldLog app _source level =
+    --     appShouldLogAll (appSettings app)
+    --         || level == LevelWarn
+    --         || level == LevelError
 
     makeLogger = return . appLogger
 

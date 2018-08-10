@@ -249,7 +249,7 @@ instance YesodAuth App where
     -- You can add other plugins like BrowserID, email or OAuth here
     authPlugins _ = [authHardcoded]
 
-    authHttpManager = getHttpManager
+    -- authHttpManager = getHttpManager
 
     maybeAuthId = do
       settings <- getsYesod appSettings

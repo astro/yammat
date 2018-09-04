@@ -64,7 +64,7 @@ data UpstockAmount = UpstockAmount
 
 upstockForm :: AForm Handler UpstockAmount
 upstockForm = UpstockAmount
-  <$> areq amountField (bfs MsgAmountAdded) (Just 1)
+  <$> areq amountField (bfs MsgAmountAdded) (Just 0)
   <*> areq amountField (bfs MsgCrateAmountAdded) (Just 0)
   <*  bootstrapSubmit (msgToBSSubmit MsgFillup)
 

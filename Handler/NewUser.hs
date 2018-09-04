@@ -94,7 +94,7 @@ getModifyUserR uId =
       $ renderBootstrap3 BootstrapBasicForm
       $ modifyUserForm user bs
     defaultLayout $ do
-      setTitleI (ModifyUser (userIdent user))
+      setTitleI (MsgModifyUser (userIdent user))
       $(widgetFile "modifyUser")
   )
 

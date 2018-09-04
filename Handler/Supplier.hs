@@ -15,7 +15,7 @@ getNewSupplierR :: Handler Html
 getNewSupplierR = do
   (newSupplierWidget, enctype) <- generateFormPost
     $ renderBootstrap3 BootstrapBasicForm newSupplierForm
-  defaultLayout $
+  defaultLayout $ do
     setTitleI MsgNewSupplier
     $(widgetFile "newSupplier")
 

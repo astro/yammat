@@ -11,7 +11,7 @@ getSupplierActionsR sId = do
   case mSup of
     Just sup ->
       defaultLayout $ do
-        setTitleI (MsgSupplieractions (supplierIdent sup))
+        setTitleI (MsgSupplierActions (supplierIdent sup))
         $(widgetFile "supplierActions")
     Nothing -> do
       setMessageI MsgSupplierUnknown

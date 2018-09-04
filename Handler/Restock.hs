@@ -23,7 +23,8 @@ import Data.Maybe (fromJust)
 getRestockR :: Handler Html
 getRestockR = do
   beverages <- runDB $ selectList [] [Asc BeverageIdent]
-  defaultLayout $
+  defaultLayout $ do
+    setTitleI MsgRestock
     $(widgetFile "restock")
 
 getUpstockR :: BeverageId -> Handler Html
@@ -31,7 +32,8 @@ getUpstockR bId =
   isBeverage bId RestockR >>= (\bev -> do
     (upstockWidget, enctype) <- generateFormPost
       $ renderBootstrap3 BootstrapBasicForm upstockForm
-    defaultLayout $
+    defaultLayout $ do
+      setTitleI (MsgStockUp (beverageIdent bev))
       $(widgetFile "upstock")
   )
 

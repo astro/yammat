@@ -7,7 +7,8 @@ import Data.Maybe
 getSupplierR :: Handler Html
 getSupplierR = do
   sups <- runDB $ selectList [] [Asc SupplierIdent]
-  defaultLayout $
+  defaultLayout $ do
+    setTitleI MsgSuppliers
     $(widgetFile "supplier")
 
 getNewSupplierR :: Handler Html
@@ -15,6 +16,7 @@ getNewSupplierR = do
   (newSupplierWidget, enctype) <- generateFormPost
     $ renderBootstrap3 BootstrapBasicForm newSupplierForm
   defaultLayout $
+    setTitleI MsgNewSupplier
     $(widgetFile "newSupplier")
 
 postNewSupplierR :: Handler Html
@@ -61,7 +63,8 @@ getModifySupplierR sId = do
       (modifySupplierWidget, enctype) <- generateFormPost
         $ renderBootstrap3 BootstrapBasicForm
         $ modifySupplierForm sup
-      defaultLayout $
+      defaultLayout $ do
+        setTitleI MsgEditSupplier
         $(widgetFile "modifySupplier")
     Nothing -> do
       setMessageI MsgSupplierUnknown

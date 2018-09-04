@@ -25,7 +25,8 @@ getSummaryR :: Handler Html
 getSummaryR = do
   master <- getYesod
   bevs <- runDB $ selectList [] [Asc BeverageIdent]
-  defaultLayout $
+  defaultLayout $ do
+    setTitleI MsgSummary
     $(widgetFile "summary")
 
 getSummaryJsonR :: Handler RepJson

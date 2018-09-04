@@ -147,3 +147,7 @@ Login: Přihlásit
 Logout: Odhlásit
 CreationBlocked: Nelze vytvořit nové uživatele.
 NotEnoughFunds: Nedostatek kreditu
+MainPage: Hlavní stránka
+ModifyBeverage ident@Text: Změnit zboží #{ident}
+ModifyUser ident@Text: Změnit uživatele #{ident}
+SupplierActions ident@Text: Akce pro dodavatele #{ident}

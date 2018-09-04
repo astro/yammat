@@ -32,7 +32,8 @@ getJournalR = do
   cashChecks <- runDB $ selectList [CashCheckTime >=. timeLimit] [Asc CashCheckId]
   let list = merge entries cashChecks
   cashBalance <- getCashierBalance
-  defaultLayout $
+  defaultLayout $ do
+    setTitleI MsgJournal
     $(widgetFile "journal")
 
 merge :: [Entity Transaction] -> [Entity CashCheck] -> [Either Transaction CashCheck]
@@ -57,5 +58,6 @@ getJournalPageR p = do
     else return $ transactionTime $ entityVal $ L.last entries
   cashChecks <- runDB $ selectList [CashCheckTime >=. lTimeLimit, CashCheckTime <. uTimeLimit] [Asc CashCheckId]
   let list = merge entries cashChecks
-  defaultLayout $
+  defaultLayout $ do
+    setTitleI MsgJournal
     $(widgetFile "journalPage")

@@ -21,12 +21,13 @@ import Text.Shakespeare.Text
 
 getBuyR :: UserId -> BeverageId -> Handler Html
 getBuyR uId bId = do
-  (_, bev) <- checkData uId bId
+  (user, bev) <- checkData uId bId
   master <- getYesod
   (buyWidget, enctype) <- generateFormPost
     $ renderBootstrap3 BootstrapBasicForm
     $ buyForm
-  defaultLayout $
+  defaultLayout $ do
+    setTitleI (MsgPurchaseOf (beverageIdent bev))
     $(widgetFile "buy")
 
 postBuyR :: UserId -> BeverageId -> Handler Html
@@ -105,7 +106,8 @@ getBuyCashR bId = do
       (buyCashWidget, enctype) <- generateFormPost
         $ renderBootstrap3 BootstrapBasicForm
         $ buyForm
-      defaultLayout $
+      defaultLayout $ do
+        setTitleI (MsgPurchaseOf (beverageIdent bev))
         $(widgetFile "buyCash")
     Nothing -> do
       setMessageI MsgItemUnknown

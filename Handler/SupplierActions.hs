@@ -10,7 +10,8 @@ getSupplierActionsR sId = do
   mSup <- runDB $ get sId
   case mSup of
     Just sup ->
-      defaultLayout $
+      defaultLayout $ do
+        setTitleI (MsgSupplieractions (supplierIdent sup))
         $(widgetFile "supplierActions")
     Nothing -> do
       setMessageI MsgSupplierUnknown

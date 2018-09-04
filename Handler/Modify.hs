@@ -28,7 +28,8 @@ getModifyR bId =
     (modifyWidget, enctype) <- generateFormPost
       $ renderBootstrap3 BootstrapBasicForm
       $ modifyForm (Just bev) bs
-    defaultLayout $
+    defaultLayout $ do
+      setTitleI (MsgModifyBeverage (beverageIdent bev))
       $(widgetFile "modify")
   )
 

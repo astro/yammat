@@ -32,7 +32,8 @@ getNewUserR = do
     (newUserWidget, enctype) <- generateFormPost
       $ renderBootstrap3 BootstrapBasicForm
       $ newUserForm today
-    defaultLayout $
+    defaultLayout $ do
+      setTitleI MsgNewUser
       $(widgetFile "newUser")
 
 postNewUserR :: Handler Html
@@ -92,7 +93,8 @@ getModifyUserR uId =
     (modifyUserWidget, enctype) <- generateFormPost
       $ renderBootstrap3 BootstrapBasicForm
       $ modifyUserForm user bs
-    defaultLayout $
+    defaultLayout $ do
+      setTitleI (ModifyUser (userIdent user))
       $(widgetFile "modifyUser")
   )
 

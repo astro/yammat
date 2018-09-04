@@ -109,7 +109,7 @@ BarcodeUnknown: Dieser Barcode ist unbekannt
 BarcodeField: Barcodes
 BarcodeAdded: Barcode erfolgreich hinzugefügt
 BarcodeDuplicate: Dieser barcode wird schon verwendet
-Transfer: Transferieren
+Transfer: Guthaben Transferieren
 TransferTo: Guthaben transferieren an
 NegativeTransfer: Keine negativen Beträge transferieren
 TransferComplete: Transfer abgeschlossen
@@ -147,3 +147,7 @@ Login: Login
 Logout: Logout
 CreationBlocked: Es können keine neuen Nutzer angelegt werden.
 NotEnoughFunds: Nicht genügen Guthaben
+MainPage: Hauptseite
+ModifyBeverage ident@Text: Artikel #{ident} bearbeiten
+ModifyUser ident@Text: Benutzer #{ident} bearbeiten
+SupplierActions ident@Text: Aktionen für Lieferant #{ident}

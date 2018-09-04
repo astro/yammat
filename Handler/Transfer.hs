@@ -24,7 +24,8 @@ getTransferSelectR :: UserId -> Handler Html
 getTransferSelectR from =
   isUser from HomeR >>= (\_ -> do
     users <- runDB $ selectList [UserId !=. from] [Asc UserIdent]
-    defaultLayout $
+    defaultLayout $ do
+      setTitleI MsgTransfer
       $(widgetFile "transferSelect")
   )
 
@@ -36,6 +37,7 @@ getTransferR from to =
         $ renderBootstrap3 BootstrapBasicForm transferForm
       currency <- appCurrency <$> appSettings <$> getYesod
       defaultLayout $ do
+        setTitleI MsgTransfer
         $(widgetFile "transfer")
       )
   )

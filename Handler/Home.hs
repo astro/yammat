@@ -35,6 +35,7 @@ getHomeR = do
   ousers <- runDB $ selectList [UserTimestamp <. addDays (-30) today] [Asc UserIdent]
   defaultLayout $ do
     addScript $ StaticR js_barcode_js
+    setTitleI MsgMainPage
     $(widgetFile "home")
 
 getReactivateR :: Handler Html
@@ -43,6 +44,7 @@ getReactivateR = do
   users <- runDB $ selectList [UserTimestamp <. addDays (-30) today] [Asc UserIdent]
   defaultLayout $ do
     addScript $ StaticR js_barcode_js
+    setTitleI MsgUserReactivate
     $(widgetFile "reactivate")
 
 getUserReactivateR :: UserId -> Handler Html

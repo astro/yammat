@@ -147,3 +147,7 @@ Login: Login
 Logout: Logout
 CreationBlocked: New users can not be created.
 NotEnoughFunds: Not enough funds!
+MainPage: Main page
+ModifyBeverage ident@Text: Modify beverage #{ident}
+ModifyUser ident@Text: Modify user #{ident}
+SupplierActions ident@Text: Actions for supplier #{ident}

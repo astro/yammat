@@ -27,6 +27,7 @@ getSelectR uId =
     beverages <- runDB $ selectList [BeverageAmount >. 0] [Asc BeverageIdent]
     defaultLayout $ do
       addScript $ StaticR js_barcode_js
+      setTitleI MsgSelectItem
       $(widgetFile "select")
   )
 
@@ -35,6 +36,7 @@ getSelectCashR = do
   beverages <- runDB $ selectList [BeverageAmount >. 0] [Asc BeverageIdent]
   defaultLayout $ do
     addScript $ StaticR js_barcode_js
+    setTitleI MsgSelectItem
     $(widgetFile "selectCash")
 
 getRechargeR :: UserId -> Handler Html
@@ -43,7 +45,8 @@ getRechargeR uId =
     (rechargeWidget, enctype) <- generateFormPost
       $ renderBootstrap3 BootstrapBasicForm rechargeForm
     currency <- appCurrency <$> appSettings <$> getYesod
-    defaultLayout $
+    defaultLayout $ do
+      setTitleI MsgRecharge
       $(widgetFile "recharge")
   )
 

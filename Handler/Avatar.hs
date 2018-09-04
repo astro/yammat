@@ -30,14 +30,16 @@ import Codec.Picture.ScaleDCT
 getAvatarR :: Handler Html
 getAvatarR = do
   avatars <- runDB $ selectList [] [Asc AvatarIdent]
-  defaultLayout $
+  defaultLayout $ do
+    setTitleI MsgAvatars
     $(widgetFile "avatars")
 
 getNewAvatarR :: Handler Html
 getNewAvatarR = do
   (newAvatarWidget, enctype) <- generateFormPost
     $ renderBootstrap3 BootstrapBasicForm $ avatarNewForm
-  defaultLayout $
+  defaultLayout $ do
+    setTitleI MsgNewAvatar
     $(widgetFile "newAvatar")
 
 postNewAvatarR :: Handler Html
@@ -77,7 +79,8 @@ getModifyAvatarR aId = do
       (avatarModifyWidget, enctype) <- generateFormPost
         $ renderBootstrap3 BootstrapBasicForm
         $ avatarModForm avatar
-      defaultLayout $
+      defaultLayout $ do
+        setTitleI MsgModifyAvatar
         $(widgetFile "modifyAvatar")
     Nothing -> do
       setMessageI MsgAvatarUnknown

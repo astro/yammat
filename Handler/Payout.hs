@@ -28,7 +28,8 @@ getPayoutR :: Handler Html
 getPayoutR = do
   (payoutWidget, enctype) <- generateFormPost
     $ renderBootstrap3 BootstrapBasicForm payoutForm
-  defaultLayout $
+  defaultLayout $ do
+    setTitleI MsgPayoutFromCash
     $(widgetFile "payout")
 
 postPayoutR :: Handler Html

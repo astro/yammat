@@ -22,7 +22,8 @@ getCashCheckR :: Handler Html
 getCashCheckR = do
   (cashCheckWidget, enctype) <- generateFormPost
     $ renderBootstrap3 BootstrapBasicForm createCashCheckForm
-  defaultLayout $
+  defaultLayout $ do
+    setTitleI MsgCashCheck
     $(widgetFile "cashCheck")
 
 postCashCheckR :: Handler Html

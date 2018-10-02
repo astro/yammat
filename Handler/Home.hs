@@ -28,6 +28,7 @@ import Data.Time.Calendar (addDays)
 -- inclined, or create a single monolithic file.
 getHomeR :: Handler Html
 getHomeR = do
+  deleteSession "pinentry"
   settings <- getsYesod appSettings
   beverages <- runDB $ selectList [BeverageAmount !=. 0] [Desc BeverageIdent]
   today <- liftIO $ utctDay <$> getCurrentTime

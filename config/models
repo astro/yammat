@@ -4,6 +4,7 @@ User
     timestamp Day
     email Text Maybe
     avatar AvatarId Maybe
+    pin Text Maybe
     UniqueUser ident
     deriving Typeable Show
 

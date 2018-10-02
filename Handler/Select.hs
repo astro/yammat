@@ -13,6 +13,7 @@
 --
 --  You should have received a copy of the GNU Affero General Public License
 --  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+{-# LANGUAGE DoAndIfThenElse #-}
 module Handler.Select where
 
 import Import
@@ -24,11 +25,22 @@ getSelectR :: UserId -> Handler Html
 getSelectR uId =
   isUser uId HomeR >>= (\user -> do
     master <- getYesod
-    beverages <- runDB $ selectList [BeverageAmount >. 0] [Asc BeverageIdent]
-    defaultLayout $ do
-      addScript $ StaticR js_barcode_js
-      setTitleI MsgSelectItem
-      $(widgetFile "select")
+    mpin <- lookupSession "pinentry"
+    case mpin of
+      Nothing -> redirect $ PinentryR uId
+      Just ppin -> do
+        if ppin == T.pack (show uId)
+        then do
+          deleteSession "pinentry"
+          beverages <- runDB $ selectList [BeverageAmount >. 0] [Asc BeverageIdent]
+          defaultLayout $ do
+            addScript $ StaticR js_barcode_js
+            setTitleI MsgSelectItem
+            $(widgetFile "select")
+        else do
+          deleteSession "pinentry"
+          setMessageI MsgWrongPinAuth
+          redirect HomeR
   )
 
 getSelectCashR :: Handler Html

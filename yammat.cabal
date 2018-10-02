@@ -41,6 +41,7 @@ library
                      Handler.SupplierActions
                      Handler.Demand
                      Handler.Statistics
+                     Handler.Pinentry
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT -DHTTP_CLIENT

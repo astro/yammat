@@ -70,6 +70,7 @@ newUserForm today = User
   <*> pure today
   <*> aopt emailField (bfs MsgEmailNotify) Nothing
   <*> aopt (selectField avatars) (bfs MsgSelectAvatar) Nothing
+  <*> aopt passwordField (bfs MsgUserPin) Nothing
   <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
   where
     avatars = do
@@ -81,6 +82,7 @@ data UserConf = UserConf
   , userConfEmail :: Maybe Text
   , userConfAvatar :: Maybe AvatarId
   , userConfBarcode :: Maybe [Text]
+  , userConfPIN :: Maybe Text
   }
 
 getModifyUserR :: UserId -> Handler Html
@@ -115,6 +117,7 @@ postModifyUserR uId =
               [ UserIdent =. userConfIdent uc
               , UserEmail =. userConfEmail uc
               , UserAvatar =. userConfAvatar uc
+              , UserPin =. userConfPIN uc
               ]
             liftIO $ notify user (userConfEmail uc)
             handleBarcodes (Left uId) (fromMaybe [] $ userConfBarcode uc)
@@ -134,6 +137,7 @@ modifyUserForm user bs = UserConf
   <*> aopt emailField (bfs MsgEmailNotify) (Just $ userEmail user)
   <*> aopt (selectField avatars) (bfs MsgSelectAvatar) (Just $ userAvatar user)
   <*> aopt barcodeField (bfs MsgBarcodeField) (Just $ Just bs)
+  <*> aopt passwordField (bfs MsgUserPin) Nothing
   <*  bootstrapSubmit (msgToBSSubmit MsgSubmit)
   where
     avatars = do

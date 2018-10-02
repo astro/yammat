@@ -28,10 +28,9 @@ getSelectR uId =
     mpin <- lookupSession "pinentry"
     case mpin of
       Nothing -> redirect $ PinentryR uId
-      Just ppin -> do
+      Just ppin ->
         if ppin == T.pack (show uId)
         then do
-          deleteSession "pinentry"
           beverages <- runDB $ selectList [BeverageAmount >. 0] [Asc BeverageIdent]
           defaultLayout $ do
             addScript $ StaticR js_barcode_js

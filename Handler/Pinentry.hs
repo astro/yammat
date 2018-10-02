@@ -1,4 +1,3 @@
-{-# LANGUAGE DoAndIfThenElse #-}
 module Handler.Pinentry where
 
 import Import
@@ -35,7 +34,7 @@ postPinentryR uId = do
           $ renderBootstrap3 BootstrapBasicForm
           $ pinentryForm
         case res of
-          FormSuccess ppin -> do
+          FormSuccess ppin ->
             if ppin == pin
             then do
               setSession "pinentry" (T.pack $ show uId)

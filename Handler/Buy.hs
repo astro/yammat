@@ -19,54 +19,83 @@ import Import
 import Handler.Common
 import Text.Shakespeare.Text
 
+import qualified Data.Text as T (pack)
+
 getBuyR :: UserId -> BeverageId -> Handler Html
 getBuyR uId bId = do
-  (user, bev) <- checkData uId bId
-  master <- getYesod
-  (buyWidget, enctype) <- generateFormPost
-    $ renderBootstrap3 BootstrapBasicForm
-    $ buyForm
-  defaultLayout $ do
-    setTitleI (MsgPurchaseOf (beverageIdent bev))
-    $(widgetFile "buy")
+  mpin <- lookupSession "pinentry"
+  case mpin of
+    Just ppin ->
+      if ppin == T.pack (show uId)
+      then do
+        (user, bev) <- checkData uId bId
+        master <- getYesod
+        (buyWidget, enctype) <- generateFormPost
+          $ renderBootstrap3 BootstrapBasicForm
+          $ buyForm
+        defaultLayout $ do
+          setTitleI (MsgPurchaseOf (beverageIdent bev))
+          $(widgetFile "buy")
+      else do
+        deleteSession "pinentry"
+        setMessageI MsgWrongPin
+        redirect HomeR
+    Nothing -> do
+      setMessageI MsgWrongPin
+      redirect HomeR
 
 postBuyR :: UserId -> BeverageId -> Handler Html
 postBuyR uId bId = do
-  (user, bev) <- checkData uId bId
-  ((res, _), _) <- runFormPost
-    $ renderBootstrap3 BootstrapBasicForm
-    $ buyForm
-  case res of
-    FormSuccess quant -> do
-      if quant > beverageAmount bev
-        then do
-          setMessageI MsgNotEnoughItems
-          redirect $ BuyR uId bId
-        else do
-          let price = quant * (beveragePrice bev)
-          let sw = price > (userBalance user)
-          today <- liftIO $ return . utctDay =<< getCurrentTime
-          runDB $ do
-            update uId [UserTimestamp =. today]
-            update uId [UserBalance -=. price]
-            update bId [BeverageAmount -=. quant]
-            update bId [BeverageTotalBought +=. 1]
-          checkAlert bId (beverageAmount bev)
-          master <- getYesod
-          liftIO $ notifyUser user bev quant price master
-          case sw of
-            False -> do
-              setMessageI MsgPurchaseSuccess
-              redirect HomeR
-            True -> do
-              let level = case userBalance user - price of
-                    balance
-                      | balance <= -5000 -> 3
-                      | balance <= -1000 -> 2
-                      | otherwise -> 1
-              redirect $ DemandR level
-    _ -> do
-      setMessageI MsgErrorOccured
+  mpin <- lookupSession "pinentry"
+  case mpin of
+    Just ppin ->
+      if ppin == T.pack (show uId)
+      then do
+        (user, bev) <- checkData uId bId
+        ((res, _), _) <- runFormPost
+          $ renderBootstrap3 BootstrapBasicForm
+          $ buyForm
+        case res of
+          FormSuccess quant -> do
+            if quant > beverageAmount bev
+              then do
+                setMessageI MsgNotEnoughItems
+                redirect $ BuyR uId bId
+              else do
+                let price = quant * (beveragePrice bev)
+                let sw = price > (userBalance user)
+                today <- liftIO $ return . utctDay =<< getCurrentTime
+                runDB $ do
+                  update uId [UserTimestamp =. today]
+                  update uId [UserBalance -=. price]
+                  update bId [BeverageAmount -=. quant]
+                  update bId [BeverageTotalBought +=. 1]
+                checkAlert bId (beverageAmount bev)
+                master <- getYesod
+                liftIO $ notifyUser user bev quant price master
+                case sw of
+                  False -> do
+                    deleteSession "pinentry"
+                    setMessageI MsgPurchaseSuccess
+                    redirect HomeR
+                  True -> do
+                    deleteSession "pinentry"
+                    let level = case userBalance user - price of
+                          balance
+                            | balance <= -5000 -> 3
+                            | balance <= -1000 -> 2
+                            | otherwise -> 1
+                    redirect $ DemandR level
+          _ -> do
+            deleteSession "pinentry"
+            setMessageI MsgErrorOccured
+            redirect HomeR
+      else do
+        deleteSession "pinentry"
+        setMessageI MsgWrongPin
+        redirect HomeR
+    Nothing -> do
+      setMessageI MsgWrongPin
       redirect HomeR
 
 notifyUser :: User -> Beverage -> Int -> Int -> App -> IO ()

@@ -152,7 +152,7 @@ ModifyBeverage ident@Text: Artikel #{ident} bearbeiten
 ModifyUser ident@Text: Benutzer #{ident} bearbeiten
 SupplierActions ident@Text: Aktionen für Lieferant #{ident}
 UserPin: Benutzer-PIN
-WrongPinAuth: Falsche Pin fpr diesen Benutzer
+WrongPinAuth: Falsche Pin für diesen Benutzer
 EnterPin: Bitte PIN Eingeben
 WrongPin: Falsche PIN eingegeben
 PinFailure: Fehler bei der Pineingabe

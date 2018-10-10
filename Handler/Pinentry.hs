@@ -53,5 +53,5 @@ postPinentryR uId = do
     )
 
 pinentryForm :: AForm Handler Text
-pinentryForm = areq passwordField (bfs MsgPIN) Nothing
+pinentryForm = areq passwordField (withAtofocus $ bfs MsgPIN) Nothing
  <* bootstrapSubmit (msgToBSSubmit MsgSubmit)

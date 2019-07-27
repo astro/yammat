@@ -166,7 +166,7 @@ test-suite test
 
     build-depends: base
                  , yammat
-                 , yesod-test >= 1.4.2 && < 1.5
+                 , yesod-test >= 1.4.2
                  , yesod-core
                  , yesod
                  , persistent

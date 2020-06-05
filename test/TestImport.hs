@@ -5,7 +5,7 @@ module TestImport
 
 import Application           (makeFoundation)
 import ClassyPrelude         as X hiding (Handler)
-import Database.Persist      as X hiding (get)
+import Database.Persist      as X hiding (get, delete, deleteBy)
 import Database.Persist.Sql  (SqlPersistM, runSqlPersistMPool)
 import Foundation            as X
 import Model                 as X

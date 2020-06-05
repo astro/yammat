@@ -35,5 +35,6 @@ mkDerivation {
     yesod-test
   ];
   doCheck = false;
+  doHaddock = false;
   license = stdenv.lib.licenses.agpl3;
 }

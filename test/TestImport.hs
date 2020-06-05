@@ -18,10 +18,10 @@ runDB query = do
     pool <- fmap appConnPool getTestYesod
     liftIO $ runSqlPersistMPool query pool
 
-withApp :: SpecWith App -> Spec
+withApp :: SpecWith (App, a -> a) -> Spec
 withApp = before $ do
     settings <- loadAppSettings
         ["config/test-settings.yml", "config/settings.yml"]
         []
         ignoreEnv
-    makeFoundation settings
+    (, id) <$> makeFoundation settings

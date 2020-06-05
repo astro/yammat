@@ -217,9 +217,8 @@ sendMail to subject body =
       , mailParts =[[Part
         { partType = "text/plain; charset=utf-8"
         , partEncoding = None
-        , partFilename = Nothing
         , partHeaders = []
-        , partContent = E.encodeUtf8 body
+        , partContent = PartContent $ E.encodeUtf8 body
         }]]
       }
 

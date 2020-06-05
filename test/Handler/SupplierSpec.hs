@@ -3,8 +3,7 @@ module Handler.SupplierSpec (spec) where
 import TestImport
 
 spec :: Spec
-spec = withApp $ do
-
+spec =
     describe "getSupplierR" $ do
-        error "Spec not implemented: getSupplierR"
-
+      xit "Spec not implemented: getSupplierR" $ do
+          pending

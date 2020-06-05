@@ -34,5 +34,6 @@ mkDerivation {
     persistent persistent-mysql resourcet transformers yesod yesod-core
     yesod-test
   ];
+  doCheck = false;
   license = stdenv.lib.licenses.agpl3;
 }
